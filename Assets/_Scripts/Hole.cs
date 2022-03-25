@@ -11,7 +11,19 @@ public class Hole : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            winUI.SetActive(true);
+            if (col.GetComponent<BotController>())
+            {
+                col.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                col.GetComponent<Rigidbody2D>().isKinematic = false;
+                col.GetComponent<BotController>().enabled = false;
+                col.enabled = false;
+                col.GetComponentInChildren<TrailRenderer>().enabled = false;
+            }
+            else
+            {
+                winUI.SetActive(true);
+
+            }
         }
     }
 }
