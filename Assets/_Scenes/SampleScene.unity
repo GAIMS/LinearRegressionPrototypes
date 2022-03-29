@@ -232,12 +232,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871e615afa4424cadb61aa76ca3af6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pxlWidth: 50
-  pxlHeight: 50
+  pxlWidth: 100
+  pxlHeight: 100
   xOrg: 0
   yOrg: 0
-  scale: 2.5
+  scale: 5
   noiseTex: {fileID: 0}
+  lowestPoint: 0.5
+  highestPoint: 0.5
+  lowestCoord: {x: 0, y: 0}
+  highestCoord: {x: 0, y: 0}
 --- !u!1 &270128981
 GameObject:
   m_ObjectHideFlags: 0

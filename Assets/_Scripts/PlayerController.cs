@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     private float x, z;
     private bool jump;
+    private NoiseGenerator noiseGen;
     
     void Start()
     {
         controller = gameObject.GetComponent<CharacterController>();
-        noise = FindObjectOfType<NoiseGenerator>().noiseTex;
+        noiseGen = FindObjectOfType<NoiseGenerator>();
+        noise = noiseGen.noiseTex;
     }
 
     void Update()
@@ -59,9 +61,14 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
 
+        //Debug.Log(noise.GetPixel((int)transform.position.x * 1,(int)transform.position.z * 1).r);
+        
+        //noise.SetPixel(-(int)transform.position.x + 50,-(int)transform.position.z + 50,Color.red);
+        //noise.Apply();
+        
         if (jump && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(noise.GetPixel((int)transform.position.x,(int)transform.position.y).r * jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(noise.GetPixel(-(int)transform.position.x + (noiseGen.pxlWidth),-(int)transform.position.z + (noiseGen.pxlHeight)).r * jumpHeight * -2f * gravity);
         }
         
         velocity.y += gravity * Time.deltaTime;
