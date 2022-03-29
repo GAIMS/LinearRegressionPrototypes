@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Texture2D noise;
 
+    [SerializeField] private GameObject highestFlag;
+    [SerializeField] private GameObject lowestFlag;
+
+    private Vector2 lowestPoint, highestPoint;
+    
     private CharacterController controller;
     private Vector3 velocity;
     private float x, z;
@@ -35,6 +40,18 @@ public class PlayerController : MonoBehaviour
         GetInput();
         Move();
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Instantiate(highestFlag, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);
+            highestPoint = new Vector2(transform.position.x, transform.position.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Instantiate(lowestFlag, new Vector3(transform.position.x, 1, transform.position.z), Quaternion.identity);
+            lowestPoint = new Vector2(transform.position.x, transform.position.z);
+        }
+            
     }
 
     void GetInput()
@@ -65,10 +82,12 @@ public class PlayerController : MonoBehaviour
         
         //noise.SetPixel(-(int)transform.position.x + 50,-(int)transform.position.z + 50,Color.red);
         //noise.Apply();
-        
+        float pxlVal = noise.GetPixel(-(int) transform.position.x + (noiseGen.pxlWidth/2),
+            -(int) transform.position.z + (noiseGen.pxlHeight/2)).r;
+        Debug.Log(pxlVal);
         if (jump && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(noise.GetPixel(-(int)transform.position.x + (noiseGen.pxlWidth),-(int)transform.position.z + (noiseGen.pxlHeight)).r * jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * pxlVal * -2f * gravity);
         }
         
         velocity.y += gravity * Time.deltaTime;
