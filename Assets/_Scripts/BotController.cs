@@ -34,7 +34,7 @@ public class BotController : MonoBehaviour
     private bool checkSlope = true;
 
     private int shotNum = -1;
-
+    private bool firstShot = true;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -47,6 +47,7 @@ public class BotController : MonoBehaviour
             _noiseGen = FindObjectOfType<NoiseGenerator>();
             transform.position = _noiseGen.highestCoord;
             slopeIndicator.SetActive(true);
+            //aimReticle.SetActive(false);
         }
     }
 
@@ -57,6 +58,7 @@ public class BotController : MonoBehaviour
         {
             _rb.velocity = Vector2.zero;
             aimGuide.SetActive(true);
+            slopeGuide.SetActive(true);
             return true;
         }
 
@@ -100,56 +102,81 @@ public class BotController : MonoBehaviour
             slopeGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, minAngle));
             checkSlope = false;
         }
-        Debug.Log("previousPow " + previousPow);
-        Debug.Log("currentPow " + currentPow);
-        
-        if (currentPow < previousPow && _canAim)
+        //Debug.Log("previousPow " + previousPow);
+        //Debug.Log("currentPow " + currentPow);
+        if(useDistanceForPow)
         {
-            if (currentPow < closestPow)
+            if (currentPow < previousPow && _canAim)
             {
-                closestPow = currentPow;
-                closestDir = previousDir;
+                if (currentPow < closestPow)
+                {
+                    closestPow = currentPow;
+                    closestDir = previousDir;
+                }
+
+                float newAngle = previousDir + Random.Range(-aiRandomness + 60, aiRandomness - 60);
+                previousDir = newAngle;
+                aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
+                _canAim = false;
+                Debug.Log("closer");
+                previousPow = currentPow;
             }
-            
-            float newAngle = previousDir + Random.Range(-aiRandomness + 60, aiRandomness - 60);
-            previousDir = newAngle;
-            aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
-            _canAim = false;
-            Debug.Log("closer");
-            previousPow = currentPow;
+            else if (_canAim)
+            {
+
+                Vector3 randPos = Random.insideUnitCircle.normalized;
+
+                Vector3 objectPos = aimGuide.transform.position;
+                randPos.x = randPos.x - objectPos.x;
+                randPos.y = randPos.y - objectPos.y;
+
+                //float angle = Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
+                float angle = previousDir + Random.Range(-aiRandomness, aiRandomness) + 180;
+                previousDir = angle;
+                aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                _canAim = false;
+                Debug.Log("further");
+                previousPow = currentPow;
+            }
+            _direction = aimGuide.transform.right;
         }
-        else if(_canAim)
+        else if(_canAim && !firstShot)
+        {
+            //previousDir = angle;
+            float noiseAngle = Random.Range(-aiRandomness + 60, aiRandomness - 60);
+            aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, minAngle + noiseAngle));
+            
+            _canAim = false;
+            previousPow = currentPow;
+            _direction = aimGuide.transform.right;
+        }
+        if (firstShot && _canAim)
         {
 
-            Vector3 randPos = Random.insideUnitCircle.normalized;
-        
-            Vector3 objectPos = aimGuide.transform.position;
-            randPos.x = randPos.x - objectPos.x;
-            randPos.y = randPos.y - objectPos.y;
- 
-            //float angle = Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
-            float angle = previousDir + Random.Range(-aiRandomness, aiRandomness) + 180;
-            previousDir = angle;
-            aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));  
+            float work = Random.Range(0, 360);
+            Debug.Log(work);
+            aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, work));
+                
+            _direction = aimGuide.transform.right;
             _canAim = false;
-            Debug.Log("further");
-            previousPow = currentPow;
+            firstShot = false;
         }
-        
-        
-        _direction = aimGuide.transform.right;
         Invoke("Move", 1f);
     }
     void Move()
     {
         aimGuide.SetActive(false);
-        if(useDistanceForPow)
+        slopeGuide.SetActive(false);
+        if (useDistanceForPow)
+        {
             _rb.velocity = _direction.normalized * GetDistance() * speedMult;
+        }
         else
         {
             _rb.velocity = _direction.normalized * GetSlope() * speedMult * 4;
         }
         _canAim = true;
+        checkSlope = true;
     }
 
     float GetDistance()

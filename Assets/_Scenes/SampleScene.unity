@@ -829,7 +829,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &736716073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,6 +844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botNum: 100
   botPrefab: {fileID: 5455531438469825044, guid: 056c9a217ec519c47b2d64a54a6e66c5, type: 3}
+  usingNoise: 0
 --- !u!4 &736716074
 Transform:
   m_ObjectHideFlags: 0
@@ -2782,7 +2783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5455531438469825044, guid: 056c9a217ec519c47b2d64a54a6e66c5, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 056c9a217ec519c47b2d64a54a6e66c5, type: 3}

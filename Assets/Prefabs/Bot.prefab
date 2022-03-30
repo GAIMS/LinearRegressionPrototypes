@@ -260,7 +260,7 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
-      key1: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
+      key1: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 0.1882353}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -515,11 +515,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0957ff2d6cc4c778d7a5899dd6f7b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMult: 1
+  speedMult: 1.5
   stopSpeed: 0.25
   aimGuide: {fileID: 5455531437356294299}
   aimReticle: {fileID: 5455531438449018690}
-  aiRandomness: 90
+  aiRandomness: 70
   previousDir: 0
   closestDir: 0
   previousPow: 0
@@ -530,7 +530,7 @@ MonoBehaviour:
   slopeResolution: 1
   usingNoise: 1
   useDistance: 1
-  useDistanceForPow: 1
+  useDistanceForPow: 0
 --- !u!114 &5376851556298884711
 MonoBehaviour:
   m_ObjectHideFlags: 0
