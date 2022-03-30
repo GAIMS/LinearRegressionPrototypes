@@ -28,10 +28,12 @@ public class ObstacleManager : MonoBehaviour {
 	}
 	
 	[SerializeField]
-	private float timeBetweenRounds = 1f;
+	[Range(0.1f, 10f)]
+	private float timeBetweenRounds = 3.5f;
 	
 	[SerializeField]
-	private float timePerRound = 2.5f;
+	[Range(0.1f, 10f)]
+	private float timePerRound = 0.5f;
 	
 	private float timer = 0;
 	

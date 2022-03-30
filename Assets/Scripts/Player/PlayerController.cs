@@ -11,12 +11,13 @@ public class PlayerController : MonoBehaviour {
 	[NonSerialized]
 	public PlayerGameplay gameplay;
 	
+	public PlayerUI ui;
+	
 	[NonSerialized]
 	public PlayerLine line;
 	
 	[NonSerialized]
 	public PlayerAI ai;
-	
 	[SerializeField]
 	private bool isAI = false;
 	
