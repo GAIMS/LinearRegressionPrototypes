@@ -68,8 +68,8 @@ public class NoiseGenerator : MonoBehaviour
             y++;
         }
         noiseTex.SetPixels(pix);
-        noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
-        noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
+        //noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
+        //noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
         noiseTex.Apply();
     }
     

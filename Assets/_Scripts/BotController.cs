@@ -16,10 +16,22 @@ public class BotController : MonoBehaviour
     [SerializeField] private float currentPow;
     [SerializeField] private float closestPow;
     private bool _canAim;
+    
+    [SerializeField] private GameObject slopeGuide;
+    [SerializeField] private GameObject slopeIndicator;
+    [SerializeField] private int slopeResolution;
+    public bool usingNoise;
+    public bool useDistance;
+    public bool useDistanceForPow;
 
     private Rigidbody2D _rb;
     private GameObject _hole;
     private Vector2 _direction;
+    
+    private NoiseGenerator _noiseGen;
+    private float x, y, z;
+    private float minX, minY, minAngle;
+    private bool checkSlope = true;
 
     private int shotNum = -1;
 
@@ -29,6 +41,13 @@ public class BotController : MonoBehaviour
         _hole = GameObject.FindWithTag("Finish");
         _canAim = true;
         previousPow = closestPow = GetDistance();
+        
+        if (usingNoise)
+        {
+            _noiseGen = FindObjectOfType<NoiseGenerator>();
+            transform.position = _noiseGen.highestCoord;
+            slopeIndicator.SetActive(true);
+        }
     }
 
     bool _canMove()
@@ -59,11 +78,28 @@ public class BotController : MonoBehaviour
 
     void Aim()
     {
-        currentPow = GetDistance();
-        shotNum++;
-        aimReticle.transform.localScale = new Vector3(.25f,(GetDistance()/1.5f)/2,1);
-        aimReticle.transform.localPosition = Vector3.right * (((GetDistance() / 1.5f) / 4) + .5f);
 
+        shotNum++;
+        if(useDistanceForPow)
+        {
+            currentPow = GetDistance();
+            aimReticle.transform.localScale = new Vector3(.25f, (GetDistance() / 1.5f) / 2, 1);
+            aimReticle.transform.localPosition = Vector3.right * (((GetDistance() / 1.5f) / 4) + .5f);
+        }
+        else
+        {
+            currentPow = GetSlope();
+            aimReticle.transform.localScale = new Vector3(.25f, (GetSlope() / 1.5f) * 4, 1);
+            aimReticle.transform.localPosition = Vector3.right * (((GetSlope() / 1.5f) * 2) + .5f);
+        }
+        if (_noiseGen && checkSlope)
+        {
+            slopeIndicator.transform.localScale = new Vector3(.25f, (GetSlope() / 1.5f) * 4, 1);
+            slopeIndicator.transform.localPosition = Vector3.right * (((GetSlope() / 1.5f) * 2) + .5f);
+
+            slopeGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, minAngle));
+            checkSlope = false;
+        }
         Debug.Log("previousPow " + previousPow);
         Debug.Log("currentPow " + currentPow);
         
@@ -99,18 +135,71 @@ public class BotController : MonoBehaviour
             Debug.Log("further");
             previousPow = currentPow;
         }
+        
+        
         _direction = aimGuide.transform.right;
         Invoke("Move", 1f);
     }
     void Move()
     {
         aimGuide.SetActive(false);
-        _rb.velocity = _direction.normalized * GetDistance() * speedMult;
+        if(useDistanceForPow)
+            _rb.velocity = _direction.normalized * GetDistance() * speedMult;
+        else
+        {
+            _rb.velocity = _direction.normalized * GetSlope() * speedMult * 4;
+        }
         _canAim = true;
     }
 
     float GetDistance()
     {
         return Vector2.Distance(transform.position, _hole.transform.position);
+    }
+    
+    float GetSlope()
+    {
+        float min = 1f;
+        for (int i = 0; i < 360 * slopeResolution; i++)
+        {
+            if (useDistance)
+            {
+                x = ((transform.position.x * 10) + (GetDistance() / 1.5f) * Mathf.Cos(i * Mathf.PI / 180));
+                y = ((transform.position.y * 10) + (GetDistance() / 1.5f) * Mathf.Sin(i * Mathf.PI / 180));   
+            }
+            if (!useDistance)
+            {
+                x = ((transform.position.x * 10) + 10 * Mathf.Cos(i * Mathf.PI / 180));
+                y = ((transform.position.y * 10) + 10 * Mathf.Sin(i * Mathf.PI / 180));
+            }
+            
+            z = _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(x,y).x,(int)ConvertWorldToTex(x,y).y).r;
+            
+            //_noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(x,y).x,(int)ConvertWorldToTex(x,y).y, Color.blue);
+            //_noiseGen.noiseTex.Apply();
+            //Debug.Log(x +","+ y);
+            //Debug.Log(ConvertWorldToTex(x,y));
+            //Debug.Log("point at angle: " + i + " is " + z);
+            
+            if (z < min)
+            {
+                min = z;
+                minX = x;
+                minY = y;
+                minAngle = i;
+            }
+        }
+
+        _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(minX,minY).x,(int)ConvertWorldToTex(minX,minY).y,
+            _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(minX,minY).x,(int)ConvertWorldToTex(minX,minY).y) + Color.green);
+        _noiseGen.noiseTex.Apply();
+        //Debug.Log("Min = " + min);
+        
+        return min;
+    }
+
+    Vector2 ConvertWorldToTex(float x, float y)
+    {
+        return new Vector2(((int) -x + (_noiseGen.pxlWidth/2)), ((int) -y + (_noiseGen.pxlHeight/2)));
     }
 }
