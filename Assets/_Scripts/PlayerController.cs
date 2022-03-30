@@ -8,15 +8,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float stopSpeed;
     [SerializeField] private GameObject aimGuide;
     [SerializeField] private GameObject aimReticle;
+    public bool usingNoise;
 
     private Rigidbody2D _rb;
     private GameObject _hole;
     private Vector2 _direction;
+    private NoiseGenerator _noiseGen;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _hole = GameObject.FindWithTag("Finish");
+        if (usingNoise)
+        {
+            _noiseGen = FindObjectOfType<NoiseGenerator>();
+            transform.position = _noiseGen.highestCoord;
+        }
     }
 
     bool _canMove()

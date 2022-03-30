@@ -52,6 +52,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Scripts\NoiseGenerator.cs" />
      <Compile Include="Assets\_Scripts\Hole.cs" />
      <Compile Include="Assets\_Scripts\BotManager.cs" />
      <Compile Include="Assets\_Scripts\PlayerController.cs" />

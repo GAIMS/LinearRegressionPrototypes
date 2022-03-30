@@ -6,6 +6,15 @@ using UnityEngine;
 public class Hole : MonoBehaviour
 {
     [SerializeField] private GameObject winUI;
+    [SerializeField] private bool noisePlacement;
+
+    private void Start()
+    {
+        if (noisePlacement)
+        {
+            transform.position = FindObjectOfType<NoiseGenerator>().lowestCoord;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
