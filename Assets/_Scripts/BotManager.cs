@@ -12,7 +12,7 @@ public class BotManager : MonoBehaviour
     [SerializeField] private float resetVelocity;
     [SerializeField] private float avgVelocity;
 
-    private float timer = 5;
+    private float timer = 10;
     private NoiseGenerator _noiseGen;
     private List<BotController> bots;
     void Start()
@@ -30,27 +30,34 @@ public class BotManager : MonoBehaviour
         timer -= Time.deltaTime;
         if(timer <= 0)
         {
-            for (int i = 0; i < bots.Count; i++)
-            {
-                float vel = bots[i]._rb.velocity.magnitude;
-                Debug.Log(vel);
-                avgVelocity = ((avgVelocity + vel) / (i + 1)) * 1;
-                if (i > (bots.Count / 2))
+            avgVelocity = 0;
+            for (int i = 1; i < bots.Count; i++)
+            { 
+                if(!bots[i].inHole)
+                {
+                    float vel = bots[i - 1].distanceDelta;
+                    Debug.Log(vel);
+                    avgVelocity = ((avgVelocity + vel) / (i)) * 10;
+                }
+                Debug.Log(i);
+                if (i >= (bots.Count - 1))
                 {
                     if (avgVelocity < resetVelocity)
                     {
-                        timer = 5;
+                        timer = 10;
                         foreach (var bot in bots)
                         {
                             bot.ResetGen();
-                            Destroy(bot);
-                            StartGen();
+                            Destroy(bot.gameObject);
                         }
+                        StartGen();
                     }
                 }
+                else
+                {
+                    timer = .1f;
+                }
             }
-
-            timer = 3;
         }
     }
 

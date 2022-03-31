@@ -889,7 +889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 973e899afa065e4428a317f649c9e660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botNum: 5
+  botNum: 100
   botPrefab: {fileID: 5455531438469825044, guid: 056c9a217ec519c47b2d64a54a6e66c5, type: 3}
   usingNoise: 1
   resetVelocity: 0.1

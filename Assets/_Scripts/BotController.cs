@@ -15,7 +15,9 @@ public class BotController : MonoBehaviour
     [SerializeField] private float previousPow;
     [SerializeField] private float currentPow;
     [SerializeField] private float closestPow;
-    private bool _canAim;
+    [SerializeField] public float distanceDelta;
+    [HideInInspector] public Vector3 lastPos;
+    [HideInInspector] public bool _canAim;
     
     [SerializeField] private GameObject slopeGuide;
     [SerializeField] private GameObject slopeIndicator;
@@ -35,7 +37,7 @@ public class BotController : MonoBehaviour
 
     private int shotNum = -1;
     private bool firstShot = true;
-    private bool inHole = false;
+    public bool inHole = false;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -49,6 +51,7 @@ public class BotController : MonoBehaviour
             transform.position = _noiseGen.highestCoord;
             slopeIndicator.SetActive(true);
             //aimReticle.SetActive(false);
+            lastPos = transform.position;
         }
     }
 
@@ -69,11 +72,11 @@ public class BotController : MonoBehaviour
     
     void Update()
     {
-        if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0) && inHole)
+        if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0))
         {
             //Move();
         }
-        else if(_canMove() && _canAim)
+        else if(_canMove() && _canAim && !inHole)
         {
             Aim();
         }
@@ -81,7 +84,10 @@ public class BotController : MonoBehaviour
 
     void Aim()
     {
-
+        distanceDelta = Vector3.Distance(lastPos, transform.position);
+        lastPos = transform.position;
+        
+        
         shotNum++;
         if(useDistanceForPow)
         {
@@ -234,14 +240,16 @@ public class BotController : MonoBehaviour
     public void Hole()
     {
         inHole = true;
+        aimGuide.SetActive(false);
+        slopeGuide.SetActive(false);
     }
     
     public void ResetGen()
     {
-        _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(transform.position.x,transform.position.y).x,
-            (int)ConvertWorldToTex(transform.position.x,transform.position.y).y,
-            _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(transform.position.x,transform.position.y).x,
-                (int)ConvertWorldToTex(transform.position.x,transform.position.y).y) + new Color(.1f,0,0,1));
+        _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).x,
+            (int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).y,
+            _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).x,
+                (int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).y) + new Color(.5f,0,0,1));
         _noiseGen.noiseTex.Apply();
     }
     
