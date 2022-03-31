@@ -21,7 +21,7 @@ public class NoiseGenerator : MonoBehaviour
     private float randPosX,randPosY;
     
     
-    void Start()
+    void Awake()
     {
         rend = GetComponent<Renderer>();
 
