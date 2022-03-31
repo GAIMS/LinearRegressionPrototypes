@@ -246,11 +246,16 @@ public class BotController : MonoBehaviour
     
     public void ResetGen()
     {
-        _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).x,
-            (int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).y,
-            _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).x,
-                (int)ConvertWorldToTex(transform.position.x * 10,transform.position.y * 10).y) + new Color(.5f,0,0,1));
-        _noiseGen.noiseTex.Apply();
+        if(!inHole)
+        {
+            _noiseGen.noiseTex.SetPixel((int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).x,
+                (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).y,
+                _noiseGen.noiseTex.GetPixel(
+                    (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).x,
+                    (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).y) +
+                new Color(.5f, 0, 0, 1));
+            _noiseGen.noiseTex.Apply();
+        }
     }
     
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BotManager : MonoBehaviour
@@ -34,13 +35,14 @@ public class BotManager : MonoBehaviour
         if(timer <= 0)
         {
             avgVelocity = 0;
-            for (int i = 1; i < bots.Count; i++)
+            for (int i = 1, z = 1; i < bots.Count; i++)
             { 
                 if(!bots[i].inHole)
                 {
                     float vel = bots[i - 1].distanceDelta;
                     Debug.Log(vel);
-                    avgVelocity = ((avgVelocity + vel) / (i)) * 10;
+                    avgVelocity = ((avgVelocity + vel) / (z)) * 10;
+                    z++;
                 }
                 Debug.Log(i);
                 if (i >= (bots.Count - 1))
@@ -61,6 +63,11 @@ public class BotManager : MonoBehaviour
                     timer = .1f;
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 

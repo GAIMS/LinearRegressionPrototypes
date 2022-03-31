@@ -974,6 +974,7 @@ MonoBehaviour:
   resetVelocity: 0.1
   avgVelocity: 0
   generationNum: 0
+  generationText: {fileID: 346356055}
 --- !u!4 &736716074
 Transform:
   m_ObjectHideFlags: 0
