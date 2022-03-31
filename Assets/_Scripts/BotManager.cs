@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BotManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class BotManager : MonoBehaviour
     [SerializeField] private bool usingNoise;
     [SerializeField] private float resetVelocity;
     [SerializeField] private float avgVelocity;
+    [SerializeField] private int generationNum = 0;
+    [SerializeField] private Text generationText;
 
     private float timer = 10;
     private NoiseGenerator _noiseGen;
@@ -63,6 +66,8 @@ public class BotManager : MonoBehaviour
 
     public void StartGen()
     {
+        generationNum++;
+        generationText.text = "Generation: " + generationNum;
         bots = new List<BotController>();
         for (int i = 0; i < botNum; i++)
         {
