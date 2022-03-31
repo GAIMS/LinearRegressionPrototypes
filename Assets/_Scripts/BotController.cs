@@ -24,7 +24,7 @@ public class BotController : MonoBehaviour
     public bool useDistance;
     public bool useDistanceForPow;
 
-    private Rigidbody2D _rb;
+    [HideInInspector] public Rigidbody2D _rb;
     private GameObject _hole;
     private Vector2 _direction;
     
@@ -35,6 +35,7 @@ public class BotController : MonoBehaviour
 
     private int shotNum = -1;
     private bool firstShot = true;
+    private bool inHole = false;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -68,7 +69,7 @@ public class BotController : MonoBehaviour
     
     void Update()
     {
-        if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0))
+        if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0) && inHole)
         {
             //Move();
         }
@@ -154,7 +155,7 @@ public class BotController : MonoBehaviour
         {
 
             float work = Random.Range(0, 360);
-            Debug.Log(work);
+            //Debug.Log(work);
             aimGuide.transform.rotation = Quaternion.Euler(new Vector3(0, 0, work));
                 
             _direction = aimGuide.transform.right;
@@ -229,4 +230,19 @@ public class BotController : MonoBehaviour
     {
         return new Vector2(((int) -x + (_noiseGen.pxlWidth/2)), ((int) -y + (_noiseGen.pxlHeight/2)));
     }
+
+    public void Hole()
+    {
+        inHole = true;
+    }
+    
+    public void ResetGen()
+    {
+        _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(transform.position.x,transform.position.y).x,
+            (int)ConvertWorldToTex(transform.position.x,transform.position.y).y,
+            _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(transform.position.x,transform.position.y).x,
+                (int)ConvertWorldToTex(transform.position.x,transform.position.y).y) + new Color(.1f,0,0,1));
+        _noiseGen.noiseTex.Apply();
+    }
+    
 }

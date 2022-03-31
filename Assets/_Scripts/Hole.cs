@@ -24,7 +24,7 @@ public class Hole : MonoBehaviour
             {
                 col.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 col.GetComponent<Rigidbody2D>().isKinematic = false;
-                col.GetComponent<BotController>().enabled = false;
+                col.GetComponent<BotController>().Hole();
                 col.enabled = false;
                 col.GetComponentInChildren<TrailRenderer>().enabled = false;
             }
