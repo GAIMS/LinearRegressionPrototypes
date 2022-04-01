@@ -98,16 +98,31 @@ public class Lock : MonoBehaviour {
 	
 	private IEnumerator UnlockRoutine(bool unlocked) {
 		float lockPickRot = LockPickController.Instance.lockTransform.localEulerAngles.z;
+		if (lockPickRot > 180f) {
+			lockPickRot = (360f - lockPickRot) * -1f;
+		}
 		float abs = Mathf.Abs(lockPickRot - this.targetAngle);
-		float speed = abs * 0.05f;
+		Debug.Log("Abs: " + abs);
+		float speed = abs * 0.1f;
+		Debug.Log("Speed: " + speed);
 		
 		this.animator.Play("Unlocking");
-		this.animator.speed = 1f - speed;
-		yield return new WaitForSeconds(1f - speed);
+		speed = Mathf.Clamp(1f / speed, 0f, 1f);
+		Debug.Log("Speed 2: " + speed);
+		
+		this.animator.speed = speed;
+		yield return new WaitForSeconds(1f);
 		if (!unlocked) {
+			this.animator.speed = 0f;
+			yield return new WaitForSeconds(1f);
+			this.animator.speed = 1f;
 			this.animator.Play("Locked");
 			LockPickController.Instance.IsUnlocking = false;
-		}		
+			
+		} else {
+			yield return new WaitForSeconds(1f);
+			this.ResetLock();
+		}
 	}
 	
 	public bool IsWithinRange(float offset) {
@@ -116,11 +131,16 @@ public class Lock : MonoBehaviour {
 		if (lockPickRot > 180f) {
 			lockPickRot = (360f - lockPickRot) * -1f;
 		}
-		Debug.Log(lockPickRot);
 		
 		float min = this.targetAngle - offset;
 		float max = this.targetAngle + offset;
 		return lockPickRot >= Mathf.Min(min, max) && lockPickRot <= Mathf.Max(min, max);
 	}
-		
+	
+	public void ResetLock() {
+		this.SetLock();
+		LockPickController.Instance.ResetAngle();
+		LockPickController.Instance.IsUnlocking = false;
+		this.animator.Play("Locked");
+	}		
 }

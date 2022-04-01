@@ -75,6 +75,7 @@ public class LockPickController : MonoBehaviour {
 	
 	public void ResetAngle() {
 		this.angle = 0f;
+		this.UpdateRotation();
 	}
 	
 	public void UpdateRotation() {
