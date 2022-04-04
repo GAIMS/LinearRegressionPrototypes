@@ -57,7 +57,7 @@ public class BotController : MonoBehaviour
 
     bool _canMove()
     {
-        float lerp = 0;
+        //float lerp = 0;
         if (_rb.velocity.magnitude <= stopSpeed)
         {
             _rb.velocity = Vector2.zero;
@@ -66,7 +66,7 @@ public class BotController : MonoBehaviour
             return true;
         }
 
-        lerp = 0;
+        //lerp = 0;
         return false;
     }
     
@@ -248,12 +248,16 @@ public class BotController : MonoBehaviour
     {
         if(!inHole)
         {
+            /*
             _noiseGen.noiseTex.SetPixel((int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).x,
                 (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).y,
                 _noiseGen.noiseTex.GetPixel(
                     (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).x,
                     (int) ConvertWorldToTex(transform.position.x * 10, transform.position.y * 10).y) +
                 new Color(.5f, 0, 0, 1));
+                */
+            _noiseGen.noiseTex.SetPixel((int)ConvertWorldToTex(minX,minY).x,(int)ConvertWorldToTex(minX,minY).y,
+                _noiseGen.noiseTex.GetPixel((int)ConvertWorldToTex(minX,minY).x,(int)ConvertWorldToTex(minX,minY).y) + new Color(.5f, 0, 0, 1));
             _noiseGen.noiseTex.Apply();
         }
     }

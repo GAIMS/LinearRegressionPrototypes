@@ -57,9 +57,7 @@
      <Compile Include="Assets\_Scripts\PlayerController.cs" />
      <Compile Include="Assets\_Scripts\RandomColor.cs" />
      <Compile Include="Assets\_Scripts\BotController.cs" />
-     <Compile Include="Assets\_Scripts\VoxelMap.cs" />
      <Compile Include="Assets\_Scripts\Hole.cs" />
-     <Compile Include="Assets\_Scripts\VoxelGrid.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

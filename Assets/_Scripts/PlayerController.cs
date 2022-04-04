@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     bool _canMove()
     {
-        float lerp = 0;
+        //float lerp = 0;
         if (_rb.velocity.magnitude <= stopSpeed)
         {
             _rb.velocity = Vector2.zero;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
             return true;
         }
 
-        lerp = 0;
+        //lerp = 0;
         return false;
     }
     
