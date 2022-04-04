@@ -53,8 +53,10 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\_Scripts\BotManager.cs" />
+     <Compile Include="Assets\_Scripts\MapGenerator.cs" />
      <Compile Include="Assets\_Scripts\NoiseGenerator.cs" />
      <Compile Include="Assets\_Scripts\PlayerController.cs" />
+     <Compile Include="Assets\_Scripts\MeshGenerator.cs" />
      <Compile Include="Assets\_Scripts\RandomColor.cs" />
      <Compile Include="Assets\_Scripts\BotController.cs" />
      <Compile Include="Assets\_Scripts\Hole.cs" />
