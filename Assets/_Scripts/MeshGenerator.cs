@@ -10,6 +10,10 @@ public class MeshGenerator : MonoBehaviour
     public SquareGrid squareGrid;
     private List<Vector3> verticies;
     private List<int> triangles;
+    
+    Dictionary<int,List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>> ();
+    List<List<int>> outlines = new List<List<int>> ();
+    HashSet<int> checkedVertices = new HashSet<int>();
 
     public void GenerateMesh(int[,] map, float squareSize)
     {
@@ -30,36 +34,7 @@ public class MeshGenerator : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         if(useCollision)
         {
-            PolygonCollider2D col = GetComponent<PolygonCollider2D>();
-            //col.pathCount = triangles.Count;
-
-            Vector2[] flatVert = new Vector2[verticies.Count];
-            for (int i = 0; i < flatVert.Length; i++)
-            {
-                flatVert[i] = new Vector2(verticies[i].x, verticies[i].y);
-            }
-
-            col.pathCount = triangles.Count;
-            for (int p = 0, i = 0; i < col.pathCount; i += 3)
-            {
-                Vector2[] tri = new Vector2[3];
-                Debug.Log(i);
-                if (i >= 3)
-                {
-                    tri[0] = flatVert[i];
-                    tri[1] = flatVert[i - 1];
-                    tri[2] = flatVert[i - 2];
-                }
-                else
-                {
-                    tri[0] = flatVert[0];
-                    tri[1] = flatVert[1];
-                    tri[2] = flatVert[2];
-                }
-
-                col.SetPath(i, tri);
-                p++;
-            }
+            Generate2DColliders();
         }
 
         mesh.vertices = verticies.ToArray();
@@ -166,6 +141,136 @@ public class MeshGenerator : MonoBehaviour
         triangles.Add(a.vertexIndex);
         triangles.Add(b.vertexIndex);
         triangles.Add(c.vertexIndex);
+        
+        Triangle triangle = new Triangle (a.vertexIndex, b.vertexIndex, c.vertexIndex);
+        AddTriangleToDictionary (triangle.vertexIndexA, triangle);
+        AddTriangleToDictionary (triangle.vertexIndexB, triangle);
+        AddTriangleToDictionary (triangle.vertexIndexC, triangle);
+    }
+
+    void Generate2DColliders()
+    {
+        EdgeCollider2D[] currentColliders = GetComponents<EdgeCollider2D>();
+        for (int i = 0; i < currentColliders.Length; i++)
+        {
+            Destroy(currentColliders[i]);
+        }
+        
+        CalculateMeshOutlines();
+
+        foreach (var outline in outlines)
+        {
+            EdgeCollider2D edgeCollider = gameObject.AddComponent<EdgeCollider2D>();
+            Vector2[] edgePoints = new Vector2[outline.Count];
+
+            for (int i = 0; i < outline.Count; i++)
+            {
+                edgePoints[i] = new Vector2 (verticies[outline[i]].x,verticies[outline[i]].y);
+            }
+
+            edgeCollider.points = edgePoints;
+        }
+    }
+
+    void AddTriangleToDictionary(int vertexIndexKey, Triangle triangle) {
+        if (triangleDictionary.ContainsKey (vertexIndexKey)) {
+            triangleDictionary [vertexIndexKey].Add (triangle);
+        } else {
+            List<Triangle> triangleList = new List<Triangle>();
+            triangleList.Add(triangle);
+            triangleDictionary.Add(vertexIndexKey, triangleList);
+        }
+    }
+    
+    void CalculateMeshOutlines() {
+
+        for (int vertexIndex = 0; vertexIndex < verticies.Count; vertexIndex ++) {
+            if (!checkedVertices.Contains(vertexIndex)) {
+                int newOutlineVertex = GetConnectedOutlineVertex(vertexIndex);
+                if (newOutlineVertex != -1) {
+                    checkedVertices.Add(vertexIndex);
+
+                    List<int> newOutline = new List<int>();
+                    newOutline.Add(vertexIndex);
+                    outlines.Add(newOutline);
+                    FollowOutline(newOutlineVertex, outlines.Count-1);
+                    outlines[outlines.Count-1].Add(vertexIndex);
+                }
+            }
+        }
+    }
+    
+    void FollowOutline(int vertexIndex, int outlineIndex) {
+        outlines [outlineIndex].Add (vertexIndex);
+        checkedVertices.Add (vertexIndex);
+        int nextVertexIndex = GetConnectedOutlineVertex (vertexIndex);
+
+        if (nextVertexIndex != -1) {
+            FollowOutline(nextVertexIndex, outlineIndex);
+        }
+    }
+    
+    int GetConnectedOutlineVertex(int vertexIndex) {
+        List<Triangle> trianglesContainingVertex = triangleDictionary [vertexIndex];
+
+        for (int i = 0; i < trianglesContainingVertex.Count; i ++) {
+            Triangle triangle = trianglesContainingVertex[i];
+
+            for (int j = 0; j < 3; j ++) {
+                int vertexB = triangle[j];
+                if (vertexB != vertexIndex && !checkedVertices.Contains(vertexB)) {
+                    if (IsOutlineEdge(vertexIndex, vertexB)) {
+                        return vertexB;
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    bool IsOutlineEdge(int vertexA, int vertexB) {
+        List<Triangle> trianglesContainingVertexA = triangleDictionary [vertexA];
+        int sharedTriangleCount = 0;
+
+        for (int i = 0; i < trianglesContainingVertexA.Count; i ++) {
+            if (trianglesContainingVertexA[i].Contains(vertexB)) {
+                sharedTriangleCount ++;
+                if (sharedTriangleCount > 1) {
+                    break;
+                }
+            }
+        }
+        return sharedTriangleCount == 1;
+    }
+    
+    struct Triangle {
+        public int vertexIndexA;
+        public int vertexIndexB;
+        public int vertexIndexC;
+        int[] vertices;
+
+        public Triangle (int a, int b, int c) {
+            vertexIndexA = a;
+            vertexIndexB = b;
+            vertexIndexC = c;
+
+            vertices = new int[3];
+            vertices[0] = a;
+            vertices[1] = b;
+            vertices[2] = c;
+        }
+
+        public int this[int i] {
+            get {
+                return vertices[i];
+            }
+        }
+
+
+        public bool Contains(int vertexIndex) {
+            return vertexIndex == vertexIndexA || vertexIndex == vertexIndexB || vertexIndex == vertexIndexC;
+        }
     }
     
     private void OnDrawGizmos()
