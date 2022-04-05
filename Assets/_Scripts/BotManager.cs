@@ -11,6 +11,7 @@ public class BotManager : MonoBehaviour
     [SerializeField] private int botNum;
     [SerializeField] private GameObject botPrefab;
     [SerializeField] private bool usingNoise;
+    [SerializeField] private bool refreshSlopeIndicators;
     [SerializeField] private float resetVelocity;
     [SerializeField] private float avgVelocity;
     [SerializeField] private int generationNum = 0;
@@ -87,6 +88,14 @@ public class BotManager : MonoBehaviour
 
     public void StartGen()
     {
+        for (int x = 0; x < _noiseGen.pxlWidth; x++)
+        {
+            for (int y = 0; y < _noiseGen.pxlHeight; y++)
+            {
+                _noiseGen.noiseTex.SetPixel(x,y, new Color(_noiseGen.noiseTex.GetPixel(x,y).r, _noiseGen.noiseTex.GetPixel(x,y).b, _noiseGen.noiseTex.GetPixel(x,y).b));
+            }
+        }
+        _noiseGen.noiseTex.Apply();
         genTimer = generationTime;
         generationNum++;
         generationText.text = "Generation: " + generationNum;
