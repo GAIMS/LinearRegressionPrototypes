@@ -55,7 +55,7 @@ public class BotManager : MonoBehaviour
                 if(!bots[i].inHole)
                 {
                     float vel = bots[i].distanceDelta;
-                    Debug.Log(vel);
+                    //Debug.Log(vel);
                     avgVelocity = ((avgVelocity + vel) / (z)) * 10;
                     z++;
                 }

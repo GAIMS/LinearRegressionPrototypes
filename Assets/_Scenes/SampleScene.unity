@@ -928,8 +928,8 @@ MonoBehaviour:
   width: 180
   height: 101
   seed: test
-  useRandomSeed: 1
-  randomFillPercent: 42
+  useRandomSeed: 0
+  randomFillPercent: 43
   smoothAmount: 5
   squareSize: 1
 --- !u!4 &580212572
