@@ -1061,6 +1061,7 @@ MonoBehaviour:
   botNum: 100
   botPrefab: {fileID: 5455531438469825044, guid: 056c9a217ec519c47b2d64a54a6e66c5, type: 3}
   usingNoise: 1
+  refreshSlopeIndicators: 1
   resetVelocity: 0.1
   avgVelocity: 0
   generationNum: 0
