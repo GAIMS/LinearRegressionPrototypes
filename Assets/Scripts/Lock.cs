@@ -90,6 +90,7 @@ public class Lock : MonoBehaviour {
 	private Coroutine lockRoutine;
 	
 	private IEnumerator FailedRoutine() {
+		LockAI.Instance.Failed();
 		this.animator.Play("Failed");
 		yield return new WaitForSeconds(0.75f);
 		this.animator.Play("Locked");
@@ -102,15 +103,16 @@ public class Lock : MonoBehaviour {
 			lockPickRot = (360f - lockPickRot) * -1f;
 		}
 		float abs = Mathf.Abs(lockPickRot - this.targetAngle);
-		Debug.Log("Abs: " + abs);
+	//	Debug.Log("Abs: " + abs);
 		float speed = abs * 0.1f;
-		Debug.Log("Speed: " + speed);
+	//	Debug.Log("Speed: " + speed);
 		
 		this.animator.Play("Unlocking");
 		speed = Mathf.Clamp(1f / speed, 0f, 1f);
-		Debug.Log("Speed 2: " + speed);
+	//	Debug.Log("Speed 2: " + speed);
 		
 		this.animator.speed = speed;
+		LockAI.Instance.UpdateInfo(this.animator.speed);
 		yield return new WaitForSeconds(1f);
 		if (!unlocked) {
 			this.animator.speed = 0f;
@@ -122,6 +124,7 @@ public class Lock : MonoBehaviour {
 		} else {
 			yield return new WaitForSeconds(1f);
 			this.ResetLock();
+			Debug.Log("Unlocked Lock!");
 		}
 	}
 	

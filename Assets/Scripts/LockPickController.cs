@@ -34,6 +34,12 @@ public class LockPickController : MonoBehaviour {
 	[SerializeField]
 	private float speed = 5f;
 	
+	public float Speed {
+		get {
+			return this.speed;
+		}
+	}
+	
 	private bool isUnlocking = false;
 	
 	public bool IsUnlocking {
@@ -53,6 +59,10 @@ public class LockPickController : MonoBehaviour {
 	}
 	
 	private void Update() {
+		
+		if (LockAI.Instance.IsActive) {
+			return;
+		}
 		
 		if (this.isUnlocking) {
 			return;
@@ -76,6 +86,7 @@ public class LockPickController : MonoBehaviour {
 	public void ResetAngle() {
 		this.angle = 0f;
 		this.UpdateRotation();
+		LockAI.Instance.SetStartAngle();
 	}
 	
 	public void UpdateRotation() {
