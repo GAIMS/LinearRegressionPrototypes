@@ -5,23 +5,27 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
-    private List<Vector3> clickedPos;
+    private List<Vector2> clickedPos;
 
     private Rigidbody2D rb;
     private Vector2 targetPos;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        clickedPos = new List<Vector2>();
     }
     
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            targetPos = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+            clickedPos.Add(targetPos);
+            float angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
+            gameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            Vector3 mouse = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-            clickedPos.Add(mouse);
-            float angle = Mathf.Atan2(mouse.y, mouse.x) * Mathf.Rad2Deg;
-            gameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             rb.AddForce(transform.right * speed);
         }
     }
