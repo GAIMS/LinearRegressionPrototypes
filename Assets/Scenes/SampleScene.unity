@@ -1073,8 +1073,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 2668233464573720897, guid: ec5664ee102cd5f4d88dbb167008732d, type: 3}
-  maxEnemies: 150
-  initEnemies: 150
+  maxEnemies: 2000
+  initEnemies: 2000
   spawnRate: 5
 --- !u!4 &1895291284
 Transform:
