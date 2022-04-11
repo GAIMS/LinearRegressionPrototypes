@@ -159,8 +159,8 @@ MonoBehaviour:
   clickedPos: []
   w: 0
   b: 0
-  learningRate: 1
-  normalize: 1
+  learningRate: 0.1
+  normalize: 5
   line: {fileID: 455110582}
   parentTransform: {fileID: 1367521275}
 --- !u!50 &175542540
