@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour {
 		Vector3 velocity = new Vector3(hori, vert, 0f) * this.speed;
 		
 		this.rigidbody.velocity = velocity;
+		
+		Vector3 v = this.transform.position - Vector3.zero;
+		v = Vector3.ClampMagnitude(v, LevelParams.Instance.Radius);
+		v.z = 0f;
+		this.transform.position = Vector3.zero + v;
 	}
 	
 	private void OnCollisionEnter(Collision collision) {
