@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerWall : MonoBehaviour {
 	
 	[SerializeField]
-	private PlayerController playerOne, playerTwo;
+	public PlayerController playerOne, playerTwo;
 	
 	private Transform transform;
 	
@@ -41,19 +41,23 @@ public class PlayerWall : MonoBehaviour {
 		this.transform.localScale = new Vector3(dist, 0.25f, 1f);
 	}
 	
-	private void OnCollisionEnter(Collision collision) {
-		Debug.Log("Colliding with " + collision.gameObject.name);
-		ObjProjectile projectile = collision.gameObject.GetComponentInChildren<ObjProjectile>();
+	private void OnTriggerEnter(Collider collider) {
+		Debug.Log("Colliding with " + collider.gameObject.name);
+		ObjProjectile projectile = collider.gameObject.GetComponentInChildren<ObjProjectile>();
 		if (projectile == null) {
 			return;
 		} else {
+			if (projectile.isPlayer) {
+				return;
+			}
 			Vector3 dir = this.transform.position - projectile.transform.position;
 			float dot = Vector3.Dot(dir, this.transform.up);
 			if (dot >= 0.1f) {
-				projectile.Rigidbody.velocity = -this.transform.up * 10f;
+				projectile.rigidbody.velocity = -this.transform.up * 10f;
 			} else if (dot <= -0.1f) {
-				projectile.Rigidbody.velocity = this.transform.up * 10f;
+				projectile.rigidbody.velocity = this.transform.up * 10f;
 			}
+			projectile.Reflect(true);
 		}
 	}
 }

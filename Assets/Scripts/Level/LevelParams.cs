@@ -14,6 +14,8 @@ public class LevelParams : MonoBehaviour {
 		}
 	}
 	
+	public Camera camera;
+	
 	[SerializeField]
 	[Range(5f, 50f)]
 	private float radius = 10f;
@@ -32,5 +34,7 @@ public class LevelParams : MonoBehaviour {
 		scale.x = scale.z + 1f;
 		scale.y = 1f;
 		this.arenaTrans.localScale = scale;
+		
+		this.camera.orthographicSize = this.radius + 5f;
 	}
 }

@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class ObjProjectile : MonoBehaviour {
 	
-	private Rigidbody rigidbody;
+	public Rigidbody rigidbody { get; private set; }
 	
-	public Rigidbody Rigidbody {
-		get {
-			return this.rigidbody;
-		}
-	}
+	public bool isPlayer { get; private set; }
+	
+	private float timer = 0f;
+	
+	private float deathTime = 5f;
 	
 	private void Awake() {
 		this.rigidbody = this.GetComponent<Rigidbody>();
+	}
+	
+	private void Start() {
+		this.isPlayer = false;
+	}
+	
+	public void Reflect(bool player) {
+		this.isPlayer = player;
+	}
+	
+	private void Update() {
+		this.timer += Time.deltaTime;
+		if (this.timer > this.deathTime) {
+			Destroy(this.gameObject);
+		}
 	}
 }
