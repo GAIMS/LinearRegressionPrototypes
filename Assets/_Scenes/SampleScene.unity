@@ -928,7 +928,7 @@ MonoBehaviour:
   width: 180
   height: 101
   seed: test
-  useRandomSeed: 0
+  useRandomSeed: 1
   randomFillPercent: 43
   smoothAmount: 5
   squareSize: 1
