@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076b2ae0bd93fd0419eff63fcfe7c042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
+  camera: {fileID: 376696821626664693}
   radius: 15
   arenaTrans: {fileID: 275766775419326823}
 --- !u!1 &275766775419326820
@@ -107,7 +107,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ea479376f3097a24bba9bf3ce2bf9434, type: 2}
+  - {fileID: 2100000, guid: 79f5eb1efae255744aee126f094d7c05, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
