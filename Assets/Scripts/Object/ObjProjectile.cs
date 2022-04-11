@@ -10,7 +10,7 @@ public class ObjProjectile : MonoBehaviour {
 	
 	private float timer = 0f;
 	
-	private float deathTime = 5f;
+	private float deathTime = 20f;
 	
 	private void Awake() {
 		this.rigidbody = this.GetComponent<Rigidbody>();
@@ -22,6 +22,7 @@ public class ObjProjectile : MonoBehaviour {
 	
 	public void Reflect(bool player) {
 		this.isPlayer = player;
+		this.timer = 0f;
 	}
 	
 	private void Update() {

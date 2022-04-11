@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
 	
+	private static EnemySpawner _Instance;
+	public static EnemySpawner Instance {
+		get {
+			if (_Instance == null) {
+				_Instance = FindObjectOfType<EnemySpawner>();
+			}
+			return _Instance;
+		}
+	}
+	
     public GameObject enemyPrefab;
 	
 	private int currentActiveAmt = 0;
