@@ -82,8 +82,8 @@ public class EnemyCore : MonoBehaviour {
 	protected virtual void Damage() {
 		this.hp--;
 		if (this.hp <= 0){ 
-			this.gameObject.SetActive(false);
 			EnemySpawner.Instance.EnemyDied();
+			Destroy(this.gameObject);
 		}
 	}
 	
