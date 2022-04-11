@@ -37,10 +37,6 @@ public class PlayerController : MonoBehaviour {
 		this.transform = this.gameObject.transform;
 	}
 	
-	private void Update() {
-		
-	}
-	
 	private void FixedUpdate() {
 		
 		if (this.isNotHuman) {
