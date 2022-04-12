@@ -330,14 +330,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0208a55f53389484e98ec149cb3673d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pxlWidth: 513
-  pxlHeight: 513
-  terrainWidth: 100
-  terrainHeight: 100
-  terrainDepth: 0
+  pxlWidth: 129
+  pxlHeight: 129
+  terrainDepth: 50
   xOrg: 0
   yOrg: 0
-  scale: 1
+  scale: 10
   terrain: {fileID: 0}
   noiseTex: {fileID: 0}
   lowestPoint: 0

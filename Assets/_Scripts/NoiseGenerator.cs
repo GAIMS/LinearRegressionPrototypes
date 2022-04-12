@@ -1,14 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class NoiseGenerator : MonoBehaviour
 {
     [SerializeField] public int pxlWidth;
     [SerializeField] public int pxlHeight;
-    
-    [SerializeField] public int terrainWidth;
-    [SerializeField] public int terrainHeight;
     [SerializeField] public int terrainDepth;
 
     [SerializeField] private float xOrg;
@@ -31,9 +30,9 @@ public class NoiseGenerator : MonoBehaviour
     {
         //rend = GetComponent<Renderer>();
         terrain = GetComponent<Terrain>();
-        terrain.materialTemplate.mainTexture = noiseTex;
-        noiseTex = new Texture2D(pxlWidth, pxlHeight);
-        pix = new Color[noiseTex.width * noiseTex.height];
+        //terrain.materialTemplate.mainTexture = noiseTex;
+        //noiseTex = new Texture2D(pxlWidth, pxlHeight);
+        //pix = new Color[noiseTex.width * noiseTex.height];
         //rend.material.mainTexture = noiseTex;
         randPosX = Random.Range(0, 1000);
         randPosY = Random.Range(0, 1000);
@@ -43,24 +42,23 @@ public class NoiseGenerator : MonoBehaviour
     void CalcNoise()
     {
         float[,] heights = new float[pxlWidth, pxlHeight];
-        terrain.terrainData.size = new Vector3(terrainWidth,terrainDepth,terrainHeight);
+        terrain.terrainData.size = new Vector3(pxlWidth,terrainDepth,pxlHeight);
+        terrain.terrainData.heightmapResolution = pxlWidth + 1;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
-        while (y<noiseTex.height)
+        while (y < pxlHeight)
         {
             float x = 0;
-            while (x < noiseTex.width)
+            while (x < pxlWidth)
             {
-                float xCoord = (xOrg + randPosX) + x / noiseTex.width * scale;
-                float yCoord = (yOrg + randPosY) + y / noiseTex.height * scale;
+                float xCoord = (xOrg + randPosX) + x / pxlWidth * scale;
+                float yCoord = (yOrg + randPosY) + y / pxlHeight * scale;
 
                 float sample = Mathf.PerlinNoise(xCoord, yCoord);
 
                 heights[(int) x, (int) y] = sample;
-                
-                terrain.terrainData.SetHeights(0,0,heights);
-                
-                pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
+
+                //pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
                 if (sample > highestPoint)
                 {
                     Debug.Log("High: " + sample);
@@ -81,9 +79,18 @@ public class NoiseGenerator : MonoBehaviour
 
             y++;
         }
-        noiseTex.SetPixels(pix);
-        noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
-        noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
-        noiseTex.Apply();
+        //noiseTex.SetPixels(pix);
+        //noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
+        //noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
+        //noiseTex.Apply();
+        terrain.terrainData.SetHeights(0,0,heights);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CalcNoise();
+        }
     }
 }
