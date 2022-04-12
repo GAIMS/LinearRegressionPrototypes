@@ -30,15 +30,25 @@ public class NoiseGenerator : MonoBehaviour
     {
         //rend = GetComponent<Renderer>();
         terrain = GetComponent<Terrain>();
-        //terrain.materialTemplate.mainTexture = noiseTex;
-        //noiseTex = new Texture2D(pxlWidth, pxlHeight);
-        //pix = new Color[noiseTex.width * noiseTex.height];
+        terrain.materialTemplate.mainTexture = noiseTex;
+        noiseTex = new Texture2D(pxlWidth, pxlHeight);
+        pix = new Color[noiseTex.width * noiseTex.height];
         //rend.material.mainTexture = noiseTex;
         randPosX = Random.Range(0, 1000);
         randPosY = Random.Range(0, 1000);
         CalcNoise();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            randPosX = Random.Range(0, 1000);
+            randPosY = Random.Range(0, 1000);
+            CalcNoise();
+        }
+    }
+    
     void CalcNoise()
     {
         float[,] heights = new float[pxlWidth, pxlHeight];
@@ -58,7 +68,7 @@ public class NoiseGenerator : MonoBehaviour
 
                 heights[(int) x, (int) y] = sample;
 
-                //pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
+                pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
                 if (sample > highestPoint)
                 {
                     Debug.Log("High: " + sample);
@@ -79,18 +89,10 @@ public class NoiseGenerator : MonoBehaviour
 
             y++;
         }
-        //noiseTex.SetPixels(pix);
-        //noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
-        //noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
-        //noiseTex.Apply();
+        noiseTex.SetPixels(pix);
+        noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
+        noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
+        noiseTex.Apply();
         terrain.terrainData.SetHeights(0,0,heights);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            CalcNoise();
-        }
     }
 }
