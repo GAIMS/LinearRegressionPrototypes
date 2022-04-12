@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
             clickedPos.Add(hit.point);
             float angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
             gameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            
             if (clickedPos.Count < 1)
             {
                 w = b = 0;
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour
             {
                 GradientDescent();
             }
-            SetLine(w,b);
+            SetLine((float)w,(float)b);
         }
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -52,15 +53,15 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    private void SetLine(double w, double b)
+    private void SetLine(float w, float b)
     {
-        // double rad = Math.Atan(w);
-        // double deg = rad * 180 / Math.PI;
-        // transform.localPosition = new Vector3(0, (float) b, 0);
-        // transform.localRotation = Quaternion.Euler(0, 0, (float) deg);
+        //float rad = Mathf.Atan(w);
+        //float deg = rad * 180 / Mathf.PI;
+        //transform.localPosition = new Vector3(0, (float) b, 0);
+        //transform.localRotation = Quaternion.Euler(0, 0, (float) deg);
 
-        line.SetPosition(0, new Vector3(-2.5f + parentTransform.position.x, (-0.5f* (float) w + (float) b) * 5f + parentTransform.position.y, 0f));
-        line.SetPosition(1, new Vector3(2.5f + parentTransform.position.x, (0.5f* (float) w + (float) b) * 5f + parentTransform.position.y, 0f));
+        line.SetPosition(0, new Vector3(-2.5f, (-0.5f* (float) w + (float) b), 0f));
+        line.SetPosition(1, new Vector3(2.5f, (0.5f* (float) w + (float) b), 0f));
 
 
     }
