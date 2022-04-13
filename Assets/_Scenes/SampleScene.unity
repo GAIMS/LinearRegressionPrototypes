@@ -160,7 +160,7 @@ MonoBehaviour:
   w: 0
   b: 0
   learningRate: 0.1
-  normalize: 0.5
+  normalize: 10
   line: {fileID: 455110582}
   parentTransform: {fileID: 1367521275}
   backMask:
