@@ -68,7 +68,10 @@ public class PlayerController : MonoBehaviour
     
     private void GradientDescent()
     {
-        var pointList = clickedPos.ToArray();
+        w = 0;
+        b = 0;
+        Vector2[] pointList = new Vector2[0];
+        pointList = clickedPos.ToArray();
         var positions = pointList.Select(p => p);
         var X = positions.Select(pos => pos.x);
         // foreach (var x in X)
