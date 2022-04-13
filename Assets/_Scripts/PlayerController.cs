@@ -60,8 +60,8 @@ public class PlayerController : MonoBehaviour
         //transform.localPosition = new Vector3(0, (float) b, 0);
         //transform.localRotation = Quaternion.Euler(0, 0, (float) deg);
 
-        line.SetPosition(0, new Vector3(-2.5f, (-0.5f* (float) w + (float) b), 0f));
-        line.SetPosition(1, new Vector3(2.5f, (0.5f* (float) w + (float) b), 0f));
+        line.SetPosition(0, new Vector3(-2.5f, (-0.5f* (float) w + (float) 0), 0f));
+        line.SetPosition(1, new Vector3(2.5f, (0.5f* (float) w + (float) 0), 0f));
 
 
     }
