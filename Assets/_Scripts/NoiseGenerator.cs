@@ -65,8 +65,18 @@ public class NoiseGenerator : MonoBehaviour
                 float yCoord = (yOrg + randPosY) + y / pxlHeight * scale;
 
                 float sample = Mathf.PerlinNoise(xCoord, yCoord);
-
-                heights[(int) x, (int) y] = sample;
+                //if ((int)x == 1 || (int)y == 1 || (int) x == (pxlWidth - 2) || (int) y == (pxlHeight - 2))
+                //{
+                //    heights[(int) x, (int) y] = -50;
+                //}
+                if((int)x == 0 || (int)y == 0 || (int) x == (pxlWidth - 1) || (int) y == (pxlHeight - 1))
+                {
+                    heights[(int) x, (int) y] = -50;
+                }
+                else
+                {
+                    heights[(int) x, (int) y] = sample;
+                }
 
                 pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
                 if (sample > highestPoint)
