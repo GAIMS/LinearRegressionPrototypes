@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool singlePlayer;
     [SerializeField] private bool twoPlayer;
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Text gameUI;
 
     private PlayerController player;
     private BotManager botManager;

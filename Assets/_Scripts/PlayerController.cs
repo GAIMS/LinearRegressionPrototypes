@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject slopeGuide;
     [SerializeField] private GameObject slopeIndicator;
     [SerializeField] private int slopeResolution;
+    [SerializeField] private Text shotNumText;
     public bool usingNoise;
     public bool useDistance;
     public bool useDistanceForPow;
@@ -26,10 +28,13 @@ public class PlayerController : MonoBehaviour
     private float minX, minY, minAngle;
     private bool checkSlope = true;
     private GameManager gm;
+    private int shotNum;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _hole = GameObject.FindWithTag("Finish");
+        shotNum = 0;
+        shotNumText = FindObjectOfType<Text>();
         if (usingNoise)
         {
             _noiseGen = FindObjectOfType<NoiseGenerator>();
@@ -73,6 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0))
         {
+            shotNum++;
             if (twoPlayer && myTurn)
             {
                 gm.ChangeTurn(this);
@@ -82,6 +88,7 @@ public class PlayerController : MonoBehaviour
             else if(!twoPlayer)
             {
                 Move();
+                shotNumText.text = "Shot Number: " + shotNum;
             }
         }
         else if(_canMove())
