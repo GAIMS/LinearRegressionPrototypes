@@ -370,9 +370,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8e99428bca842048eb269b9a20caad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bots: 0
+  bots: 1
   singlePlayer: 0
-  twoPlayer: 1
+  twoPlayer: 0
   playerPrefab: {fileID: 1842405018939258299, guid: 8725f4be52baa48f984973edc5999bba, type: 3}
 --- !u!4 &211553976
 Transform:
