@@ -454,7 +454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bots: 0
-  singlePlayer: 0
+  singlePlayer: 1
   twoPlayer: 0
 --- !u!4 &211553976
 Transform:

@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public bool usingNoise;
     public bool useDistance;
     public bool useDistanceForPow;
+    public bool twoPlayer;
+    public bool playerTwo;
+    public bool myTurn;
 
     private Rigidbody2D _rb;
     private GameObject _hole;
@@ -39,10 +42,21 @@ public class PlayerController : MonoBehaviour
         //float lerp = 0;
         if (_rb.velocity.magnitude <= stopSpeed)
         {
-            _rb.velocity = Vector2.zero;
-            aimGuide.SetActive(true);
-            slopeGuide.SetActive(true);
-            return true;
+            if (twoPlayer && myTurn)
+            {
+                _rb.velocity = Vector2.zero;
+                aimGuide.SetActive(true);
+                slopeGuide.SetActive(true);
+                return true;
+            }
+            else if(!twoPlayer)
+            {
+                _rb.velocity = Vector2.zero;
+                aimGuide.SetActive(true);
+                slopeGuide.SetActive(true);
+                return true;
+            }
+
         }
 
         //lerp = 0;
@@ -53,11 +67,24 @@ public class PlayerController : MonoBehaviour
     {
         if (_canMove() && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Move();
+            if (twoPlayer && myTurn)
+            {
+                myTurn = false;
+                Move();
+            }
+            else if(!twoPlayer)
+            {
+                Move();
+            }
         }
         else if(_canMove())
         {
-            Aim();
+            if (twoPlayer && myTurn)
+                Aim();
+            else if(!twoPlayer)
+            {
+                Aim();
+            }
         }
     }
 

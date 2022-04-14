@@ -7,13 +7,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool bots;
     [SerializeField] private bool singlePlayer;
     [SerializeField] private bool twoPlayer;
+    [SerializeField] private GameObject playerPrefab;
 
     private PlayerController player;
     private BotManager botManager;
     private MapGenerator mapGenerator;
     private Hole hole;
     private NoiseGenerator background;
-    void Start()
+    private PlayerController playerTwo;
+    void Awake()
     {
         player = FindObjectOfType<PlayerController>();
         botManager = FindObjectOfType<BotManager>();
@@ -39,6 +41,11 @@ public class GameManager : MonoBehaviour
         }
         else if(twoPlayer)
         {
+            playerTwo = Instantiate(playerPrefab).GetComponent<PlayerController>();
+            playerTwo.playerTwo = true;
+            playerTwo.twoPlayer = true;
+            player.myTurn = true;
+            player.twoPlayer = true;
             player.gameObject.SetActive(true);
             botManager.gameObject.SetActive(false);
             mapGenerator.GetComponent<Renderer>().enabled = false;
@@ -50,6 +57,9 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        
+        if(!player.myTurn)
+            playerTwo.myTurn = true;
+        else if(!playerTwo.myTurn)
+            player.myTurn = true;
     }
 }
