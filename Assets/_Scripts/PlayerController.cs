@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private float x, y, z;
     private float minX, minY, minAngle;
     private bool checkSlope = true;
+    private GameManager gm;
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -34,6 +35,11 @@ public class PlayerController : MonoBehaviour
             _noiseGen = FindObjectOfType<NoiseGenerator>();
             transform.position = _noiseGen.highestCoord;
             slopeIndicator.SetActive(true);
+        }
+
+        if (twoPlayer)
+        {
+            gm = FindObjectOfType<GameManager>();
         }
     }
 
@@ -69,7 +75,8 @@ public class PlayerController : MonoBehaviour
         {
             if (twoPlayer && myTurn)
             {
-                myTurn = false;
+                gm.ChangeTurn(this);
+
                 Move();
             }
             else if(!twoPlayer)
@@ -80,7 +87,9 @@ public class PlayerController : MonoBehaviour
         else if(_canMove())
         {
             if (twoPlayer && myTurn)
+            {
                 Aim();
+            }
             else if(!twoPlayer)
             {
                 Aim();

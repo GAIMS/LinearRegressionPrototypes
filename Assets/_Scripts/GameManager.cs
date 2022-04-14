@@ -54,12 +54,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
-    void Update()
+    public void ChangeTurn(PlayerController pc)
     {
-        if(!player.myTurn)
+        if (pc.gameObject.name == player.gameObject.name)
+        {
             playerTwo.myTurn = true;
-        else if(!playerTwo.myTurn)
+            player.myTurn = false;
+        }
+        else if (pc.gameObject.name == playerTwo.gameObject.name)
+        {
             player.myTurn = true;
+            playerTwo.myTurn = false;
+        }
     }
 }
