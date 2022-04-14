@@ -845,7 +845,7 @@ MonoBehaviour:
   targetAngle: 0
   prevDistance: []
   prevAngle: []
-  isActive: 1
+  isActive: 0
 --- !u!1 &1670823105
 GameObject:
   m_ObjectHideFlags: 0
