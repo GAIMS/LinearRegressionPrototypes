@@ -278,7 +278,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 25, y: 25}
@@ -600,6 +600,8 @@ MonoBehaviour:
   yOrg: 0
   scale: 3
   numPrefab: {fileID: 2422720123017090202, guid: 684e0501d02bb43029ab129d63f7b2ea, type: 3}
+  seed: test
+  useRandomSeed: 1
   layoutGroup: {fileID: 413787228}
   lowestPoint: 0.5
   highestPoint: 0.5

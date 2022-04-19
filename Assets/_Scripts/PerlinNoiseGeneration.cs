@@ -15,6 +15,9 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
     [SerializeField] private float scale = 1f;
     [SerializeField] private GameObject numPrefab;
+    
+    [SerializeField] private string seed;
+    [SerializeField] private bool useRandomSeed;
 
     public GridLayoutGroup layoutGroup;
     public float lowestPoint = .5f, highestPoint = .5f;
@@ -38,8 +41,16 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
     void CalcNoise()
     {
-        randPosX = Random.Range(0, 1000);
-        randPosY = Random.Range(0, 1000);
+        if (useRandomSeed)
+        {
+            seed = Time.time.ToString();
+        }
+
+        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+
+        randPosX = pseudoRandom.Next(-100, 100);
+        randPosY = pseudoRandom.Next(-100, 100);
+        
         layoutGroup.constraintCount = pxlHeight;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
