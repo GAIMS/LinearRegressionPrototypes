@@ -283,7 +283,7 @@ MonoBehaviour:
   m_StartAxis: 0
   m_CellSize: {x: 10, y: 10}
   m_Spacing: {x: 0, y: 0}
-  m_Constraint: 0
+  m_Constraint: 2
   m_ConstraintCount: 2
 --- !u!114 &413787229
 MonoBehaviour:
@@ -594,8 +594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6522ba2ea1e4c4a8e966fe3453b93d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pxlWidth: 65
-  pxlHeight: 35
+  pxlWidth: 63
+  pxlHeight: 36
   xOrg: 0
   yOrg: 0
   scale: 2

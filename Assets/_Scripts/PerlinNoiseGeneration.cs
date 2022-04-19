@@ -40,6 +40,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
     void CalcNoise()
     {
+        layoutGroup.constraintCount = pxlHeight;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
         while (y<pxlHeight)
@@ -59,7 +60,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
                 {
                     Debug.Log("High: " + sample);
                     highestPoint = sample;
-                    highestCoord = new Vector2(((int) -x + (pxlWidth/2))*.1f, ((int) -y + (pxlHeight/2))*.1f);
+                    highestCoord = new Vector2(x, y);
                     test1 = new Vector2(x, y);
                 }
 
@@ -67,7 +68,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
                 {
                     Debug.Log("Low: " + sample);
                     lowestPoint = sample;
-                    lowestCoord = new Vector2(((int) -x + (pxlWidth/2))*.1f, ((int) -y + (pxlHeight/2))*.1f);
+                    lowestCoord = new Vector2(x, y);
                     test2 = new Vector2(x, y);
                 }
                 x++;
@@ -85,7 +86,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Text[] obj = FindObjectsOfType<Text>();
+            Text[] obj = layoutGroup.GetComponentsInChildren<Text>();
 
             foreach (var text in obj)
             {
