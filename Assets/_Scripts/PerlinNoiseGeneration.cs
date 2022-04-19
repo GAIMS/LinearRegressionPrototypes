@@ -33,13 +33,13 @@ public class PerlinNoiseGeneration : MonoBehaviour
         //noiseTex = new Texture2D(pxlWidth, pxlHeight);
         //pix = new Color[noiseTex.width * noiseTex.height];
         //rend.material.mainTexture = noiseTex;
-        randPosX = Random.Range(0, 1000);
-        randPosY = Random.Range(0, 1000);
         CalcNoise();
     }
 
     void CalcNoise()
     {
+        randPosX = Random.Range(0, 1000);
+        randPosY = Random.Range(0, 1000);
         layoutGroup.constraintCount = pxlHeight;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
