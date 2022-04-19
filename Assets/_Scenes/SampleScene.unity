@@ -1360,6 +1360,8 @@ MonoBehaviour:
   xOrg: 0
   yOrg: 0
   scale: 5
+  seed: test
+  useRandomSeed: 1
   noiseTex: {fileID: 0}
   lowestPoint: 0.5
   highestPoint: 0.5

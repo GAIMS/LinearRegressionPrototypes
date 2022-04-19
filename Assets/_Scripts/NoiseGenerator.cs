@@ -11,6 +11,9 @@ public class NoiseGenerator : MonoBehaviour
     [SerializeField] private float yOrg;
 
     [SerializeField] private float scale = 1f;
+    
+    [SerializeField] private string seed;
+    [SerializeField] private bool useRandomSeed;
 
     public Texture2D noiseTex;
     public float lowestPoint, highestPoint = .5f;
@@ -28,8 +31,17 @@ public class NoiseGenerator : MonoBehaviour
         noiseTex = new Texture2D(pxlWidth, pxlHeight);
         pix = new Color[noiseTex.width * noiseTex.height];
         rend.material.mainTexture = noiseTex;
-        randPosX = Random.Range(0, 1000);
-        randPosY = Random.Range(0, 1000);
+        
+        if (useRandomSeed)
+        {
+            seed = Time.time.ToString();
+        }
+
+        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+
+        randPosX = pseudoRandom.Next(-100, 100);
+        randPosY = pseudoRandom.Next(-100, 100);
+        
         CalcNoise();
     }
 
