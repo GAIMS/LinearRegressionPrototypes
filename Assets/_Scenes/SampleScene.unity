@@ -840,10 +840,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5846d22b2a920412db35373786485dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridHeight: 10
-  gridWidth: 5
-  hexSize: 5
+  gridHeight: 5
+  gridWidth: 10
+  hexSize: 1
   hexPrefab: {fileID: 7273884098483859450, guid: f1337e056b7544e2fa472ab5e6b28049, type: 3}
+  offset: 0.01
 --- !u!4 &1135612848
 Transform:
   m_ObjectHideFlags: 0

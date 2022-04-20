@@ -9,12 +9,15 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private int gridWidth;
     [SerializeField] private float hexSize;
     [SerializeField] private GameObject hexPrefab;
+    [SerializeField] private float offset;
 
     private GameObject[,] hexes;
     
     private void Start()
     {
-        int[,] grid = new int[gridWidth, gridHeight];
+        int[,] grid = new int[gridHeight, gridWidth];
+        float[,] value = new float[gridHeight, gridWidth];
+        hexes = new GameObject[gridHeight, gridWidth];
         //for (int x = 0; x < gridWidth; x++)
         //{
         //    for (int y = 0; y < gridHeight; y++)
@@ -22,16 +25,19 @@ public class HexGridManager : MonoBehaviour
         //        //grid[x,y] = ;
         //    }
         //}
-        CreateHexGrid(grid,new float[gridWidth, gridHeight], hexSize);
+        CreateHexGrid(grid, value, hexSize);
     }
 
     public void CreateHexGrid(int[,] grid, float[,] value, float hexSize)
     {
+        
+        
         for (int x = 0; x < grid.GetLength(1); x++)
         {
             for (int y = 0; y < grid.GetLength(0); y++)
             {
-                CreateHex(new Vector2(x, y), value[x, y], hexSize);
+                //float val = value[x,y];
+                CreateHex(new Vector2(x, y), 0, hexSize);
             }
         }
     }
@@ -40,15 +46,15 @@ public class HexGridManager : MonoBehaviour
     {
         if (pos.x % 2 == 0)
         {
-            Vector2 position = pos * (new Vector2(.78f, .9f) * (size));
+            pos = pos * (new Vector2(.78f, .9f) * (size + offset));
         }
         else
         {
-            Vector2 position = pos * (new Vector2(.78f, .9f) * (size)) + Vector2.up * .44f * size;
+            pos = pos * (new Vector2(.78f, .9f) * (size + offset)) + Vector2.up * .44f * size;
         }
         GameObject hexObj = Instantiate(hexPrefab, pos, Quaternion.identity, transform);
         hexObj.transform.localScale = Vector3.one * hexSize;
-        hexes[(int) pos.x, (int) pos.y] = hexObj;
+        //hexes[(int) pos.x, (int) pos.y] = hexObj;
     }
 }
 
