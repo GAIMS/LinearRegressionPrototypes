@@ -11,13 +11,13 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private GameObject hexPrefab;
     [SerializeField] private float offset;
 
-    private GameObject[,] hexes;
+    private Vector3[] hexesPos;
     
     private void Start()
     {
         int[,] grid = new int[gridHeight, gridWidth];
         float[,] value = new float[gridWidth, gridHeight];
-        hexes = new GameObject[gridWidth, gridHeight];
+        
         //for (int x = 0; x < gridWidth; x++)
         //{
         //    for (int y = 0; y < gridHeight; y++)
@@ -46,15 +46,16 @@ public class HexGridManager : MonoBehaviour
     {
         if (pos.x % 2 == 0)
         {
-            pos = pos * (new Vector2(.78f, .9f) * (size + offset));
+            pos = pos * (new Vector2(size * .75f, size * .865f) + (Vector2.one * offset));
         }
         else
         {
-            pos = pos * (new Vector2(.78f, .9f) * (size + offset)) + Vector2.up * .44f * size;
+            pos = pos * (new Vector2(size * .75f, size * .865f) + (Vector2.one * offset)) + Vector2.up * .44f * size;
         }
-        GameObject hexObj = Instantiate(hexPrefab, pos, Quaternion.identity, transform);
+        GameObject hexObj = Instantiate(hexPrefab, Vector3.zero, Quaternion.identity, transform);
         hexObj.transform.localScale = Vector3.one * hexSize;
-        hexes[(int) pos.x, (int) pos.y] = hexObj;
+        hexObj.transform.localPosition = pos;
+        //hexes[(int) pos.x, (int) pos.y] = hexObj;
     }
 }
 
