@@ -3,111 +3,141 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineController : MonoBehaviour
+public class GraphManager : MonoBehaviour
 {
-
-    public LineRenderer LineRenderer;
     public Camera Camera;
-    public  List<NodeObject> Nodes;
+    public LineObject Line;
+    public List<PointObject> Points;
+    public Transform PointContainer;
+    public int PointCount;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [ContextMenu("Generate Points")]
+    public void GeneratePoints() {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     [ContextMenu("Redraw Line")]
     public void RedrawLine() {
-        RedrawLine(Nodes);
+        RedrawLine(Points);
     }
-
-    public void RedrawLine(List<NodeObject> _points) {
+    public void RedrawLine(List<PointObject> _points) {
         // get our line of best fit
         List<Point> points = new List<Point>();
-        foreach (NodeObject _p in _points) {
+        foreach (PointObject _p in _points) {
             points.Add(new Point(_p.transform));
         }
         Line bestFit = LineOfBestFit(points);
-        Debug.Log(bestFit.A.X);
-        Debug.Log(bestFit.A.Y);
-        Debug.Log(bestFit.B.X);
-        Debug.Log(bestFit.B.Y);
+        Debug.Log(bestFit);
 
         Debug.Log("width: " + Screen.width);
         Debug.Log("height: " + Screen.height);
 
-        // find our corners
-        Vector3 bottomLeft = Camera.ScreenToWorldPoint(new Vector3(0,0,0));
-        Debug.Log(bottomLeft);
-        Vector3 bottomRight = Camera.ScreenToWorldPoint(new Vector3(Screen.width,0,0));
-        Debug.Log(bottomRight);
-        Vector3 upperLeft = Camera.ScreenToWorldPoint(new Vector3(0,Screen.height,0));
-        Debug.Log(upperLeft);
-        Vector3 upperRight = Camera.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
-        Debug.Log(upperRight);
-
-        // create line and point objects from corners
-        Line bottom = new Line(new Point(bottomLeft.x, bottomLeft.y), new Point(bottomRight.x, bottomRight.y));
-        Debug.Log("bottom: " + bottom.ToString());
-        Line top = new Line(new Point(upperLeft.x, upperLeft.y), new Point(upperRight.x, upperRight.y));
-        Debug.Log("top: " + top.ToString());
-        Line left = new Line(new Point(bottomLeft.x, bottomLeft.y), new Point(upperLeft.x, upperLeft.y));
-        Debug.Log("left: " + left.ToString());
-        Line right = new Line(new Point(bottomRight.x, bottomRight.y), new Point(upperRight.x, upperRight.y));
-        Debug.Log("right: " + right.ToString());
+        (Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) = GetCorners(Camera);
+        (Line bottom, Line top, Line left, Line right) = GetSides(bottomLeft, bottomRight, topLeft, topRight);
 
         // find our points of intersection
         List<Point> intersects = new List<Point>();
         try {
             intersects.Add(LineIntersection.FindIntersection(bestFit, bottom));
+            Debug.Log(intersects[intersects.Count-1]);
         } catch (System.SystemException e) {
             Debug.LogError("bottom line error");
             Debug.LogError(e);
         }
         try {
             intersects.Add(LineIntersection.FindIntersection(bestFit, top));
+            Debug.Log(intersects[intersects.Count-1]);
         } catch (System.SystemException e) {
             Debug.LogError("top line error");
             Debug.LogError(e);
         }
         try {
             intersects.Add(LineIntersection.FindIntersection(bestFit, left));
+            Debug.Log(intersects[intersects.Count-1]);
         } catch (System.SystemException e) {
             Debug.LogError("left line error");
             Debug.LogError(e);
         }
         try {
             intersects.Add(LineIntersection.FindIntersection(bestFit, right));
+            Debug.Log(intersects[intersects.Count-1]);
         } catch (System.SystemException e) {
             Debug.LogError("right line error");
             Debug.LogError(e);
         }
 
+        Debug.Log("Intersects Count: " + intersects.Count);
+
         // find the points which are within the bounds of teh screen edge
         List<Point> screenIntersects = new List<Point>();
         for (int i = 0; i < intersects.Count; i++) {
-            if (intersects[i].X >= bottomLeft.x && intersects[i].X <= bottomRight.x) {
-                if (intersects[i].Y >= bottomLeft.y && intersects[i].Y <= upperLeft.y) {
-                    Debug.Log(intersects[i].X + ", " + intersects[i].Y);
+            Debug.Log(intersects[i]);
+            /*Debug.Log("if "  + intersects[i].X + " >= " +  bottomLeft.x + " and " + intersects[i].X + " <= " + bottomRight.x);
+            Debug.Log(intersects[i].X >= bottomLeft.X);
+            Debug.Log(intersects[i].X <= bottomRight.X);*/
+            if (intersects[i].X >= bottomLeft.X && intersects[i].X <= bottomRight.X) {
+                /*Debug.Log("if "  + intersects[i].Y + " >= " +  bottomLeft.y + " and " + intersects[i].Y + " <= " + topLeft.y);
+                Debug.Log(intersects[i].Y >= bottomLeft.y);
+                Debug.Log(intersects[i].Y <= topLeft.y);*/
+                if (intersects[i].Y >= bottomLeft.Y && intersects[i].Y <= topLeft.Y) {
+                    Debug.Log("screenIntersect: " + intersects[i].X + ", " + intersects[i].Y);
                     screenIntersects.Add(intersects[i]);
+                } else {
+                    // Debug.Log("second if failed");
                 }
+            } else {
+                // Debug.Log("first if failed");
             }
         }
 
-        // build line renderer position values
-        Vector3[] positions =  new Vector3[2];
-        positions[0] = new Vector3(screenIntersects[0].X, screenIntersects[0].Y, 0);
-        positions[1] = new Vector3(screenIntersects[1].X, screenIntersects[1].Y, 0);
-        LineRenderer.SetPositions(positions);
+        Debug.Log("screeIntersects.Count: " + screenIntersects.Count);
+        if (screenIntersects.Count == 2) {
+            // build line renderer position values
+            Vector3[] positions =  new Vector3[2];
+            positions[0] = new Vector3(screenIntersects[0].X, screenIntersects[0].Y, 0);
+            positions[1] = new Vector3(screenIntersects[1].X, screenIntersects[1].Y, 0);
+            Line.LineRenderer.SetPositions(positions);
+        } else if (screenIntersects.Count == 1) {
+            Debug.LogError("Only 1 screen intersection, this shouldn't be possible.");
+        } else if (screenIntersects.Count > 2) {
+            Debug.LogError("More than 2 screen intersections, this shouldn't be possible.");
+        } else {
+            Debug.LogWarning("Not enough intersects to draw line");
+        }
     }
 
-    Line LineOfBestFit(List<Point> points) {
+    public (Line, Line, Line, Line)  GetSides(Point bottomLeft, Point bottomRight, Point topLeft, Point topRight) {
+        // create line and point objects from corners
+        Line bottom = new Line(bottomLeft, bottomRight);
+        Debug.Log("bottom: " + bottom.ToString());
+        Line top = new Line(topLeft, topRight);
+        Debug.Log("top: " + top.ToString());
+        Line left = new Line(bottomLeft, topLeft);
+        Debug.Log("left: " + left.ToString());
+        Line right = new Line(bottomRight, topRight);
+        Debug.Log("right: " + right.ToString());
+        return (bottom, top, left, right);
+    }
+
+    public (Point, Point, Point, Point) GetCorners(Rect rect) {
+        Vector3 bottomLeftVector = Camera.ScreenToWorldPoint(new Vector3(rect.xMin * Screen.width, rect.yMin * Screen.height, 0));
+        Point bottomLeft = new Point(bottomLeftVector);
+        Vector3 bottomRightVector = Camera.ScreenToWorldPoint(new Vector3(rect.xMax * Screen.width, rect.yMin * Screen.height, 0));
+        Point bottomRight = new Point(bottomRightVector);
+        Vector3 topLeftVector = Camera.ScreenToWorldPoint(new Vector3(rect.xMin * Screen.width, rect.yMax * Screen.height, 0));
+        Point topLeft = new Point(topLeftVector);
+        Vector3 topRightVector = Camera.ScreenToWorldPoint(new Vector3(rect.xMax * Screen.width, rect.yMax * Screen.height, 0));
+        Point topRight = new Point(topRightVector);
+        return (bottomLeft, bottomRight, topLeft, topRight);
+    }
+    public (Point, Point, Point, Point) GetCorners(Camera camera) {
+        return GetCorners(camera.rect);
+    }
+    public (Point, Point, Point, Point) GetCorners(RectTransform rectTransform) {
+        return GetCorners(rectTransform.rect);
+    }
+
+    public Line LineOfBestFit(List<Point> points) {
         //average our points
         float meanX = points.Average(point => point.X);
         float meanY = points.Average(point => point.Y);
@@ -121,11 +151,13 @@ public class LineController : MonoBehaviour
 
         return new Line(new Point(0,yIntercept), new Point(xIntercept, 0));
     }
+
 }
 
+[System.Serializable]
 public struct Line {
-    public Point A { get; set; }
-    public Point B { get; set; }
+    public Point A;
+    public Point B;
 
     public Line(Point a, Point b) {
         A = a;
@@ -138,9 +170,15 @@ public struct Line {
     }
 }
 
+[System.Serializable]
 public struct Point {
-    public float X { get; set; }
-    public float Y { get; set; }
+    public float X;
+    public float Y;
+
+    public Point (Vector3 vector) {
+        X = vector.x;
+        Y = vector.y;
+    }
 
     public Point (float x, float y) {
         X = x;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3063313667167164253}
   - component: {fileID: 6109142725582152116}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Point-3D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183651255645090595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.889, y: -5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 0}
@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b5e5257f9833e48a99ed90d595fd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Renderer: {fileID: 6317036359316229030}
