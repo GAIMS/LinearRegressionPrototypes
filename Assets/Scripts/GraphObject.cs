@@ -43,7 +43,6 @@ public class GraphObject : MonoBehaviour
 
     }
 
-
     [ContextMenu("Redraw Points")]
     public void RedrawPoints() {
         ClearPoints();
