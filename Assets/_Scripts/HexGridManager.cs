@@ -13,20 +13,10 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float offset;
 
     public Hex[,] hexes;
-    private Vector3 currentPos;
-    private float currentVal;
 
     private void Awake()
     {
         hexes = new Hex[gridWidth, gridHeight];
-
-        //for (int x = 0; x < gridWidth; x++)
-        //{
-        //    for (int y = 0; y < gridHeight; y++)
-        //    {
-        //        //grid[x,y] = ;
-        //    }
-        //}
         CreateHexGrid(hexSize);
     }
     public void CreateHexGrid(float hexSize)
@@ -38,11 +28,9 @@ public class HexGridManager : MonoBehaviour
             {
 
                 Hex hex = new Hex();
-                hex.position = new Vector3(x, y, -x - y);
+                float r = y - (x + (x & 1)) / 2;
+                hex.position = new Vector3(x, r, -x - r);
                 hexes[x,y] = hex;
-                currentPos = hex.position;
-                currentVal = hex.hexValue;
-                //Debug.Log(hex.position);
                 CreateHex(new Vector2(x, y), hexSize, x, y);
             }
         }
@@ -57,15 +45,13 @@ public class HexGridManager : MonoBehaviour
         else
         {
             pos = pos * (new Vector2(size * .75f, size * .865f) + 
-            (Vector2.one * offset)) + Vector2.up * .44f * size;
+            (Vector2.one * offset)) - Vector2.up * .44f * size;
         }
 
         GameObject hexObj = Instantiate(hexPrefab, Vector3.zero, Quaternion.identity, transform);
         hexObj.transform.localScale = Vector3.one * hexSize;
         hexObj.transform.localPosition = pos;
         hexes[x,y].hexObject = hexObj;
-        //hexObj.GetComponentInChildren<Text>().text = currentVal.ToString();
-        //hexes[(int) pos.x, (int) pos.y] = hexObj;
     }
 
     private void Update()
@@ -80,26 +66,25 @@ public class HexGridManager : MonoBehaviour
                     thing++;
                     hexes[x,y].hexObject.GetComponentInChildren<Text>().text = ((int) (hexes[x,y].hexValue * 10)).ToString();
                     hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * hexes[x, y].hexValue;
-
+                    
                     GetNeighbors(hexes[x,y]);
 
-                    Vector3 randPos = LowestNeighbor(hexes[x, y]);
+                    Vector3 randPos = LowestNeighbor(hexes[x, y]).hexObject.transform.position;
                     Vector3 objectPos = hexes[x,y].hexObject.transform.position;
                     randPos.x = randPos.x - objectPos.x;
                     randPos.y = randPos.y - objectPos.y;
                     float angle =  Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
-                    hexes[x,y].hexObject.GetComponentsInChildren<Text>()[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                    hexes[x,y].hexObject.GetComponentsInChildren<Text>()[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
                     
                     for (int i = 2; i < hexes[x,y].hexObject.GetComponentsInChildren<Text>().Length; i++)
                     {
                         if (i == 2)
-                            hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.x.ToString();
-                        if (i == 3)
                             hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.y.ToString();
-                        if (i == 4)
+                        if (i == 3)
                             hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.z.ToString();
+                        if (i == 4)
+                            hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.x.ToString();
                     }
-                    //hexes[x,y].hexObject.GetComponentInChildren<Text>().text = thing + " " + x + " , " + y;
                 }
             }
         }
@@ -125,9 +110,9 @@ public class HexGridManager : MonoBehaviour
         }
     }
 
-    Vector3 LowestNeighbor(Hex hex)
+    Hex LowestNeighbor(Hex hex)
     {
-        float min = 10;
+        float min = 1000000;
         Hex lowest = null;
         for (int i = 0; i < hex.neighbors.Count; i++)
         {
@@ -137,22 +122,7 @@ public class HexGridManager : MonoBehaviour
                 lowest = hex.neighbors[i];
             }
         }
-        Debug.Log(min);
-        return lowest.hexObject.transform.position;
-    }
-
-    public class HexGrid
-    {
-        public HexGrid(int[,] grid, float[,] value, float hexSize)
-        {
-            for (int x = 0; x < grid.GetLength(1); x++)
-            {
-                for (int y = 0; y < grid.GetLength(0); y++)
-                {
-                    //new Hex(new Vector2(x, y), value[x, y]);
-                }
-            }
-        }
+        return lowest;
     }
 
     public class Hex
