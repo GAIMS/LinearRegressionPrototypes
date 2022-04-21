@@ -16,6 +16,8 @@ public class GraphObject : MonoBehaviour
     [Header("Rect Rendering")]
     public List<PointObject> Corners;
     public List<LineObject> Sides;
+    public bool DrawCorners = true;
+    public bool DrawSides = true;
     // graph stuff?
     [Header("Prefabs")]
     public LineObject LinePrefab;
@@ -82,21 +84,23 @@ public class GraphObject : MonoBehaviour
             switch (i) {
                 case 0:
                     Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y - (Rect.height/2));
-                    Corners[i].UpdatePosition();
                     break;
                 case 1:
                     Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y - (Rect.height/2));
-                    Corners[i].UpdatePosition();
                     break;
                 case 2:
                     Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y + (Rect.height/2));
-                    Corners[i].UpdatePosition();
                     break;
                 case 3:
                     Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y + (Rect.height/2));
-                    Corners[i].UpdatePosition();
                     break;
                 
+            }
+            Corners[i].UpdatePosition();
+            if (DrawCorners == false) {
+                Corners[i].gameObject.SetActive(false);
+            } else {
+                Corners[i].gameObject.SetActive(true);
             }
         }
     }
@@ -112,20 +116,22 @@ public class GraphObject : MonoBehaviour
                 switch (i) {
                     case 0:
                         Sides[i].Line = new Line(new Point(Corners[0].Point.X, Corners[0].Point.Y), new Point(Corners[1].Point.X, Corners[1].Point.Y));
-                        Sides[i].UpdatePosition();
                         break;
                     case 1:
                         Sides[i].Line = new Line(new Point(Corners[2].Point.X, Corners[2].Point.Y), new Point(Corners[3].Point.X, Corners[3].Point.Y));
-                        Sides[i].UpdatePosition();
                         break;
                     case 2:
                         Sides[i].Line = new Line(new Point(Corners[0].Point.X, Corners[0].Point.Y), new Point(Corners[2].Point.X, Corners[2].Point.Y));
-                        Sides[i].UpdatePosition();
                         break;
                     case 3:
                         Sides[i].Line = new Line(new Point(Corners[1].Point.X, Corners[1].Point.Y), new Point(Corners[3].Point.X, Corners[3].Point.Y));
-                        Sides[i].UpdatePosition();
                         break;
+                }
+                Sides[i].UpdatePosition();
+                if (DrawSides == false) {
+                    Sides[i].gameObject.SetActive(false);
+                } else {
+                    Sides[i].gameObject.SetActive(true);
                 }
             }
         } else {
@@ -207,4 +213,20 @@ public class GraphObject : MonoBehaviour
         return new Line(new Point(0,yIntercept), new Point(xIntercept, 0));
     }
 
+    public void AddPoint(Vector3 position, bool screenSpace = false, bool redrawLine = true) {
+        if (screenSpace) {
+            // convert point to world space coordinates
+        }
+        Point p = new Point(position);
+        if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width*2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
+            PointObject point = Instantiate(PointPrefab, PointContainer.transform);
+            point.Point = p;
+            point.UpdatePosition();
+            if (redrawLine) {
+                RedrawLine();
+            }
+        } else {
+            Debug.LogError("New Point is out of bounds");
+        }
+    }
 }
