@@ -27,6 +27,12 @@ public struct Line {
         B = b;
     }
 
+    public Line(float slope, float yIntercept) {
+        float xIntercept = yIntercept/slope;
+        A = new Point(0, yIntercept);
+        B = new Point(xIntercept, 0);
+    }
+
     public override string ToString()
     {
         return A.ToString() + "----->" + B.ToString();
