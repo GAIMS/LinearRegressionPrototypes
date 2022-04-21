@@ -14,7 +14,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
     [SerializeField] private float yOrg;
 
     [SerializeField] private float scale = 1f;
-    [SerializeField] private GameObject numPrefab;
+    //[SerializeField] private GameObject numPrefab;
     
     [SerializeField] private string seed;
     [SerializeField] private bool useRandomSeed;
@@ -26,16 +26,14 @@ public class PerlinNoiseGeneration : MonoBehaviour
     private Color[] pix;
     private Renderer rend;
     private float randPosX,randPosY;
-    
-    
-    void Awake()
-    {
-        //layoutGroup.constraintCount = pxlHeight;
-        //rend = GetComponent<Renderer>();
 
-        //noiseTex = new Texture2D(pxlWidth, pxlHeight);
-        //pix = new Color[noiseTex.width * noiseTex.height];
-        //rend.material.mainTexture = noiseTex;
+    private HexGridManager hexManager;
+    
+    void Start()
+    {
+        hexManager = FindObjectOfType<HexGridManager>();
+        pxlWidth = hexManager.gridWidth;
+        pxlHeight = hexManager.gridHeight;
         CalcNoise();
     }
 
@@ -54,18 +52,21 @@ public class PerlinNoiseGeneration : MonoBehaviour
         layoutGroup.constraintCount = pxlHeight;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
-        while (y<pxlHeight)
+        
+        while (y<hexManager.hexes.GetLength(1))
         {
             float x = 0;
-            while (x < pxlWidth)
+            while (x < hexManager.hexes.GetLength(0))
             {
                 float xCoord = (xOrg + randPosX) + x / pxlWidth * scale;
                 float yCoord = (yOrg + randPosY) + y / pxlHeight * scale;
 
                 float sample = Mathf.PerlinNoise(xCoord, yCoord);
-                //pix[(int) y * noiseTex.width + (int) x] = new Color(sample, sample, sample);
-                Text text = Instantiate(numPrefab, layoutGroup.transform).GetComponent<Text>();
-                text.text = ((int)(sample * 10)).ToString();
+
+                //Text text = Instantiate(numPrefab, layoutGroup.transform).GetComponent<Text>();
+                //text.text = ((int)(sample * 10)).ToString();
+
+                hexManager.hexes[(int)x , (int)y].hexValue = sample;
                 
                 if (sample > highestPoint)
                 {
@@ -87,23 +88,12 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
             y++;
         }
-        //noiseTex.SetPixels(pix);
-        //noiseTex.SetPixel((int)test1.x,(int)test1.y,Color.green);
-        //noiseTex.SetPixel((int)test2.x,(int)test2.y,Color.blue);
-        //noiseTex.Apply();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Text[] obj = layoutGroup.GetComponentsInChildren<Text>();
-
-            foreach (var text in obj)
-            {
-                Destroy(text.gameObject);
-            }
-            
             CalcNoise();
         }
     }
