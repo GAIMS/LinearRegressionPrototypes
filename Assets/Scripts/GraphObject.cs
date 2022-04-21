@@ -214,14 +214,16 @@ public class GraphObject : MonoBehaviour
     }
 
     public void AddPoint(Vector3 position, bool screenSpace = false, bool redrawLine = true) {
+        Vector3 _position = position;
         if (screenSpace) {
-            // convert point to world space coordinates
+            _position = Camera.ScreenToWorldPoint(position);
         }
-        Point p = new Point(position);
-        if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width*2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
+        Point p = new Point(_position);
+        if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width/2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
             PointObject point = Instantiate(PointPrefab, PointContainer.transform);
             point.Point = p;
             point.UpdatePosition();
+            Points.Add(point);
             if (redrawLine) {
                 RedrawLine();
             }
