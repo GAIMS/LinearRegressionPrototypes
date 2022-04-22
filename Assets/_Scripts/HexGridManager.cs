@@ -110,7 +110,7 @@ public class HexGridManager : MonoBehaviour
         }
     }
 
-    Hex LowestNeighbor(Hex hex)
+    public Hex LowestNeighbor(Hex hex)
     {
         float min = 1000000;
         Hex lowest = null;
