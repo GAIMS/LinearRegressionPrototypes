@@ -64,7 +64,7 @@ public class HexGridManager : MonoBehaviour
                 for (int y = 0; y < hexes.GetLength(1); y++)
                 {
                     thing++;
-                    hexes[x,y].hexObject.GetComponentInChildren<Text>().text = ((int) (hexes[x,y].hexValue * 10)).ToString();
+                    hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(hexes[x, y].hexValue * 100).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
                     hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * hexes[x, y].hexValue;
                     
                     GetNeighbors(hexes[x,y]);
@@ -120,8 +120,13 @@ public class HexGridManager : MonoBehaviour
             {
                 min = hex.neighbors[i].hexValue;
                 lowest = hex.neighbors[i];
+                Debug.Log("Min " + min);
+                Debug.Log("Hex Value " + lowest.hexValue);
+
             }
         }
+
+        hex.lowestNeighbors = lowest;
         return lowest;
     }
 
@@ -132,5 +137,6 @@ public class HexGridManager : MonoBehaviour
         public GameObject hexObject;
         
         public List<Hex> neighbors;
+        public Hex lowestNeighbors;
     }
 }

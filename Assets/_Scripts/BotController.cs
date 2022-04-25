@@ -40,10 +40,15 @@ public class BotController : MonoBehaviour
 
     void Move()
     {
-        currentHex = _hexGridManager.LowestNeighbor(lastHex);
+        for (int i = 0; i < currentHex.neighbors.Count; i++)
+        {
+            currentHex.neighbors[i].hexObject.GetComponent<SpriteRenderer>().color += Color.yellow;
+        }
+        currentHex.hexObject.GetComponent<SpriteRenderer>().color += Color.blue;
+        
+        currentHex = currentHex.lowestNeighbors;
         
         transform.position = currentHex.hexObject.transform.position;
-
         lastHex = currentHex;
     }
 }
