@@ -128,7 +128,7 @@ LineRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 0
 --- !u!114 &9040164282951661586
 MonoBehaviour:
@@ -142,4 +142,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c069a8dbd8fb29459f51d99e94daf74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Line:
+    A:
+      X: 0
+      Y: 0
+    B:
+      X: 0
+      Y: 0
   LineRenderer: {fileID: 4560212521880101000}

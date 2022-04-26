@@ -9,6 +9,7 @@ public class GraphObject : MonoBehaviour
     public Camera Camera;
     public Rect Rect;
     public LineObject Line;
+    public GameObject LineContainer;
     public List<PointObject> Points;
     public GameObject PointContainer;
     [Header("Graph Data")]
@@ -30,7 +31,7 @@ public class GraphObject : MonoBehaviour
         RedrawRect();
         RedrawGrid();
         RedrawPoints();
-        RedrawLine();
+        RedrawMainLine();
     }
 
     [ContextMenu("Redraw Rect")]
@@ -57,7 +58,7 @@ public class GraphObject : MonoBehaviour
             p.UpdatePosition();
             Points.Add(p);
         }
-        RedrawLine();
+        RedrawMainLine();
     }
 
     [ContextMenu("Clear Points")]
@@ -71,8 +72,8 @@ public class GraphObject : MonoBehaviour
     }
 
     [ContextMenu("Redraw Line")]
-    public void RedrawLine() {
-        RedrawLine(Points);
+    public void RedrawMainLine() {
+        RedrawMainLine(Points);
     }
 
     [ContextMenu("Redraw Corners")]
@@ -139,7 +140,7 @@ public class GraphObject : MonoBehaviour
         }
     }
 
-    public void RedrawLine(List<PointObject> _points) {
+    public void RedrawMainLine(List<PointObject> _points) {
         // get our line of best fit
         List<Point> points = new List<Point>();
         foreach (PointObject _p in _points) {
@@ -225,10 +226,44 @@ public class GraphObject : MonoBehaviour
             point.UpdatePosition();
             Points.Add(point);
             if (redrawLine) {
-                RedrawLine();
+                RedrawMainLine();
             }
         } else {
             Debug.LogError("New Point is out of bounds");
         }
+    }
+
+    [ContextMenu("Draw Loss Lines")]
+    public void DrawLossLines() {
+        for (int i = 0; i < Points.Count; i++) {
+            LineObject line = Instantiate(LinePrefab, LineContainer.transform);
+            line.Line = CalculateLossLine(Points[i].Point, Line.Line);
+            Vector3[] positions = new Vector3[] {new Vector3(line.Line.A.X, line.Line.A.Y, 0), new Vector3(line.Line.B.X, line.Line.B.Y, 0)};
+            line.LineRenderer.SetPositions(positions);
+        }
+    }
+
+    public float CalculateLoss(Point point, Line line) {
+        Line lossLine = CalculateLossLine(point, line);
+        float loss = lossLine.A.Y - lossLine.B.Y;
+        return loss * loss * ((loss < 0) ? -1 : 1);
+    }
+
+    public Line CalculateLossLine(Point point, Line lineA) {
+        Point xIntercept = new Point(point.X, 0);
+        Line lineB = new Line(point, xIntercept);
+        Point intersect = LineIntersection.FindIntersection(lineA, lineB);
+        Line lossLine = new Line(point, intersect);
+        return lossLine;
+    }
+
+    [ContextMenu("Calculate Total Loss")]
+    public float CalculateTotalLoss() {
+        float totalLoss = 0f;
+        for (int i = 0; i < Points.Count; i++) {
+            totalLoss += CalculateLoss(Points[i].Point, Line.Line);
+        }
+        Debug.Log("Total Loss: " + totalLoss);
+        return totalLoss;
     }
 }

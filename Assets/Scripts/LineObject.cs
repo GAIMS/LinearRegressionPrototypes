@@ -21,6 +21,12 @@ public class LineObject : MonoBehaviour
 public struct Line {
     public Point A;
     public Point B;
+    
+    public float Slope {
+        get {
+            return (B.Y-A.Y)/(B.X-A.X);
+        }
+    }
 
     public Line(Point a, Point b) {
         A = a;
