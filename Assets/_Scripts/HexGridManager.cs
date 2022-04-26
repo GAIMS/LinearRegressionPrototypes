@@ -86,7 +86,7 @@ public class HexGridManager : MonoBehaviour
                 
                 thing++;
                 hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * 1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
-                hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .005f);
+                hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .0025f);
                     
                 GetNeighbors(hexes[x,y]);
 
@@ -94,6 +94,7 @@ public class HexGridManager : MonoBehaviour
                 Vector3 objectPos = hexes[x,y].hexObject.transform.position;
                 randPos.x = randPos.x - objectPos.x;
                 randPos.y = randPos.y - objectPos.y;
+                
                 float angle =  Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
                 hexes[x,y].hexObject.GetComponentsInChildren<Text>()[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
                     
@@ -140,7 +141,7 @@ public class HexGridManager : MonoBehaviour
         {
             if (hex.neighbors[i].hexValue < min)
             {
-                min = hex.neighbors[i].hexValue;
+                min = Mathf.Abs(hex.neighbors[i].hexValue);
                 lowest = hex.neighbors[i];
                 Debug.Log("Min " + min);
                 Debug.Log("Hex Value " + lowest.hexValue);

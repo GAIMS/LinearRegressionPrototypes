@@ -36,7 +36,7 @@ public class BotController : MonoBehaviour
         {
             //GraphObject Graph = new GraphObject();
             //Graph.RedrawLine(new Line());
-            //Move();
+            Move();
         }
     }
 
