@@ -11,13 +11,16 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float hexSize;
     [SerializeField] private GameObject hexPrefab;
     [SerializeField] private float offset;
+    [SerializeField] private GraphObject graphObject;
 
     public Hex[,] hexes;
 
     private void Awake()
     {
         hexes = new Hex[gridWidth, gridHeight];
+        graphObject = FindObjectOfType<GraphObject>();
         CreateHexGrid(hexSize);
+        UpdateHexes();
     }
     public void CreateHexGrid(float hexSize)
     {
@@ -31,9 +34,13 @@ public class HexGridManager : MonoBehaviour
                 float r = y - (x + (x & 1)) / 2;
                 hex.position = new Vector3(x, r, -x - r);
                 hexes[x,y] = hex;
+                graphObject.RedrawLine(new Line(x, y - graphObject.Rect.height/2 ));
+                hexes[x, y].hexValue = graphObject.CalculateTotalLoss();
                 CreateHex(new Vector2(x, y), hexSize, x, y);
             }
         }
+
+        graphObject.RedrawLine(graphObject.Points);
     }
 
     public void CreateHex(Vector2 pos, float size, int x, int y)
@@ -58,38 +65,44 @@ public class HexGridManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            int thing = 0;
-            for (int x = 0; x < hexes.GetLength(0); x++)
-            {
-                for (int y = 0; y < hexes.GetLength(1); y++)
-                {
-                    thing++;
-                    hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(hexes[x, y].hexValue * 100).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
-                    hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * hexes[x, y].hexValue;
-                    
-                    GetNeighbors(hexes[x,y]);
-
-                    Vector3 randPos = LowestNeighbor(hexes[x, y]).hexObject.transform.position;
-                    Vector3 objectPos = hexes[x,y].hexObject.transform.position;
-                    randPos.x = randPos.x - objectPos.x;
-                    randPos.y = randPos.y - objectPos.y;
-                    float angle =  Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
-                    hexes[x,y].hexObject.GetComponentsInChildren<Text>()[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
-                    
-                    for (int i = 2; i < hexes[x,y].hexObject.GetComponentsInChildren<Text>().Length; i++)
-                    {
-                        if (i == 2)
-                            hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.y.ToString();
-                        if (i == 3)
-                            hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.z.ToString();
-                        if (i == 4)
-                            hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.x.ToString();
-                    }
-                }
-            }
+            UpdateHexes();
         }
     }
 
+    public void UpdateHexes()
+    {
+        int thing = 0;
+        for (int x = 0; x < hexes.GetLength(0); x++)
+        {
+            for (int y = 0; y < hexes.GetLength(1); y++)
+            {
+                thing++;
+                hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * .1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
+                hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .001f);
+                    
+                GetNeighbors(hexes[x,y]);
+
+                Vector3 randPos = LowestNeighbor(hexes[x, y]).hexObject.transform.position;
+                Vector3 objectPos = hexes[x,y].hexObject.transform.position;
+                randPos.x = randPos.x - objectPos.x;
+                randPos.y = randPos.y - objectPos.y;
+                float angle =  Mathf.Atan2(randPos.y, randPos.x) * Mathf.Rad2Deg;
+                hexes[x,y].hexObject.GetComponentsInChildren<Text>()[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+                    
+                for (int i = 2; i < hexes[x,y].hexObject.GetComponentsInChildren<Text>().Length; i++)
+                {
+                    if (i == 2)
+                        hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.y.ToString();
+                    if (i == 3)
+                        hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.z.ToString();
+                    if (i == 4)
+                        hexes[x, y].hexObject.GetComponentsInChildren<Text>()[i].text = hexes[x, y].position.x.ToString();
+                }
+                    
+            }
+        }
+    }
+    
     void GetNeighbors(Hex hex)
     {
         hex.neighbors = new List<Hex>();

@@ -34,7 +34,9 @@ public class BotController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Move();
+            //GraphObject Graph = new GraphObject();
+            //Graph.RedrawLine(new Line());
+            //Move();
         }
     }
 
