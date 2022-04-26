@@ -19,19 +19,33 @@ public class GraphObject : MonoBehaviour
     public List<LineObject> Sides;
     public bool DrawCorners = true;
     public bool DrawSides = true;
+    public bool DrawLossLines = true;
     // graph stuff?
     [Header("Prefabs")]
     public LineObject LinePrefab;
     public PointObject PointPrefab;
 
     [ContextMenu("Redraw Graph")]
-    public void RedrawGraph() {
+    public void RedrawGraph(){
+        RedrawGraph(true, true);
+    }
+
+    public void RedrawGraph(bool redrawPoints, bool redrawLine) {
         Rect.x = this.transform.position.x;
         Rect.y = this.transform.position.y;
         RedrawRect();
         RedrawGrid();
-        RedrawPoints();
-        RedrawMainLine();
+        if (redrawPoints) {
+            RedrawPoints();
+        }
+        if (redrawLine) {
+            RedrawLine();
+        }
+        if (DrawLossLines == true) {
+            RedrawLossLines();
+        } else {
+            ClearLossLines();
+        }
     }
 
     [ContextMenu("Redraw Rect")]
@@ -58,22 +72,17 @@ public class GraphObject : MonoBehaviour
             p.UpdatePosition();
             Points.Add(p);
         }
-        RedrawMainLine();
+        RedrawLine();
     }
 
     [ContextMenu("Clear Points")]
     public void ClearPoints() {
         if (PointContainer.transform.childCount > 0) {
-            Object.DestroyImmediate(PointContainer.transform.GetChild(0).gameObject);
+            Object.Destroy(PointContainer.transform.GetChild(0).gameObject);
             Points.Clear();
         }
         Line.Line = new Line(new Point(0,0), new Point(0,0));
         Line.UpdatePosition();
-    }
-
-    [ContextMenu("Redraw Line")]
-    public void RedrawMainLine() {
-        RedrawMainLine(Points);
     }
 
     [ContextMenu("Redraw Corners")]
@@ -140,14 +149,23 @@ public class GraphObject : MonoBehaviour
         }
     }
 
-    public void RedrawMainLine(List<PointObject> _points) {
+    [ContextMenu("Redraw Line")]
+    public void RedrawLine() {
+        RedrawLine(Points);
+    }
+
+    public void RedrawLine(List<PointObject> _points) {
         // get our line of best fit
         List<Point> points = new List<Point>();
         foreach (PointObject _p in _points) {
             points.Add(_p.Point);
         }
-        Line.Line = LineOfBestFit(points);
+        Line line = LineOfBestFit(points);
+        RedrawLine(line);
+    }
 
+    public void RedrawLine(Line line) {
+        Line.Line = line;
         // find our points of intersection
         List<Point> intersects = new List<Point>();
         try {
@@ -226,7 +244,10 @@ public class GraphObject : MonoBehaviour
             point.UpdatePosition();
             Points.Add(point);
             if (redrawLine) {
-                RedrawMainLine();
+                RedrawLine();
+            }
+            if (DrawLossLines) {
+                RedrawLossLines();
             }
         } else {
             Debug.LogError("New Point is out of bounds");
@@ -234,7 +255,8 @@ public class GraphObject : MonoBehaviour
     }
 
     [ContextMenu("Draw Loss Lines")]
-    public void DrawLossLines() {
+    public void RedrawLossLines() {
+        ClearLossLines();
         for (int i = 0; i < Points.Count; i++) {
             LineObject line = Instantiate(LinePrefab, LineContainer.transform);
             line.Line = CalculateLossLine(Points[i].Point, Line.Line);
@@ -243,18 +265,17 @@ public class GraphObject : MonoBehaviour
         }
     }
 
+    [ContextMenu("Clear Loss Lines")]
+    public void ClearLossLines() {
+        foreach (Transform child in LineContainer.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
     public float CalculateLoss(Point point, Line line) {
         Line lossLine = CalculateLossLine(point, line);
         float loss = lossLine.A.Y - lossLine.B.Y;
         return loss * loss * ((loss < 0) ? -1 : 1);
-    }
-
-    public Line CalculateLossLine(Point point, Line lineA) {
-        Point xIntercept = new Point(point.X, 0);
-        Line lineB = new Line(point, xIntercept);
-        Point intersect = LineIntersection.FindIntersection(lineA, lineB);
-        Line lossLine = new Line(point, intersect);
-        return lossLine;
     }
 
     [ContextMenu("Calculate Total Loss")]
@@ -265,5 +286,13 @@ public class GraphObject : MonoBehaviour
         }
         Debug.Log("Total Loss: " + totalLoss);
         return totalLoss;
+    }
+
+    public Line CalculateLossLine(Point point, Line lineA) {
+        Point xIntercept = new Point(point.X, 0);
+        Line lineB = new Line(point, xIntercept);
+        Point intersect = LineIntersection.FindIntersection(lineA, lineB);
+        Line lossLine = new Line(point, intersect);
+        return lossLine;
     }
 }
