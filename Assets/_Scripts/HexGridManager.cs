@@ -12,6 +12,7 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private GameObject hexPrefab;
     [SerializeField] private float offset;
     [SerializeField] private GraphObject graphObject;
+    [SerializeField] private float slopeMax;
 
     public Hex[,] hexes;
 
@@ -34,8 +35,7 @@ public class HexGridManager : MonoBehaviour
                 float r = y - (x + (x & 1)) / 2;
                 hex.position = new Vector3(x, r, -x - r);
                 hexes[x,y] = hex;
-                graphObject.RedrawLine(new Line(x, y - graphObject.Rect.height/2 ));
-                hexes[x, y].hexValue = graphObject.CalculateTotalLoss();
+
                 CreateHex(new Vector2(x, y), hexSize, x, y);
             }
         }
@@ -76,9 +76,17 @@ public class HexGridManager : MonoBehaviour
         {
             for (int y = 0; y < hexes.GetLength(1); y++)
             {
+                graphObject.RedrawLine(new Line(
+                    (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
+                    (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1))));
+                
+                hexes[x, y].hexValue = graphObject.CalculateTotalLoss();
+                
+                Debug.Log("Loss Value for :" +x + "," + y+ " :" + hexes[x, y].hexValue);
+                
                 thing++;
-                hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * .1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
-                hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .001f);
+                hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * 1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
+                hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .005f);
                     
                 GetNeighbors(hexes[x,y]);
 
@@ -101,6 +109,7 @@ public class HexGridManager : MonoBehaviour
                     
             }
         }
+        graphObject.RedrawLine(graphObject.Points);
     }
     
     void GetNeighbors(Hex hex)
