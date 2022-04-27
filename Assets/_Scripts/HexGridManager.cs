@@ -13,6 +13,8 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float offset;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private float slopeMax;
+    [SerializeField] private LayerMask hexMax;
+    [SerializeField] private Text lossText;
 
     public Hex[,] hexes;
 
@@ -22,6 +24,7 @@ public class HexGridManager : MonoBehaviour
         graphObject = FindObjectOfType<GraphObject>();
         CreateHexGrid(hexSize);
         UpdateHexes();
+        lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
     }
     public void CreateHexGrid(float hexSize)
     {
@@ -63,9 +66,29 @@ public class HexGridManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(ray,out RaycastHit hit, Mathf.Infinity, hexMax))
+            {
+                Debug.Log("Hit");
+                foreach (var hex in hexes)
+                {
+                    if (hex.hexObject == hit.transform.gameObject)
+                    {
+                        graphObject.RedrawLine(hex.lineOfBestFit);
+                        graphObject.RedrawLossLines();
+                        lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                    }
+                }
+            }
+        }
+        
         if (Input.GetKeyDown(KeyCode.R))
         {
+            graphObject.RedrawGraph();
             UpdateHexes();
+            lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
         }
     }
 
@@ -76,9 +99,11 @@ public class HexGridManager : MonoBehaviour
         {
             for (int y = 0; y < hexes.GetLength(1); y++)
             {
-                graphObject.RedrawLine(new Line(
+                hexes[x,y].lineOfBestFit = new Line(
                     (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
-                    (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1))));
+                    (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
+
+                graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
                 
                 hexes[x, y].hexValue = graphObject.CalculateTotalLoss();
                 
@@ -161,5 +186,7 @@ public class HexGridManager : MonoBehaviour
         
         public List<Hex> neighbors;
         public Hex lowestNeighbors;
+
+        public Line lineOfBestFit;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1235353318436293361}
   - component: {fileID: 3228336495674035274}
   - component: {fileID: 1107268404156806375}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Q
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 9006454801044236155}
   - component: {fileID: 2625658492082701187}
   - component: {fileID: 3220007864387018566}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Direction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 4277369190410870186}
   - component: {fileID: 3865310006644362720}
   - component: {fileID: 2156381206336426450}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 8352125611805464200}
   - component: {fileID: 6966195234699920794}
   - component: {fileID: 7367833090025683057}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 1691839767504919844}
   - component: {fileID: 1336426682462386577}
   - component: {fileID: 8053917865180207297}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +407,8 @@ GameObject:
   m_Component:
   - component: {fileID: 155699852867114968}
   - component: {fileID: 110096317437762097}
-  m_Layer: 0
+  - component: {fileID: 4319851364287592554}
+  m_Layer: 6
   m_Name: Hexagon Flat-Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -480,6 +481,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!135 &4319851364287592554
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273884098483859450}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.48
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8160864337752979194
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +506,7 @@ GameObject:
   - component: {fileID: 482002165140848864}
   - component: {fileID: 4106862196894494305}
   - component: {fileID: 3929005147483472109}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
