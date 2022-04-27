@@ -76,6 +76,7 @@ public class HexGridManager : MonoBehaviour
                 {
                     if (hex.hexObject == hit.transform.gameObject)
                     {
+                        hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
                         graphObject.RedrawLine(hex.lineOfBestFit);
                         graphObject.RedrawLossLines();
                         lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
@@ -99,6 +100,8 @@ public class HexGridManager : MonoBehaviour
         {
             for (int y = 0; y < hexes.GetLength(1); y++)
             {
+                hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
+                
                 hexes[x,y].lineOfBestFit = new Line(
                     (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
                     (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
@@ -164,7 +167,7 @@ public class HexGridManager : MonoBehaviour
         Hex lowest = null;
         for (int i = 0; i < hex.neighbors.Count; i++)
         {
-            if (hex.neighbors[i].hexValue < min)
+            if (Mathf.Abs(hex.neighbors[i].hexValue) < min)
             {
                 min = Mathf.Abs(hex.neighbors[i].hexValue);
                 lowest = hex.neighbors[i];
