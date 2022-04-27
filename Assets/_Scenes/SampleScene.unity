@@ -2418,6 +2418,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   lossText: {fileID: 1609387619}
+  hexRadius: 2
 --- !u!4 &1135612848
 Transform:
   m_ObjectHideFlags: 0

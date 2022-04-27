@@ -15,9 +15,24 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float slopeMax;
     [SerializeField] private LayerMask hexMax;
     [SerializeField] private Text lossText;
+    [SerializeField] private int hexRadius;
 
+    private Hex pickedHex;
+    private bool turn = false;
+    private bool firstPick = true;
+    
     public Hex[,] hexes;
 
+    private Vector3[] cubeDirectionVectors = new Vector3[]
+    {
+        new Vector3(1, 0, -1),
+        new Vector3(1, -1, 0),
+        new Vector3(0, -1, 1),
+        new Vector3(-1, 0, 1),
+        new Vector3(-1, 1, 0),
+        new Vector3(0, 1, -1)
+    };
+    
     private void Awake()
     {
         hexes = new Hex[gridWidth, gridHeight];
@@ -71,17 +86,34 @@ public class HexGridManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray,out RaycastHit hit, Mathf.Infinity, hexMax))
             {
-                Debug.Log("Hit");
-                foreach (var hex in hexes)
+                if (firstPick)
                 {
-                    if (hex.hexObject == hit.transform.gameObject)
+                    foreach (var hex in hexes)
                     {
-                        hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-                        graphObject.RedrawLine(hex.lineOfBestFit);
-                        graphObject.RedrawLossLines();
-                        lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                        if (hex.hexObject == hit.transform.gameObject)
+                        {
+                            hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                            graphObject.RedrawLine(hex.lineOfBestFit);
+                            graphObject.RedrawLossLines();
+                            pickedHex = hex;
+                            lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                        }
+                        else
+                        {
+                            //hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+                        }
                     }
+                    GetExtendedNeighbors();
+
+                    firstPick = false;
+                    turn = true;
                 }
+
+                if (turn)
+                {
+                    PickPont(hit);
+                }
+
             }
         }
         
@@ -93,6 +125,93 @@ public class HexGridManager : MonoBehaviour
         }
     }
 
+    public void PickPont(RaycastHit hit)
+    {
+        //Vector3 cubeScale = pickedHex.position * HexModifier;
+
+        GetExtendedNeighbors();
+        /*
+        for (int x = 0; x < hexes.GetLength(0); x++)
+        {
+            for (int y = 0; y < hexes.GetLength(1); y++)
+            {
+                if (hexes[x,y].position == pickedHex.position + new Vector3(1, 0, -1) * 2 ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(1, -1, 0) * 2 ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(0, -1, 1) * 2 ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(-1, 0, 1) * 2 ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(-1, 1, 0) * 2 ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(0, 1, -1) * 2 ||
+                    
+                    hexes[x,y].position == pickedHex.position + new Vector3(1, 0, -1/HexModifier) * HexModifier ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(1, -1/HexModifier, 0) * HexModifier ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(0, -1, 1/HexModifier) * HexModifier ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(-1, 0, 1/HexModifier) * HexModifier ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(-1, 1/HexModifier, 0) * HexModifier ||
+                    hexes[x,y].position == pickedHex.position + new Vector3(0, 1, -1/HexModifier) * HexModifier)
+                {
+                    hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                else
+                {
+                    hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+                }
+            }
+        }
+        */
+        foreach (var hex in hexes)
+        {
+            if (hex.hexObject == hit.transform.gameObject && hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled && hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color == Color.white)
+            {
+                hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                graphObject.RedrawLine(hex.lineOfBestFit);
+                graphObject.RedrawLossLines();
+                pickedHex = hex;
+                lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+            }
+        }
+        GetExtendedNeighbors();
+    }
+
+    public void GetExtendedNeighbors()
+    {
+        //Hex hex;
+        Vector3 pos = pickedHex.position + (cubeDirectionVectors[4] * hexRadius);
+        Hex startHex = GetHex(pos);
+
+        //startHex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.blue;
+
+        foreach (var hex in hexes)
+        {
+            hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+        }
+        
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < hexRadius; j++)
+            {
+                pos = pos + cubeDirectionVectors[i];
+                startHex = GetHex(pos);
+                if (startHex != null)
+                {
+                    startHex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+                }
+            }
+        }
+    }
+
+    Hex GetHex(Vector3 pos)
+    {
+        foreach (var hex in hexes)
+        {
+            if (hex.position == pos)
+            {
+                return hex;
+            }
+        }
+
+        return null;
+    }
+    
     public void UpdateHexes()
     {
         int thing = 0;
