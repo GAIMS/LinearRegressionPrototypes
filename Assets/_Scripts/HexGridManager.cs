@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class HexGridManager : MonoBehaviour
 {
@@ -16,10 +17,14 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private LayerMask hexMax;
     [SerializeField] private Text lossText;
     [SerializeField] private int hexRadius;
+    
+    [SerializeField] private bool randomFirstPick;
+    [SerializeField] private bool cumulativeScore;
 
     private Hex pickedHex;
     private bool turn = false;
     private bool firstPick = true;
+    private int score;
     
     public Hex[,] hexes;
 
@@ -81,6 +86,30 @@ public class HexGridManager : MonoBehaviour
 
     private void Update()
     {
+        if(firstPick && randomFirstPick)
+        {
+            Hex hex = hexes[Random.Range(0, hexes.GetLength(0)), Random.Range(0, hexes.GetLength(1))];
+            hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+            graphObject.RedrawLine(hex.lineOfBestFit);
+            graphObject.RedrawLossLines();
+            pickedHex = hex;
+            if (cumulativeScore)
+            {
+                score += (int) Mathf.Abs(pickedHex.hexValue);
+                lossText.text = "Total Loss: " + score;
+
+            }
+            else
+            {
+                lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+            }
+                
+            GetExtendedNeighbors();
+
+            firstPick = false;
+            turn = true;
+        }
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -88,15 +117,27 @@ public class HexGridManager : MonoBehaviour
             {
                 if (firstPick)
                 {
-                    foreach (var hex in hexes)
+                    if(!randomFirstPick)
                     {
-                        if (hex.hexObject == hit.transform.gameObject)
+                        foreach (var hex in hexes)
                         {
-                            hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-                            graphObject.RedrawLine(hex.lineOfBestFit);
-                            graphObject.RedrawLossLines();
-                            pickedHex = hex;
-                            lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                            if (hex.hexObject == hit.transform.gameObject)
+                            {
+                                hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                                graphObject.RedrawLine(hex.lineOfBestFit);
+                                graphObject.RedrawLossLines();
+                                pickedHex = hex;
+                                if (cumulativeScore)
+                                {
+                                    score += (int) Mathf.Abs(pickedHex.hexValue);
+                                    lossText.text = "Total Loss: " + score;
+
+                                }
+                                else
+                                {
+                                    lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                                }
+                            }
                         }
                     }
                     GetExtendedNeighbors();
@@ -117,7 +158,25 @@ public class HexGridManager : MonoBehaviour
         {
             graphObject.RedrawGraph();
             UpdateHexes();
-            lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+            
+            foreach (var hex in hexes)
+            {
+                hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+            }
+
+            firstPick = true;
+            turn = false;
+            
+            if (cumulativeScore)
+            {
+                score += (int) Mathf.Abs(pickedHex.hexValue);
+                lossText.text = "Total Loss: " + score;
+
+            }
+            else
+            {
+                lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+            }
         }
     }
 
@@ -134,7 +193,16 @@ public class HexGridManager : MonoBehaviour
                 graphObject.RedrawLine(hex.lineOfBestFit);
                 graphObject.RedrawLossLines();
                 pickedHex = hex;
-                lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                if (cumulativeScore)
+                {
+                    score += (int) Mathf.Abs(pickedHex.hexValue);
+                    lossText.text = "Total Loss: " + score;
+
+                }
+                else
+                {
+                    lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
+                }
             }
         }
         GetExtendedNeighbors();
@@ -198,7 +266,7 @@ public class HexGridManager : MonoBehaviour
                 Debug.Log("Loss Value for :" +x + "," + y+ " :" + hexes[x, y].hexValue);
                 
                 thing++;
-                hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * 1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
+                hexes[x, y].hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hexes[x, y].hexValue * .1f)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
                 hexes[x, y].hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hexes[x, y].hexValue * .0025f);
                     
                 GetNeighbors(hexes[x,y]);
