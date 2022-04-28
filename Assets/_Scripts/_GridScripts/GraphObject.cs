@@ -201,13 +201,24 @@ public class GraphObject : MonoBehaviour
             Debug.LogError(e);
         }
 
+        for (int i = 0; i < Corners.Count; i++) {
+            Debug.Log(Corners[i].Point);
+        }
         // find the points which are within the bounds of teh screen edge
         List<Point> rectIntersects = new List<Point>();
         for (int i = 0; i < intersects.Count; i++) {
             Debug.Log(intersects[i]);
             if (intersects[i].X >= Corners[0].Point.X && intersects[i].X <= Corners[1].Point.X) {
                 if (intersects[i].Y >= Corners[0].Point.Y && intersects[i].Y <= Corners[2].Point.Y) {
-                    rectIntersects.Add(intersects[i]);
+                    bool duplicate = false;
+                    for (int j = 0; j < rectIntersects.Count; j++) {
+                        if (rectIntersects[j].X == intersects[i].X && rectIntersects[j].Y == intersects[i].Y) {
+                            duplicate = true;
+                        }
+                    }
+                    if (duplicate == false) {
+                        rectIntersects.Add(intersects[i]);
+                    }
                 }
             }
         }
