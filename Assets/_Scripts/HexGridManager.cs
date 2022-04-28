@@ -14,7 +14,7 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float offset;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private float slopeMax;
-    [SerializeField] private LayerMask hexMax;
+    [SerializeField] private LayerMask hexLayer;
     [SerializeField] private Text lossText;
     [SerializeField] private int hexRadius;
     
@@ -113,7 +113,7 @@ public class HexGridManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray,out RaycastHit hit, Mathf.Infinity, hexMax))
+            if(Physics.Raycast(ray,out RaycastHit hit, Mathf.Infinity, hexLayer))
             {
                 if (firstPick)
                 {
