@@ -2092,6 +2092,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135612848}
   - component: {fileID: 1135612847}
+  - component: {fileID: 1135612846}
   m_Layer: 0
   m_Name: HexGridManager
   m_TagString: Untagged
@@ -2099,6 +2100,26 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1135612846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135612845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1f48e68c93ed4702be0565e3af4dc45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  lossText: {fileID: 1609387619}
+  hexRadius: 2
+  graphObject: {fileID: 251306984}
+  randomFirstPick: 0
+  cumulativeScore: 1
 --- !u!114 &1135612847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2118,13 +2139,8 @@ MonoBehaviour:
   offset: 0.05
   graphObject: {fileID: 251306984}
   slopeMax: 2
-  hexMax:
-    serializedVersion: 2
-    m_Bits: 64
-  lossText: {fileID: 1609387619}
-  hexRadius: 2
-  randomFirstPick: 1
-  cumulativeScore: 1
+  hexValueMultiplier: 0.1
+  hexColorMultiplier: 0.025
 --- !u!4 &1135612848
 Transform:
   m_ObjectHideFlags: 0
