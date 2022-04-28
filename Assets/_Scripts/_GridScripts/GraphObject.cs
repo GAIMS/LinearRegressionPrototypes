@@ -297,17 +297,26 @@ public class GraphObject : MonoBehaviour
         }
     }
 
-    public float CalculateLoss(Point point, Line line) {
+    public float CalculateLoss(Point point, Line line, LossMode mode = LossMode.Default) {
         Line lossLine = CalculateLossLine(point, line);
         float loss = lossLine.A.Y - lossLine.B.Y;
-        return loss * loss * ((loss < 0) ? -1 : 1);
+        loss *= loss;
+        switch (mode) {
+            case LossMode.Default:
+                
+                break;
+            case LossMode.Zero:
+                loss *= ((loss < 0) ? -1 : 1);
+                break;
+        }
+        return loss;
     }
 
     [ContextMenu("Calculate Total Loss")]
-    public float CalculateTotalLoss() {
+    public float CalculateTotalLoss(LossMode mode = LossMode.Default) {
         float totalLoss = 0f;
         for (int i = 0; i < Points.Count; i++) {
-            totalLoss += CalculateLoss(Points[i].Point, Line.Line);
+            totalLoss += CalculateLoss(Points[i].Point, Line.Line, mode);
         }
         Debug.Log("Total Loss: " + totalLoss);
         return totalLoss;
@@ -328,4 +337,9 @@ public class GraphObject : MonoBehaviour
         Line lossLine = new Line(point, intersect);
         return lossLine;
     }
+}
+
+public enum LossMode {
+    Default,
+    Zero
 }
