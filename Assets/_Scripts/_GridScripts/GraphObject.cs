@@ -201,18 +201,16 @@ public class GraphObject : MonoBehaviour
             Debug.LogError(e);
         }
 
-        for (int i = 0; i < Corners.Count; i++) {
-            Debug.Log(Corners[i].Point);
-        }
         // find the points which are within the bounds of teh screen edge
         List<Point> rectIntersects = new List<Point>();
         for (int i = 0; i < intersects.Count; i++) {
-            Debug.Log(intersects[i]);
             if (intersects[i].X >= Corners[0].Point.X && intersects[i].X <= Corners[1].Point.X) {
                 if (intersects[i].Y >= Corners[0].Point.Y && intersects[i].Y <= Corners[2].Point.Y) {
                     bool duplicate = false;
                     for (int j = 0; j < rectIntersects.Count; j++) {
                         if (rectIntersects[j].X == intersects[i].X && rectIntersects[j].Y == intersects[i].Y) {
+                            duplicate = true;
+                        } else if (Mathf.Abs(rectIntersects[j].X - intersects[i].X) < 0.05f && Mathf.Abs(rectIntersects[j].Y - intersects[i].Y) < 0.05f) {
                             duplicate = true;
                         }
                     }
@@ -273,6 +271,10 @@ public class GraphObject : MonoBehaviour
         }
     }
 
+    public void InBounds(Point point) {
+
+    }
+
     [ContextMenu("Draw Loss Lines")]
     public void RedrawLossLines() {
         ClearLossLines();
@@ -293,14 +295,6 @@ public class GraphObject : MonoBehaviour
             else
                 GameObject.Destroy(LineContainer.transform.GetChild(i).gameObject);
         }
-        /*
-        foreach (Transform child in LineContainer.transform) {
-            if (Application.isEditor)
-                GameObject.DestroyImmediate(child.gameObject);
-            else
-                GameObject.Destroy(child.gameObject);
-        }
-        */
     }
 
     public float CalculateLoss(Point point, Line line) {
@@ -323,6 +317,14 @@ public class GraphObject : MonoBehaviour
         Point xIntercept = new Point(point.X, 0);
         Line lineB = new Line(point, xIntercept);
         Point intersect = LineIntersection.FindIntersection(lineA, lineB);
+        // check if our intersection is out of bounds, draw screen intersection if so
+        if (intersect.Y < Corners[0].Point.Y || intersect.Y > Corners[2].Point.Y) {
+            if (point.Y >= intersect.Y) {
+                intersect = LineIntersection.FindIntersection(lineB, Sides[0].Line);
+            } else {
+                intersect = LineIntersection.FindIntersection(lineB, Sides[1].Line);
+            }
+        }
         Line lossLine = new Line(point, intersect);
         return lossLine;
     }
