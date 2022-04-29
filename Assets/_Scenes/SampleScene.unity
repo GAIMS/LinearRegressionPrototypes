@@ -134,6 +134,84 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cf59e996831b7a4c84e913b6cb3ae68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &305336220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 305336223}
+  - component: {fileID: 305336222}
+  - component: {fileID: 305336221}
+  m_Layer: 0
+  m_Name: HexGridManager (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &305336221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305336220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1f48e68c93ed4702be0565e3af4dc45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  lossText: {fileID: 1609387619}
+  hexRadius: 2
+  graphObject: {fileID: 251306984}
+  randomFirstPick: 1
+  cumulativeScore: 1
+  adaptiveRadius: 1
+  otherPlayer: {fileID: 1135612846}
+  myTurn: 0
+--- !u!114 &305336222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305336220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5846d22b2a920412db35373786485dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridHeight: 15
+  gridWidth: 15
+  hexSize: 0.75
+  hexPrefab: {fileID: 7273884098483859450, guid: f1337e056b7544e2fa472ab5e6b28049, type: 3}
+  offset: 0.05
+  graphObject: {fileID: 251306984}
+  slopeMax: 2
+  hexValueMultiplier: 0.1
+  hexColorMultiplier: 0.025
+  usingGraph: 0
+  usingNoise: 1
+--- !u!4 &305336223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305336220}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: -3.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &316246532
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,7 +730,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &484050440
 GameObject:
@@ -2118,9 +2196,11 @@ MonoBehaviour:
   lossText: {fileID: 1609387619}
   hexRadius: 2
   graphObject: {fileID: 251306984}
-  randomFirstPick: 0
+  randomFirstPick: 1
   cumulativeScore: 1
   adaptiveRadius: 1
+  otherPlayer: {fileID: 305336221}
+  myTurn: 1
 --- !u!114 &1135612847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2142,6 +2222,8 @@ MonoBehaviour:
   slopeMax: 2
   hexValueMultiplier: 0.1
   hexColorMultiplier: 0.025
+  usingGraph: 0
+  usingNoise: 1
 --- !u!4 &1135612848
 Transform:
   m_ObjectHideFlags: 0
@@ -2150,11 +2232,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135612845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.25, y: -3.75, z: 0}
+  m_LocalPosition: {x: -9.5, y: -3.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1149608803
 PrefabInstance:
@@ -2173,7 +2255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4339783353609992066, guid: 0285261e77dc9ef4794c8fa27740a463, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4339783353609992066, guid: 0285261e77dc9ef4794c8fa27740a463, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2218,6 +2300,10 @@ PrefabInstance:
     - target: {fileID: 4339783353609992124, guid: 0285261e77dc9ef4794c8fa27740a463, type: 3}
       propertyPath: m_Name
       value: Graph
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339783353609992124, guid: 0285261e77dc9ef4794c8fa27740a463, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4339783353609992125, guid: 0285261e77dc9ef4794c8fa27740a463, type: 3}
       propertyPath: Camera
@@ -2539,7 +2625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1416189122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2557,9 +2643,9 @@ MonoBehaviour:
   xOrg: 0
   yOrg: 0
   scale: 5
+  sampleMultiplier: 50
   seed: 5082.393
   useRandomSeed: 1
-  layoutGroup: {fileID: 0}
   lowestPoint: 0.5
   highestPoint: 0.5
   lowestCoord: {x: 0, y: 0}

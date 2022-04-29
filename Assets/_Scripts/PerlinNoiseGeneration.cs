@@ -14,12 +14,12 @@ public class PerlinNoiseGeneration : MonoBehaviour
     [SerializeField] private float yOrg;
 
     [SerializeField] private float scale = 1f;
+    [SerializeField] private float sampleMultiplier = 10f;
     //[SerializeField] private GameObject numPrefab;
     
     [SerializeField] private string seed;
     [SerializeField] private bool useRandomSeed;
 
-    public GridLayoutGroup layoutGroup;
     public float lowestPoint = .5f, highestPoint = .5f;
     public Vector2 lowestCoord, highestCoord;
     
@@ -27,17 +27,17 @@ public class PerlinNoiseGeneration : MonoBehaviour
     private Renderer rend;
     private float randPosX,randPosY;
 
-    private HexGridManager hexManager;
+    //private HexGridManager hexManager;
     
     void Start()
     {
-        hexManager = FindObjectOfType<HexGridManager>();
-        pxlWidth = hexManager.gridWidth;
-        pxlHeight = hexManager.gridHeight;
-        CalcNoise();
+        //hexManager = FindObjectOfType<HexGridManager>();
+        //pxlWidth = hexManager.gridWidth;
+        //pxlHeight = hexManager.gridHeight;
+        //CalcNoise();
     }
 
-    void CalcNoise()
+    public void CalcNoise(HexGridManager hexManager)
     {
         if (useRandomSeed)
         {
@@ -48,8 +48,6 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
         randPosX = pseudoRandom.Next(-100, 100);
         randPosY = pseudoRandom.Next(-100, 100);
-        
-        layoutGroup.constraintCount = pxlHeight;
         float y = 0;
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
         
@@ -66,7 +64,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
                 //Text text = Instantiate(numPrefab, layoutGroup.transform).GetComponent<Text>();
                 //text.text = ((int)(sample * 10)).ToString();
 
-                hexManager.hexes[(int)x , (int)y].hexValue = sample;
+                hexManager.hexes[(int)x , (int)y].hexValue = sample * sampleMultiplier;
                 
                 if (sample > highestPoint)
                 {
@@ -94,7 +92,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            CalcNoise();
+            //CalcNoise();
         }
     }
 }

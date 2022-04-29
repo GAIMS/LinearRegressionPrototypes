@@ -16,9 +16,13 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float slopeMax = 2;
     [SerializeField] private float hexValueMultiplier = .1f;
     [SerializeField] private float hexColorMultiplier = .025f;
+    [SerializeField] public bool usingGraph;
+    [SerializeField] public bool usingNoise;
 
     
     public Hex[,] hexes;
+
+    private PerlinNoiseGeneration noiseGen;
 
     private Vector3[] cubeDirectionVectors = new Vector3[]
     {
@@ -34,6 +38,7 @@ public class HexGridManager : MonoBehaviour
     {
         hexes = new Hex[gridWidth, gridHeight];
         graphObject = FindObjectOfType<GraphObject>();
+        noiseGen = FindObjectOfType<PerlinNoiseGeneration>();
         CreateHexGrid(hexSize);
         UpdateHexes();
     }
@@ -117,17 +122,26 @@ public class HexGridManager : MonoBehaviour
                 hexes[x,y].neighbors = GetExtendedNeighbors(hexes[x,y],1);
                 
                 hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
-                hexes[x,y].lineOfBestFit = new Line(
-                    (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
-                    (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
 
-                
-                graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
-                hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
+
+                if (usingGraph)
+                {
+                    hexes[x,y].lineOfBestFit = new Line(
+                        (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
+                        (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
+                    graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
+                    hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
+                }
+
+                if (usingNoise)
+                {
+                    noiseGen.CalcNoise(this);
+                }
                 SetText(hexes[x,y]);
             }
         }
-        graphObject.RedrawLine(graphObject.Points);
+        if(usingGraph)
+            graphObject.RedrawLine(graphObject.Points);
     }
 
     void SetText(Hex hex)
