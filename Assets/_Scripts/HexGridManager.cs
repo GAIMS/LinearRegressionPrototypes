@@ -115,6 +115,10 @@ public class HexGridManager : MonoBehaviour
     
     public void UpdateHexes()
     {
+        if (usingNoise)
+        {
+            noiseGen.CalcNoise(this);
+        }
         for (int x = 0; x < hexes.GetLength(0); x++)
         {
             for (int y = 0; y < hexes.GetLength(1); y++)
@@ -131,11 +135,6 @@ public class HexGridManager : MonoBehaviour
                         (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
                     graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
                     hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
-                }
-
-                if (usingNoise)
-                {
-                    noiseGen.CalcNoise(this);
                 }
                 SetText(hexes[x,y]);
             }

@@ -27,6 +27,7 @@ public class PerlinNoiseGeneration : MonoBehaviour
     private Renderer rend;
     private float randPosX,randPosY;
 
+    private int timesCalled = 1;
     //private HexGridManager hexManager;
     
     void Start()
@@ -39,9 +40,10 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
     public void CalcNoise(HexGridManager hexManager)
     {
+        timesCalled++;
         if (useRandomSeed)
         {
-            seed = Time.time.ToString();
+            seed = (Time.fixedTime * timesCalled).ToString();
         }
 
         System.Random pseudoRandom = new System.Random(seed.GetHashCode());
