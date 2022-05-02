@@ -13,6 +13,7 @@ public class HexGridGame : MonoBehaviour
     [SerializeField] private bool cumulativeScore;
     [SerializeField] private bool adaptiveRadius;
     [SerializeField] private HexGridGame otherPlayer;
+    [SerializeField] private Text gameOverText;
 
     public bool myTurn = false;
     private HexGridManager.Hex pickedHex;
@@ -36,6 +37,11 @@ public class HexGridGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (pickedHex == hm.lowestHex)
+        {
+            Debug.Log("Game Over");
+            gameOverText.enabled = true;
+        }
         if (firstPick && randomFirstPick)
         {
             HexGridManager.Hex hex = hexes[Random.Range(0, hexes.GetLength(0)), Random.Range(0, hexes.GetLength(1))];
@@ -150,7 +156,7 @@ public class HexGridGame : MonoBehaviour
                     }
                     
                 }
-
+                
             }
         }
 
@@ -159,7 +165,7 @@ public class HexGridGame : MonoBehaviour
             if(hm.usingGraph)
                 graphObject.RedrawGraph();
             hm.UpdateHexes();
-
+            gameOverText.enabled = false;
             foreach (var hex in hexes)
             {
                 hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;

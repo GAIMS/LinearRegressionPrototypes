@@ -21,6 +21,7 @@ public class HexGridManager : MonoBehaviour
 
     
     public Hex[,] hexes;
+    public Hex lowestHex;
 
     private PerlinNoiseGeneration noiseGen;
 
@@ -115,6 +116,7 @@ public class HexGridManager : MonoBehaviour
     
     public void UpdateHexes()
     {
+        lowestHex = hexes[0,0];
         if (usingNoise)
         {
             noiseGen.CalcNoise(this);
@@ -127,7 +129,11 @@ public class HexGridManager : MonoBehaviour
                 
                 hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
 
-
+                if (lowestHex.hexValue > hexes[x, y].hexValue)
+                {
+                    lowestHex = hexes[x, y];
+                }
+                
                 if (usingGraph)
                 {
                     hexes[x,y].lineOfBestFit = new Line(
@@ -139,6 +145,7 @@ public class HexGridManager : MonoBehaviour
                 SetText(hexes[x,y]);
             }
         }
+        lowestHex.hexObject.GetComponent<SpriteRenderer>().color = Color.green;
         if(usingGraph)
             graphObject.RedrawLine(graphObject.Points);
     }
@@ -147,7 +154,7 @@ public class HexGridManager : MonoBehaviour
     {
         hex.hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hex.hexValue)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
         hex.hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hex.hexValue * hexColorMultiplier);
-        
+
         Vector3 randPos = LowestNeighbor(hex).hexObject.transform.position;
         Vector3 objectPos = hex.hexObject.transform.position;
         randPos.x = randPos.x - objectPos.x;
