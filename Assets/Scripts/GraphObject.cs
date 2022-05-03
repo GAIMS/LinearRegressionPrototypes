@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class GraphObject : MonoBehaviour
 {
     [Header("General")]
@@ -31,8 +33,8 @@ public class GraphObject : MonoBehaviour
     }
 
     public void RedrawGraph(bool redrawPoints, bool redrawLine) {
-        Rect.x = this.transform.position.x;
-        Rect.y = this.transform.position.y;
+        //Rect.x = this.transform.position.x;
+        //Rect.y = this.transform.position.y;
         RedrawRect();
         RedrawGrid();
         if (redrawPoints) {
@@ -78,7 +80,12 @@ public class GraphObject : MonoBehaviour
     [ContextMenu("Clear Points")]
     public void ClearPoints() {
         if (PointContainer.transform.childCount > 0) {
-            Object.Destroy(PointContainer.transform.GetChild(0).gameObject);
+            for (int i = PointContainer.transform.childCount - 1; i >= 0; i--) {
+                if (Application.isEditor)
+                    GameObject.DestroyImmediate(PointContainer.transform.GetChild(i).gameObject);
+                else
+                    GameObject.Destroy(PointContainer.transform.GetChild(i).gameObject);
+            }
             Points.Clear();
         }
         Line.Line = new Line(new Point(0,0), new Point(0,0));
@@ -196,10 +203,19 @@ public class GraphObject : MonoBehaviour
         // find the points which are within the bounds of teh screen edge
         List<Point> rectIntersects = new List<Point>();
         for (int i = 0; i < intersects.Count; i++) {
-            Debug.Log(intersects[i]);
             if (intersects[i].X >= Corners[0].Point.X && intersects[i].X <= Corners[1].Point.X) {
                 if (intersects[i].Y >= Corners[0].Point.Y && intersects[i].Y <= Corners[2].Point.Y) {
-                    rectIntersects.Add(intersects[i]);
+                    bool duplicate = false;
+                    for (int j = 0; j < rectIntersects.Count; j++) {
+                        if (rectIntersects[j].X == intersects[i].X && rectIntersects[j].Y == intersects[i].Y) {
+                            duplicate = true;
+                        } else if (Mathf.Abs(rectIntersects[j].X - intersects[i].X) < 0.05f && Mathf.Abs(rectIntersects[j].Y - intersects[i].Y) < 0.05f) {
+                            duplicate = true;
+                        }
+                    }
+                    if (duplicate == false) {
+                        rectIntersects.Add(intersects[i]);
+                    }
                 }
             }
         }
@@ -254,6 +270,10 @@ public class GraphObject : MonoBehaviour
         }
     }
 
+    public void InBounds(Point point) {
+
+    }
+
     [ContextMenu("Draw Loss Lines")]
     public void RedrawLossLines() {
         ClearLossLines();
@@ -267,22 +287,35 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Clear Loss Lines")]
     public void ClearLossLines() {
-        foreach (Transform child in LineContainer.transform) {
-            GameObject.Destroy(child.gameObject);
+        for (int i = LineContainer.transform.childCount - 1; i >= 0; i--)
+        {
+            if (Application.isEditor)
+                GameObject.DestroyImmediate(LineContainer.transform.GetChild(i).gameObject);
+            else
+                GameObject.Destroy(LineContainer.transform.GetChild(i).gameObject);
         }
     }
 
-    public float CalculateLoss(Point point, Line line) {
+    public float CalculateLoss(Point point, Line line, LossMode mode = LossMode.Default) {
         Line lossLine = CalculateLossLine(point, line);
         float loss = lossLine.A.Y - lossLine.B.Y;
-        return loss * loss * ((loss < 0) ? -1 : 1);
+        loss *= loss;
+        switch (mode) {
+            case LossMode.Default:
+                
+                break;
+            case LossMode.Zero:
+                loss *= ((loss < 0) ? -1 : 1);
+                break;
+        }
+        return loss;
     }
 
     [ContextMenu("Calculate Total Loss")]
-    public float CalculateTotalLoss() {
+    public float CalculateTotalLoss(LossMode mode = LossMode.Default) {
         float totalLoss = 0f;
         for (int i = 0; i < Points.Count; i++) {
-            totalLoss += CalculateLoss(Points[i].Point, Line.Line);
+            totalLoss += CalculateLoss(Points[i].Point, Line.Line, mode);
         }
         Debug.Log("Total Loss: " + totalLoss);
         return totalLoss;
@@ -292,7 +325,20 @@ public class GraphObject : MonoBehaviour
         Point xIntercept = new Point(point.X, 0);
         Line lineB = new Line(point, xIntercept);
         Point intersect = LineIntersection.FindIntersection(lineA, lineB);
+        // check if our intersection is out of bounds, draw screen intersection if so
+        if (intersect.Y < Corners[0].Point.Y || intersect.Y > Corners[2].Point.Y) {
+            if (point.Y >= intersect.Y) {
+                intersect = LineIntersection.FindIntersection(lineB, Sides[0].Line);
+            } else {
+                intersect = LineIntersection.FindIntersection(lineB, Sides[1].Line);
+            }
+        }
         Line lossLine = new Line(point, intersect);
         return lossLine;
     }
+}
+
+public enum LossMode {
+    Default,
+    Zero
 }
