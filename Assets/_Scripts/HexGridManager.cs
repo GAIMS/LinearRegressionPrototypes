@@ -184,7 +184,7 @@ public class HexGridManager : MonoBehaviour
             ring = GetExtendedNeighbors(lowPoint, i);
             for (int j = 0; j < ring.Count; j++)
             {
-                ring[j].hexValue = i + (noiseGen.GetPerlinNoise(ring[j], this) * i * 2);
+                ring[j].hexValue = i + (noiseGen.GetPerlinNoise(ring[j], this) * i * 3);
             }
         }
         UpdateHexes();
