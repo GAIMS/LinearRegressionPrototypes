@@ -10,6 +10,7 @@ public class HexGridGame : MonoBehaviour
     [SerializeField] private int hexRadius;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private bool randomFirstPick;
+    [SerializeField] private bool pickLowestPoint;
     [SerializeField] private bool cumulativeScore;
     [SerializeField] private bool adaptiveRadius;
     [SerializeField] private HexGridGame otherPlayer;
@@ -92,6 +93,7 @@ public class HexGridGame : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, hexLayer))
             {
+
                 if (myTurn)
                 {
                     foreach (var hex in hexes)
@@ -107,7 +109,7 @@ public class HexGridGame : MonoBehaviour
                         }
                     }
                     
-                    if (firstPick)
+                    if (firstPick && !pickLowestPoint)
                     {
                         if (!randomFirstPick)
                         {
@@ -138,25 +140,41 @@ public class HexGridGame : MonoBehaviour
 
                         foreach (var hexCol in hexes)
                         {
-                            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+                            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
+                                Color.black;
                         }
-                        
-                        foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
+                        if(pickedHex != null)
                         {
-                            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+                            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
+                            {
+                                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
+                                    Color.white;
+                            }
                         }
 
                         firstPick = false;
                         turn = true;
                     }
 
-                    if (turn)
+                    if (turn && !pickLowestPoint)
                     {
                         PickPont(hit);
                     }
                     
                 }
-                
+                if (pickLowestPoint)
+                {
+                    //Debug.Log("Test");
+                    foreach (var hex in hexes)
+                    {
+                        if (hex.hexObject == hit.transform.gameObject)
+                        {
+                            hm.GenLowestPoint(hex);
+                            pickLowestPoint = false;
+                            firstPick = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -172,11 +190,13 @@ public class HexGridGame : MonoBehaviour
             }
 
             firstPick = true;
+            pickLowestPoint = true;
             turn = false;
 
             if (cumulativeScore)
             {
-                score += (int) Mathf.Abs(pickedHex.hexValue);
+                if(pickedHex != null)
+                    score += (int) Mathf.Abs(pickedHex.hexValue);
                 lossText.text = "Total Loss: " + score;
             }
             else

@@ -40,6 +40,8 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
     public void CalcNoise(HexGridManager hexManager)
     {
+        pxlWidth = hexManager.gridWidth;
+        pxlHeight = hexManager.gridHeight;
         timesCalled++;
         if (useRandomSeed)
         {
@@ -50,9 +52,9 @@ public class PerlinNoiseGeneration : MonoBehaviour
 
         randPosX = pseudoRandom.Next(-100, 100);
         randPosY = pseudoRandom.Next(-100, 100);
-        float y = 0;
+
         Vector2 test1 = Vector2.zero, test2 = Vector2.zero;
-        
+        float y = 0;        
         while (y<hexManager.hexes.GetLength(1))
         {
             float x = 0;
@@ -90,6 +92,42 @@ public class PerlinNoiseGeneration : MonoBehaviour
         }
     }
 
+    public float GetPerlinNoise(HexGridManager.Hex hex, HexGridManager hexManager)
+    {
+        float sample = 0;
+        pxlWidth = hexManager.gridWidth;
+        pxlHeight = hexManager.gridHeight;
+        timesCalled++;
+        if (useRandomSeed)
+        {
+            seed = (Time.fixedTime * timesCalled).ToString();
+        }
+
+        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+
+        randPosX = pseudoRandom.Next(-100, 100);
+        randPosY = pseudoRandom.Next(-100, 100);
+
+        float y = 0;        
+        while (y < hexManager.hexes.GetLength(1))
+        {
+            float x = 0;
+            while (x < hexManager.hexes.GetLength(0))
+            {
+                float xCoord = (xOrg + randPosX) + x / pxlWidth * scale;
+                float yCoord = (yOrg + randPosY) + y / pxlHeight * scale;
+
+                sample = Mathf.PerlinNoise(xCoord, yCoord);
+                
+                x++;
+            }
+
+            y++;
+        }
+        //Debug.Log(sample);
+        return sample;
+    }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))

@@ -174,7 +174,21 @@ public class HexGridManager : MonoBehaviour
                 hex.hexObject.GetComponentsInChildren<Text>()[i].text = hex.position.x.ToString();
         }
     }
-    
+
+    public void GenLowestPoint(Hex lowPoint)
+    {
+        List<Hex> ring = new List<Hex>();
+        lowPoint.hexValue = 0;
+        for (int i = 1; i < gridWidth + gridHeight; i++)
+        {
+            ring = GetExtendedNeighbors(lowPoint, i);
+            for (int j = 0; j < ring.Count; j++)
+            {
+                ring[j].hexValue = i + (noiseGen.GetPerlinNoise(ring[j], this) * i * 2);
+            }
+        }
+        UpdateHexes();
+    }
     public Hex LowestNeighbor(Hex hex)
     {
         float min = 1000000;
