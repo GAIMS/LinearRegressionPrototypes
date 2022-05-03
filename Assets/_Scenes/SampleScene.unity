@@ -170,7 +170,7 @@ MonoBehaviour:
   lossText: {fileID: 955120557}
   hexRadius: 2
   graphObject: {fileID: 251306984}
-  randomFirstPick: 1
+  randomFirstPick: 0
   pickLowestPoint: 1
   cumulativeScore: 1
   adaptiveRadius: 1
@@ -2385,7 +2385,7 @@ MonoBehaviour:
   lossText: {fileID: 1756842470}
   hexRadius: 2
   graphObject: {fileID: 251306984}
-  randomFirstPick: 1
+  randomFirstPick: 0
   pickLowestPoint: 1
   cumulativeScore: 1
   adaptiveRadius: 1

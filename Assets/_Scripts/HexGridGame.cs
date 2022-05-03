@@ -38,7 +38,7 @@ public class HexGridGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (pickedHex == hm.lowestHex && !firstPick)
+        if (pickedHex == hm.lowestHex && !turn)
         {
             //Debug.Log("Game Over");
             gameOverText.enabled = true;
@@ -107,7 +107,7 @@ public class HexGridGame : MonoBehaviour
                     {
                         FirstPick(hit);
                         UpdateColor();
-                        firstPick = false;
+                        //firstPick = false;
                         turn = true;
                     }
 
