@@ -38,96 +38,59 @@ public class HexGridGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (pickedHex == hm.lowestHex && !turn)
-        {
-            //Debug.Log("Game Over");
-            gameOverText.enabled = true;
-        }
+
         if (firstPick && randomFirstPick && !pickLowestPoint)
         {
-            HexGridManager.Hex hex = hexes[Random.Range(0, hexes.GetLength(0)), Random.Range(0, hexes.GetLength(1))];
-            hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-            if (hm.usingGraph)
-            {
-                graphObject.RedrawLine(hex.lineOfBestFit);
-                graphObject.RedrawLossLines();
-            }
-            pickedHex = hex;
-            if (cumulativeScore)
-            {
-                score += (int) Mathf.Abs(pickedHex.hexValue);
-                lossText.text = "Total Loss: " + score;
-            }
-            else
-            {
-                lossText.text = "Total Loss: " + pickedHex.hexValue;
-            }
-
-            foreach (var hexCol in hexes)
-            {
-                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
-            }
-            if(adaptiveRadius)
-            {
-                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
-                {
-                    hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-                }
-            }
-            else
-            {
-                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
-                {
-                    hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-                }
-            }
-            
-
-            firstPick = false;
-            turn = true;
+            RandomFirstPick();
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, hexLayer))
+            if (firstPick||myTurn)
             {
-                foreach (var hex in hexes)
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, hexLayer))
                 {
-                    if (hex.position == hit.transform.position)
-                    {
-                        pickedHex = hex;
-                    }
-                }
-                Debug.Log("hit");
-                if (myTurn)
-                {
-                    SwapTurn(hit);
-                    if (firstPick)
-                    {
-                        FirstPick(hit);
-                        UpdateColor();
-                        //firstPick = false;
-                        turn = true;
-                    }
-
-                    if (turn)
-                    {
-                        PickPont(hit);
-                    }
-
-                }
-
-                if (pickLowestPoint)
-                {
-                    //Debug.Log("Test");
+                    Debug.Log("test");
                     foreach (var hex in hexes)
                     {
-                        if (hex.hexObject == hit.transform.gameObject)
+                        if (hex.position == hit.transform.position)
                         {
-                            hm.GenLowestPoint(hex);
-                            pickLowestPoint = false;
-                            firstPick = true;
+                            pickedHex = hex;
+                            //Debug.Log("hit");
+                        }
+                    }
+                    if (myTurn)
+                    {
+                        SwapTurn(hit);
+                        if (firstPick)
+                        {
+                            FirstPick(hit);
+                            UpdateColor();
+                            firstPick = false;
+                            turn = true;
+                        }
+                    
+                        if (turn && !firstPick)
+                        {
+                            //FirstPick(hit);
+                            PickPont(hit);
+                        }
+
+                    }
+
+                    if (pickLowestPoint)
+                    {
+                        //Debug.Log("Test");
+                        foreach (var hex in hexes)
+                        {
+                            if (hex.hexObject == hit.transform.gameObject)
+                            {
+                                hm.GenLowestPoint(hex);
+                                pickLowestPoint = false;
+                                firstPick = true;
+                                myTurn = true;
+                            }
                         }
                     }
                 }
@@ -137,23 +100,6 @@ public class HexGridGame : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             ResetGraph();
-        }
-    }
-
-    public void UpdateColor()
-    {
-        foreach (var hexCol in hexes)
-        {
-            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
-                Color.black;
-        }
-        if(pickedHex != null)
-        {
-            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
-            {
-                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
-                    Color.white;
-            }
         }
     }
     public void FirstPick(RaycastHit hit)
@@ -183,52 +129,17 @@ public class HexGridGame : MonoBehaviour
             
         }
     }
-    public void SwapTurn(RaycastHit hit)
-    {
-        foreach (var hex in hexes)
-        {
-            if (hex.hexObject.transform.position == hit.transform.position)
-            {
-                if (firstPick || 
-                    hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color == Color.white)
-                {
-                    myTurn = false;
-                    otherPlayer.myTurn = true;
-                }
-            }
-        }
-    }
     public void PickPont(RaycastHit hit)
     {
-        foreach (var hexCol in hexes)
-        {
-            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
-        }
-        
-        if(adaptiveRadius && pickedHex != null)
-        {
-            Debug.Log(pickedHex);
-            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
-            {
-                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-            }
-        }
-        else if(pickedHex != null)
-        {
-            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
-            {
-                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-            }
-        }
-
+        Debug.Log("Here");
+        UpdateColor();
         foreach (var hex in hexes)
         {
-            if (hex.hexObject == hit.transform.gameObject &&
+            if (hex.hexObject == hit.transform.gameObject&&
                 hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled &&
                 hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color == Color.white)
             {
                 hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-                Debug.Log(hm.usingGraph);
                 if (hm.usingGraph)
                 {
                     graphObject.RedrawLine(hex.lineOfBestFit);
@@ -246,29 +157,93 @@ public class HexGridGame : MonoBehaviour
                     lossText.text = "Total Loss: " + pickedHex.hexValue;
                 }
             }
+            
+        }
+        UpdateColor();
+        if (pickedHex == hm.lowestHex && !firstPick)
+        {
+            //Debug.Log("Game Over");
+            gameOverText.enabled = true;
+        }
+    }
+    public void UpdateColor()
+    {
+        foreach (var hexCol in hexes)
+        {
+            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+        }
+        foreach (var hexCol in hexes)
+        {
+            hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
+                Color.black;
+        }
+        if(pickedHex != null)
+        {
+            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
+            {
+                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color =
+                    Color.white;
+            }
+        }
+    }
+    public void SwapTurn(RaycastHit hit)
+    {
+        foreach (var hex in hexes)
+        {
+            if (hex.hexObject.transform.position == hit.transform.position)
+            {
+                if (firstPick || 
+                    hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color == Color.white)
+                {
+                    myTurn = false;
+                    otherPlayer.myTurn = true;
+                }
+            }
+        }
+    }
+    public void RandomFirstPick()
+    {
+        HexGridManager.Hex hex = hexes[Random.Range(0, hexes.GetLength(0)), Random.Range(0, hexes.GetLength(1))];
+        hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+        if (hm.usingGraph)
+        {
+            graphObject.RedrawLine(hex.lineOfBestFit);
+            graphObject.RedrawLossLines();
+        }
+        pickedHex = hex;
+        if (cumulativeScore)
+        {
+            score += (int) Mathf.Abs(pickedHex.hexValue);
+            lossText.text = "Total Loss: " + score;
+        }
+        else
+        {
+            lossText.text = "Total Loss: " + pickedHex.hexValue;
         }
 
         foreach (var hexCol in hexes)
         {
             hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
         }
-        
-        if(adaptiveRadius && pickedHex != null)
+        if(adaptiveRadius)
         {
             foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
             {
                 hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
-        else if(pickedHex != null)
+        else
         {
             foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, hexRadius))
             {
                 hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }
         }
-    }
+            
 
+        firstPick = false;
+        turn = true;
+    }
     public void ResetGraph()
     {
         if(hm.usingGraph)

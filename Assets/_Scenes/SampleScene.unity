@@ -176,7 +176,7 @@ MonoBehaviour:
   adaptiveRadius: 1
   otherPlayer: {fileID: 1135612846}
   gameOverText: {fileID: 563126779}
-  myTurn: 1
+  myTurn: 0
 --- !u!114 &305336222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2391,7 +2391,7 @@ MonoBehaviour:
   adaptiveRadius: 1
   otherPlayer: {fileID: 305336221}
   gameOverText: {fileID: 563126779}
-  myTurn: 1
+  myTurn: 0
 --- !u!114 &1135612847
 MonoBehaviour:
   m_ObjectHideFlags: 0
