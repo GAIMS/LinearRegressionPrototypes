@@ -38,9 +38,9 @@ public class HexGridGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (pickedHex == hm.lowestHex)
+        if (pickedHex == hm.lowestHex && !firstPick)
         {
-            Debug.Log("Game Over");
+            //Debug.Log("Game Over");
             gameOverText.enabled = true;
         }
         if (firstPick && randomFirstPick && !pickLowestPoint)
@@ -89,15 +89,21 @@ public class HexGridGame : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, hexLayer))
             {
-                
+                foreach (var hex in hexes)
+                {
+                    if (hex.position == hit.transform.position)
+                    {
+                        pickedHex = hex;
+                    }
+                }
+                Debug.Log("hit");
                 if (myTurn)
                 {
                     SwapTurn(hit);
-                    if (firstPick && !pickLowestPoint)
+                    if (firstPick)
                     {
                         FirstPick(hit);
                         UpdateColor();
@@ -105,12 +111,13 @@ public class HexGridGame : MonoBehaviour
                         turn = true;
                     }
 
-                    if (turn && !pickLowestPoint)
+                    if (turn)
                     {
                         PickPont(hit);
                     }
-                    
+
                 }
+
                 if (pickLowestPoint)
                 {
                     //Debug.Log("Test");
@@ -151,31 +158,29 @@ public class HexGridGame : MonoBehaviour
     }
     public void FirstPick(RaycastHit hit)
     {
-        if (!randomFirstPick)
+        foreach (var hex in hexes)
         {
-            foreach (var hex in hexes)
+            if (hex.hexObject == hit.transform.gameObject)
             {
-                if (hex.hexObject == hit.transform.gameObject)
+                hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
+                if (hm.usingGraph)
                 {
-                    hex.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = false;
-                    if (hm.usingGraph)
-                    {
-                        graphObject.RedrawLine(hex.lineOfBestFit);
-                        graphObject.RedrawLossLines();
-                    }
+                    graphObject.RedrawLine(hex.lineOfBestFit);
+                    graphObject.RedrawLossLines();
+                }
 
-                    pickedHex = hex;
-                    if (cumulativeScore)
-                    {
-                        score += (int) Mathf.Abs(pickedHex.hexValue);
-                        lossText.text = "Total Loss: " + score;
-                    }
-                    else
-                    {
-                        lossText.text = "Total Loss: " + pickedHex.hexValue;
-                    }
+                pickedHex = hex;
+                if (cumulativeScore)
+                {
+                    score += (int) Mathf.Abs(pickedHex.hexValue);
+                    lossText.text = "Total Loss: " + score;
+                }
+                else
+                {
+                    lossText.text = "Total Loss: " + pickedHex.hexValue;
                 }
             }
+            
         }
     }
     public void SwapTurn(RaycastHit hit)
