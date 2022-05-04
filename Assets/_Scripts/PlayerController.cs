@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 targetPos;
+    private GameManager gm;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gm = FindObjectOfType<GameManager>();
 
     }
     
@@ -34,5 +37,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(transform.right * speed);
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collisionInfo)
+    {
+        gm.score = 0;
+        
+        gm.Invoke("NewGraph", .1f);
     }
 }
