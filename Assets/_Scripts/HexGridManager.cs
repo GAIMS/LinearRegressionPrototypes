@@ -19,6 +19,7 @@ public class HexGridManager : MonoBehaviour
 
     
     public Hex[,] hexes;
+    public Hex lowestHex;
 
     private Vector3[] cubeDirectionVectors = new Vector3[]
     {
@@ -110,6 +111,7 @@ public class HexGridManager : MonoBehaviour
     
     public void UpdateHexes()
     {
+        lowestHex = hexes[0, 0];
         for (int x = 0; x < hexes.GetLength(0); x++)
         {
             for (int y = 0; y < hexes.GetLength(1); y++)
@@ -124,9 +126,14 @@ public class HexGridManager : MonoBehaviour
                 
                 graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
                 hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
+                if (hexes[x, y].hexValue < lowestHex.hexValue)
+                {
+                    lowestHex = hexes[x, y];
+                }
                 SetText(hexes[x,y]);
             }
         }
+        lowestHex.hexObject.GetComponent<SpriteRenderer>().color = Color.green;
         graphObject.RedrawLine(graphObject.Points);
     }
 
@@ -134,7 +141,7 @@ public class HexGridManager : MonoBehaviour
     {
         hex.hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hex.hexValue)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
         hex.hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hex.hexValue * hexColorMultiplier);
-        
+
         Vector3 randPos = LowestNeighbor(hex).hexObject.transform.position;
         Vector3 objectPos = hex.hexObject.transform.position;
         randPos.x = randPos.x - objectPos.x;

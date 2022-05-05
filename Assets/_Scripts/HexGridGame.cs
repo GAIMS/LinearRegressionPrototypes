@@ -7,6 +7,7 @@ public class HexGridGame : MonoBehaviour
 {
     [SerializeField] private LayerMask hexLayer;
     [SerializeField] private Text lossText;
+    [SerializeField] private Text gameOverText;
     [SerializeField] private int hexRadius;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private bool randomFirstPick;
@@ -138,7 +139,9 @@ public class HexGridGame : MonoBehaviour
             firstPick = true;
             turn = false;
 
-            if (cumulativeScore)
+            gameOverText.enabled = false;
+            
+            if (cumulativeScore && pickedHex != null)
             {
                 score += (int) Mathf.Abs(pickedHex.hexValue);
                 lossText.text = "Total Loss: " + score;
@@ -212,6 +215,11 @@ public class HexGridGame : MonoBehaviour
             {
                 hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }
+        }
+
+        if (pickedHex == hm.lowestHex)
+        {
+            gameOverText.enabled = true;
         }
     }
 }
