@@ -9,6 +9,8 @@ public class PlayerTeamLine : MonoBehaviour {
 	
 	public Vector3 a, b;
 	
+	private float timer = 0f;
+	
 	private void Awake() {
 		
 	}
@@ -18,21 +20,34 @@ public class PlayerTeamLine : MonoBehaviour {
 	}
 	
 	private void Update() {
-		this.GetAveragePositions();
+		if (GameManager.Instance.state == GameManager.State.Results) {
+			return;
+		}
 		
-		
-		
+		this.GetAveragePositions();		
 		Vector3 pos = (this.a - this.b) / 2f;
 		
-	//	this.transform.position = pos + ((this.team == 1) ? GameManager.Instance.playerSpace1.position : GameManager.Instance.playerSpace2.position);
-		
 		Vector3 targetDir = this.a - this.b;
-		this.transform.rotation = Quaternion.FromToRotation(Vector3.forward, targetDir);
+		this.transform.forward = targetDir;
 		
 		float dist = Vector3.Distance(this.a, this.b);
 		
 		dist = Mathf.Clamp(dist - 1.25f, 2f, 999f);
-	//	this.transform.localScale = new Vector3(dist, 0.25f, 1f);
+		
+		if (GameManager.Instance.state != GameManager.State.Game) {
+			return;
+		}
+		if (GameManager.Instance.IsLineMatching(this.transform.forward)) {
+			if (GameManager.Instance.holdPositionToWin) {
+				this.timer += Time.deltaTime;
+				if (this.timer < 1f) {
+					return;
+				}
+			}			
+			GameManager.Instance.StartCoroutine(GameManager.Instance.Results(this.team));
+		} else {
+			this.timer = 0f;
+		}
 	}
 	
 	public void GetAveragePositions() {

@@ -92,8 +92,8 @@ public class PlayerCore : MonoBehaviour {
 	private void HandlePosition() {
 		Transform playerSpace = ((this.team == 1) ? GameManager.Instance.playerSpace1 : GameManager.Instance.playerSpace2);
 		
-		float xRange = playerSpace.transform.localScale.x * 4f;
-		float zRange = playerSpace.transform.localScale.z * 4f;
+		float xRange = playerSpace.transform.localScale.x * 4.75f;
+		float zRange = playerSpace.transform.localScale.z * 4.75f;
 			
 		
 		Vector3 pos = this.transform.position;
