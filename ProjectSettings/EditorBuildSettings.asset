@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/LockPick.unity
+    guid: 2c0638fa37c9b5a44bca4006297e418f
   m_configObjects: {}

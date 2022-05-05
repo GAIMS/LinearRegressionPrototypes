@@ -43,6 +43,9 @@ public class LockAI : MonoBehaviour {
 	}
 	
 	private void Update() {
+		if (!this.isActive) {
+			return;
+		}
 		bool flag = LockPickController.Instance.IsUnlocking;
 		
 		if (flag) {
