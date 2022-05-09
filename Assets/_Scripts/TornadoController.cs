@@ -30,9 +30,14 @@ public class TornadoController : MonoBehaviour
                 clickedPos2 = hit.point;
                 line.SetPosition(1,clickedPos2);
                 click1 = true;
+                Vector2 tornadoStart = CalculateNewPoint(clickedPos1, clickedPos2, clickedPos1);
+                //Vector2 tornadoEnd = CalculateNewPoint(clickedPos1, clickedPos2, clickedPos2);
+                Vector2 targetPos = clickedPos2 - clickedPos1;
+
+                float angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
 
                 GameObject tornado = Instantiate(tornadoPrefab, clickedPos1, Quaternion.Euler(90,0,0));
-                tornado.GetComponent<TornadoScript>().endPos = clickedPos2;
+                tornado.transform.rotation = Quaternion.AngleAxis(angle, tornado.transform.up);
                 return;
             }
             if (click1)
@@ -50,5 +55,19 @@ public class TornadoController : MonoBehaviour
             Physics.Raycast(ray,out RaycastHit hit, Mathf.Infinity, backMask);
             line.SetPosition(1,hit.point);
         }
+        
+    }
+
+    public Vector2 CalculateNewPoint(Vector2 pos1, Vector2 pos2, Vector2 nextPoint)
+    {
+        float m = (pos2.y - pos1.y) / (pos2.x - pos1.x);
+
+        float b = (pos1.y) - (m * pos1.x);
+        
+        Vector2 newPoint = new Vector2();
+        newPoint.y = (m * nextPoint.x) + b;
+        newPoint.x = (nextPoint.y / m) - b;
+        
+        return newPoint;
     }
 }
