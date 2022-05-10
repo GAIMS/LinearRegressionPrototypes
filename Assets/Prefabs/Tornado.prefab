@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1330398560160391234}
   - component: {fileID: 1330398560160391233}
   - component: {fileID: 1330398560160391232}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tornado
-  m_TagString: Untagged
+  m_TagString: Tornado
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,9 +96,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5000001
+  m_Radius: 0.4
   m_Height: 2
-  m_Direction: 1
+  m_Direction: 2
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!114 &1330398560160391232
 MonoBehaviour:
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 3825731268569456191}
   - component: {fileID: 2553307769054301232}
   - component: {fileID: 6410857869278843459}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TornadoSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4932,7 +4932,7 @@ GameObject:
   - component: {fileID: 1555603862725810405}
   - component: {fileID: 3633614570319229569}
   - component: {fileID: 1428649288030871066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle System (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9737,7 +9737,7 @@ GameObject:
   - component: {fileID: 3432078179559092951}
   - component: {fileID: 7130240784916798583}
   - component: {fileID: 9076892392139290473}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SubEmitter0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14599,9 +14599,8 @@ GameObject:
   - component: {fileID: 6889392288039794858}
   - component: {fileID: 8437554969329320752}
   - component: {fileID: 6942671868295143374}
-  - component: {fileID: 8197823016677172434}
   - component: {fileID: 3201164722067605472}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14671,20 +14670,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8197823016677172434
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8271195950750717029}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &3201164722067605472
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -20,7 +20,14 @@ public class RandomPlacer : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            foreach (var house in objects)
+            {
+                Destroy(house);
+            }
+            PlaceRandom();
+        }
     }
 
     public void PlaceRandom()
