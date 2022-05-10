@@ -30,7 +30,11 @@ public class TornadoController : MonoBehaviour
                 clickedPos2 = hit.point;
                 line.SetPosition(1,clickedPos2);
                 click1 = true;
-                Vector2 tornadoStart = CalculateNewPoint(clickedPos1, clickedPos2, clickedPos1);
+                Debug.Log(clickedPos1);
+                Debug.Log(clickedPos2);
+                Vector2 tornadoStart = CalculateNewPoint(clickedPos1, clickedPos2,
+                    Vector3.one * length );
+                Debug.Log(tornadoStart);
                 //Vector2 tornadoEnd = CalculateNewPoint(clickedPos1, clickedPos2, clickedPos2);
                 Vector2 targetPos = clickedPos2 - clickedPos1;
 
@@ -38,6 +42,7 @@ public class TornadoController : MonoBehaviour
 
                 GameObject tornado = Instantiate(tornadoPrefab, clickedPos1, Quaternion.Euler(90,0,0));
                 tornado.transform.rotation = Quaternion.AngleAxis(angle, tornado.transform.up);
+                tornado.transform.position -= tornado.transform.right * length;
                 return;
             }
             if (click1)
@@ -66,7 +71,7 @@ public class TornadoController : MonoBehaviour
         
         Vector2 newPoint = new Vector2();
         newPoint.y = (m * nextPoint.x) + b;
-        newPoint.x = (nextPoint.y / m) - b;
+        newPoint.x = (newPoint.y / m) - b;
         
         return newPoint;
     }
