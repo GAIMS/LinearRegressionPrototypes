@@ -12,7 +12,8 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float hexSize = .75f;
     [SerializeField] private GameObject hexPrefab;
     [SerializeField] private float offset = .05f;
-    [SerializeField] private GraphObject graphObject;
+    [SerializeField] private GraphObject pointSource;
+    [SerializeField] private GraphObject lineTarget;
     [SerializeField] private float slopeMax = 2;
     [SerializeField] private float hexValueMultiplier = .1f;
     [SerializeField] private float hexColorMultiplier = .025f;
@@ -34,7 +35,12 @@ public class HexGridManager : MonoBehaviour
     private void Awake()
     {
         hexes = new Hex[gridWidth, gridHeight];
-        graphObject = FindObjectOfType<GraphObject>();
+        if (pointSource == null) {
+            pointSource = FindObjectOfType<GraphObject>();
+        }
+        if (lineTarget == null) {
+            lineTarget = FindObjectOfType<GraphObject>();
+        }
         CreateHexGrid(hexSize);
         UpdateHexes();
     }
@@ -121,11 +127,11 @@ public class HexGridManager : MonoBehaviour
                 hexes[x,y].hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
                 hexes[x,y].lineOfBestFit = new Line(
                     (-1 * slopeMax)+((2 * slopeMax * x)/hexes.GetLength(0)),
-                    (-1 * (graphObject.Rect.height/2))+((2 * (graphObject.Rect.height/2) * y)/hexes.GetLength(1)));
+                    (-1 * (pointSource.Rect.height/2))+((2 * (pointSource.Rect.height/2) * y)/hexes.GetLength(1)));
 
                 
-                graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
-                hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
+                lineTarget.RedrawLine(hexes[x, y].lineOfBestFit);
+                hexes[x, y].hexValue = lineTarget.CalculateTotalLoss() * hexValueMultiplier;
                 if (hexes[x, y].hexValue < lowestHex.hexValue)
                 {
                     lowestHex = hexes[x, y];
@@ -134,7 +140,7 @@ public class HexGridManager : MonoBehaviour
             }
         }
         lowestHex.hexObject.GetComponent<SpriteRenderer>().color = Color.green;
-        graphObject.RedrawLine(graphObject.Points);
+        lineTarget.RedrawLine(pointSource.Points);
     }
 
     void SetText(Hex hex)
