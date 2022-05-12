@@ -1161,6 +1161,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1330398560160391232, guid: 937e05fec9e8b63498027bd53b69d811, type: 3}
+      propertyPath: speed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1330398560160391239, guid: 937e05fec9e8b63498027bd53b69d811, type: 3}
       propertyPath: m_Name
       value: Tornado
