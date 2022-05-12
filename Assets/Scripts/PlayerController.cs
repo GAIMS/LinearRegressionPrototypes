@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     public CharacterController Controller;
     public Vector3 Velocity;
     public GameObject Grid;
+    public float Speed;
+    public float Jump;
+    public float Gravity = -9.81f;
 
     // Start is called before the first frame update
     void Start()
@@ -18,26 +21,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
-            // forward
+        bool groundedPlayer = Controller.isGrounded;
+        if (groundedPlayer && Velocity.y < 0)
+        {
+            Velocity.y = 0f;
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-            // left
+
+        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Controller.Move(movement * Time.deltaTime * Speed);
+
+        if (movement != Vector3.zero)
+        {
+            gameObject.transform.forward = movement;
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-            // right
+
+        if (Input.GetButtonDown("Jump") && groundedPlayer)
+        {
+            Velocity.y += Mathf.Sqrt(Jump * Gravity);
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
-            // back
-        }
-        if (Input.GetKey(KeyCode.Space)) {
-            // jump
-        }
-        if (Input.GetKey(KeyCode.R)) {
-            Grid.SetActive(!Grid.activeInHierarchy);
-        }
-        if (Input.GetKey(KeyCode.F)) {
-            // check for a node
-        }
+
+        Velocity.y += Gravity * Time.deltaTime;
+        Controller.Move(Velocity * Time.deltaTime);
     }
 }
