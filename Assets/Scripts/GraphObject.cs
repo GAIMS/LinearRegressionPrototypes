@@ -270,6 +270,13 @@ public class GraphObject : MonoBehaviour
         }
     }
 
+    // calculate the relative postion of a point from another graph on this graph
+    public Point ConverPoint(PointObject point, GraphObject graph) {
+        float rX = point.Point.X / graph.Rect.width;
+        float rY = point.Point.Y / graph.Rect.height;
+        return new Point(rX * Rect.width,rY * Rect.height);
+    }
+
     public void InBounds(Point point) {
 
     }
