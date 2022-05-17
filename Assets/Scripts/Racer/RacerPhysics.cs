@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RacerPhysics : MonoBehaviour {
 	
-	private const float CAST_DISTANCE = 0.6f;
+	private const float CAST_DISTANCE = 0.5f;
 	
 	public const float CAST_OFFSET = 0.4f;
 	
@@ -156,6 +156,7 @@ public class RacerPhysics : MonoBehaviour {
 		
 		Debug.Log("Doing Ground");
 		Vector3 velocity = this.rigidbody.velocity;
+		Vector3 normalized = Math3d.ProjectVectorOnPlane(this.groundNormal, velocity).normalized;
 		
 		if (this.recharging || !this.canAct) {
 			if (velocity.magnitude > 0f) {
@@ -163,16 +164,16 @@ public class RacerPhysics : MonoBehaviour {
 			} else {
 				velocity = Vector3.zero;
 			}
+			normalized = velocity;
 		} else {
-			velocity += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime);
-			velocity = Vector3.ClampMagnitude(velocity, this.GetTopSpeed());
+			normalized += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime) * 50f;
+			normalized = Vector3.ClampMagnitude(normalized, this.GetTopSpeed());
 		}
-		velocity.y = 0f;
-		this.rigidbody.velocity = velocity;
+		this.rigidbody.velocity = normalized;
 	}
 	
 	private void HandleGroundDetection() {
-		if ((this.grounded || Vector3.Dot(this.rigidbody.velocity, this.gravity) < 0f) && this.GroundCast(out this.hitInfo)) {
+		if ((this.grounded || Vector3.Dot(this.rigidbody.velocity, this.gravity) <= 0f) && this.GroundCast(out this.hitInfo)) {
 			if (!this.grounded) {
 				this.rigidbody.velocity = Math3d.ProjectVectorOnPlane(this.groundNormal, this.rigidbody.velocity);
 			} else {
@@ -277,7 +278,7 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	public float GetSwimSpeed() {
-		return BASE_SPEED * this.core.stats.Swim;
+		return BASE_SPEED * 0.75f * this.core.stats.Swim;
 	}
 	
 	public float GetClimbSpeed() {
@@ -293,7 +294,7 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	public bool WallCast() {
-		return Physics.Raycast(this.transform.position + (Vector3.up * 0.1f), this.core.skin.skin.transform.forward, out this.wallHitInfo, 0.25f, this.surfaceMask, QueryTriggerInteraction.Ignore);
+		return Physics.Raycast(this.transform.position + (Vector3.up * 0.25f), this.transform.right, out this.wallHitInfo, 0.3f, this.surfaceMask, QueryTriggerInteraction.Ignore);
 	}
 	
 	public void OnTriggerEnter(Collider collider) {
@@ -302,16 +303,17 @@ public class RacerPhysics : MonoBehaviour {
 			this.canAct = false;
 		}
 		
-		bool water = collider.gameObject.layer == 5;
+		bool water = collider.gameObject.layer == 4;
 		if (water) {
 			this.inWater = true;
 		}
 	}
 	
 	public void OnTriggerExit(Collider collider) {
-		bool water = collider.gameObject.layer == 5;
+		bool water = collider.gameObject.layer == 4;
 		if (water) {
 			this.inWater = false;
+			this.rigidbody.velocity = Vector3.zero;
 		}
 	}
 }
