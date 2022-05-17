@@ -388,11 +388,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 59.5, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 1568269604}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1022754378
 GameObject:
@@ -428,15 +428,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 0.25
   climbSpeed: 0.25
-  flySpeed: 0.25
+  flySpeed: 0.5
   swimSpeed: 0.25
-  stamina: 0.25
+  stamina: 0.75
   speedMultiplier: 250
   groundMask:
     serializedVersion: 2
     m_Bits: 88
   groundPos: {fileID: 265906685}
-  radius: 0.6
+  radius: 0.75
   isGrounded: 0
   isClimbing: 0
   isflying: 0
@@ -591,7 +591,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 88
   groundPos: {fileID: 721443672}
-  radius: 0.6
+  radius: 0.75
   isGrounded: 0
   isClimbing: 0
   isflying: 0
@@ -709,6 +709,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7203412056847000946, guid: 9b8d4f127105b49238ac6ef6a75eea77, type: 3}
   m_PrefabInstance: {fileID: 7203412057770412330}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1568269602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1568269604}
+  - component: {fileID: 1568269603}
+  m_Layer: 0
+  m_Name: CameraHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1568269603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568269602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f652167973b44cb98e23491eecf6884, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1568269604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568269602}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 59.5, y: 1, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 963194228}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1687248105
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,15 +787,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 0.25
   climbSpeed: 0.25
-  flySpeed: 0.25
+  flySpeed: 0.5
   swimSpeed: 0.25
-  stamina: 0.25
+  stamina: 0.75
   speedMultiplier: 250
   groundMask:
     serializedVersion: 2
     m_Bits: 88
   groundPos: {fileID: 584108445}
-  radius: 0.6
+  radius: 0.75
   isGrounded: 0
   isClimbing: 0
   isflying: 0
@@ -918,11 +962,16 @@ MonoBehaviour:
   - {fileID: 2367731302755570203, guid: e6a15c4e6de554ca9b712bf5bcde61dd, type: 3}
   - {fileID: 467471265607531740, guid: b4bba09acaace45fe9a5d8a3302ffac8, type: 3}
   - {fileID: 2681635878131166071, guid: 35683aeebb7a44eb1b4583da44650b73, type: 3}
-  raceSegments: 10
+  - {fileID: 5363220630681920761, guid: b114401d0e8f14641827a619a4aeda9d, type: 3}
+  - {fileID: 5363220630681920761, guid: a6af698e20fe147cf9252a88731401b8, type: 3}
+  - {fileID: 7203412056847000957, guid: d4efab89f114e48469ccf13969eae22f, type: 3}
+  - {fileID: 467471265607531740, guid: 5d7af483bb7ea44889a032c2160c750b, type: 3}
+  - {fileID: 2681635878131166071, guid: 9a24d7592a86d4bae827d7ba02044010, type: 3}
+  raceSegments: 15
   runWeight: 1
   climbWeight: 1
   flyWeight: 1
-  swimWeight: 1
+  swimWeight: 0.95
 --- !u!1001 &467471265312740368
 PrefabInstance:
   m_ObjectHideFlags: 0

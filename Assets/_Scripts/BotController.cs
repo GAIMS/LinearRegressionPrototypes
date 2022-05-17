@@ -50,25 +50,31 @@ public class BotController : MonoBehaviour
         if(Physics2D.CircleCast(groundPos.position, radius, Vector2.zero, 0, groundMask))
         {
             isflying = false;
+
+            if (hit.collider.gameObject.layer == 6)
+            {
+                isGrounded = true;
+            }
+            
+            if (hit.collider.gameObject.layer == 3)
+            {
+                isClimbing = true;
+                isGrounded = false;
+            }
+            // else if(hit.collider.gameObject.layer != 3)
+            // {
+            //     isClimbing = false;
+            // }
+            
             if (hit.collider.gameObject.layer == 4)
             {
                 isSwimming = true;
                 isGrounded = false;
             }
-            else if (hit.collider.gameObject.layer == 3)
-            {
-                isClimbing = true;
-            }
-            else if (hit.collider.gameObject.layer == 6)
-            {
-                isGrounded = true;
-            }
-            if(hit.collider.gameObject.layer != 4)
+            
+            if(hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3)
             {
                 isSwimming = false;
-            }
-            if(hit.collider.gameObject.layer != 3)
-            {
                 isClimbing = false;
             }
         }
