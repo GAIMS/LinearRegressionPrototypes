@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class RacerPhysics : MonoBehaviour {
 	
+	private const float CAST_DISTANCE = 0.6f;
+	
+	public const float CAST_OFFSET = 0.4f;
+	
+	public const float GRAVITY = -48f * 0.1f;
+	
 	private RacerCore core;
 	
 	private Rigidbody rigidbody;
@@ -14,13 +20,75 @@ public class RacerPhysics : MonoBehaviour {
 		}
 	}
 	
+	public LayerMask surfaceMask;
+	
+	public LayerMask waterMask;
+	
+	[SerializeField]
 	private bool grounded;
+	
+	[SerializeField]
+	private bool prevGrounded;
+	
+	[SerializeField]
+	private bool inWater;
+	
+	[SerializeField]
+	private bool detectWall;
+	
+	private Vector3 gravity = Vector3.up;
+	
+	private Vector3 groundNormal = Vector3.up;
+	
+	private RaycastHit hitInfo;
+	
+	private RaycastHit wallHitInfo;
+	
+	private GameObject groundObject;
 	
 	public bool Grounded {
 		get {
 			return this.grounded;
 		} set {
 			this.grounded = value;
+		}
+	}
+	
+	public bool PrevGrounded {
+		get {
+			return this.prevGrounded;
+		}
+	}
+	
+	public bool InWater {
+		get {
+			return this.inWater;
+		} set {
+			this.inWater = value;
+		}
+	}
+	
+	public bool DetectWall {
+		get {
+			return this.detectWall;
+		} set {
+			this.detectWall = value;
+		}
+	}
+	
+	public Vector3 Gravity {
+		get {
+			return this.gravity;
+		} set {
+			this.gravity = value;
+		}
+	}
+	
+	public Vector3 GroundNormal {
+		get {
+			return this.groundNormal;
+		} set {
+			this.groundNormal = value;
 		}
 	}
 	
@@ -73,11 +141,20 @@ public class RacerPhysics : MonoBehaviour {
 	}				
 	
 	private void FixedUpdate() {
+		this.HandleGroundDetection();
+		this.HandleWallDetection();
 		this.HandleGround();
+		this.HandleAir();
+		this.HandleWater();
+		this.HandleWall();
 	}
 	
 	private void HandleGround() {
+		if (!this.grounded || this.inWater || this.detectWall) {
+			return;
+		}
 		
+		Debug.Log("Doing Ground");
 		Vector3 velocity = this.rigidbody.velocity;
 		
 		if (this.recharging || !this.canAct) {
@@ -87,11 +164,81 @@ public class RacerPhysics : MonoBehaviour {
 				velocity = Vector3.zero;
 			}
 		} else {
-			velocity += this.core.skin.skin.forward * (this.GetAcceleration() * Time.fixedDeltaTime);
+			velocity += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime);
 			velocity = Vector3.ClampMagnitude(velocity, this.GetTopSpeed());
 		}
-		
+		velocity.y = 0f;
 		this.rigidbody.velocity = velocity;
+	}
+	
+	private void HandleGroundDetection() {
+		if ((this.grounded || Vector3.Dot(this.rigidbody.velocity, this.gravity) < 0f) && this.GroundCast(out this.hitInfo)) {
+			if (!this.grounded) {
+				this.rigidbody.velocity = Math3d.ProjectVectorOnPlane(this.groundNormal, this.rigidbody.velocity);
+			} else {
+				this.rigidbody.velocity = Quaternion.FromToRotation(this.groundNormal, this.hitInfo.normal) * this.rigidbody.velocity;
+			}
+			if (!this.detectWall) {
+				this.transform.position = this.hitInfo.point;
+			}
+			this.prevGrounded = this.grounded;
+			this.grounded = true;
+			this.groundNormal = this.hitInfo.normal;
+			this.groundObject = this.hitInfo.transform.gameObject;
+		} else {
+			this.prevGrounded = this.grounded;
+			this.grounded = false;
+			this.groundNormal = this.gravity;
+		}
+	}
+	
+	private void HandleAir() {
+		if (this.grounded || this.inWater || this.detectWall) {
+			return;
+		}
+		
+		Debug.Log("Doing Air");
+		
+		Vector3 velocity = this.rigidbody.velocity;
+		Vector3 hori = velocity;
+		Vector3 vert = velocity;
+		hori.y = 0f;
+		vert.x = 0f;
+		vert.z = 0f;
+		vert += GRAVITY * this.gravity * Time.fixedDeltaTime;
+		hori += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime);
+		hori = Vector3.ClampMagnitude(hori, this.GetFlySpeed());
+		velocity = hori + vert;
+		this.rigidbody.velocity = velocity;
+	}
+	
+	private void HandleWater() {
+		if (this.grounded || this.detectWall || !this.inWater) {
+			return;
+		}
+		
+		Debug.Log("Doing Water");
+		Vector3 velocity = this.rigidbody.velocity;
+		velocity += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime);
+		velocity.y = 0f;
+		velocity = Vector3.ClampMagnitude(velocity, this.GetSwimSpeed());
+		this.rigidbody.velocity = velocity;
+		
+	}
+	
+	private void HandleWall() {
+		if (!this.detectWall ) {
+			return;
+		}		
+		
+		Debug.Log("Doing Wall");
+		Vector3 velocity = Vector3.zero;
+		velocity = Vector3.up * this.GetClimbSpeed();
+		this.rigidbody.velocity = velocity;
+	}
+	
+	private void HandleWallDetection() {
+		this.detectWall = this.WallCast();
 	}
 	
 	public float GetVerticalVelocity() {
@@ -125,11 +272,46 @@ public class RacerPhysics : MonoBehaviour {
 		return BASE_RECHARGE * this.core.stats.Recharge;
 	}
 	
+	public float GetFlySpeed() {
+		return BASE_SPEED * 1.5f * this.core.stats.Fly;
+	}
+	
+	public float GetSwimSpeed() {
+		return BASE_SPEED * this.core.stats.Swim;
+	}
+	
+	public float GetClimbSpeed() {
+		return BASE_SPEED * 0.5f * this.core.stats.Climb;
+	}
+	
+	public bool GroundCast(out RaycastHit hit) {
+		return this.GroundCast(this.transform.position + this.gravity * CAST_OFFSET, out hit);
+	}
+	
+	public bool GroundCast(Vector3 origin, out RaycastHit hit) {
+		return Physics.Raycast(origin, -this.gravity, out hit, CAST_DISTANCE, this.surfaceMask, QueryTriggerInteraction.Ignore);
+	}
+	
+	public bool WallCast() {
+		return Physics.Raycast(this.transform.position + (Vector3.up * 0.1f), this.core.skin.skin.transform.forward, out this.wallHitInfo, 0.25f, this.surfaceMask, QueryTriggerInteraction.Ignore);
+	}
+	
 	public void OnTriggerEnter(Collider collider) {
 		ObjGoal goal = collider.GetComponent<ObjGoal>();
-		if (goal == null) {
-			return;
+		if (goal != null) {
+			this.canAct = false;
 		}
-		this.canAct = false;
+		
+		bool water = collider.gameObject.layer == 5;
+		if (water) {
+			this.inWater = true;
+		}
+	}
+	
+	public void OnTriggerExit(Collider collider) {
+		bool water = collider.gameObject.layer == 5;
+		if (water) {
+			this.inWater = false;
+		}
 	}
 }

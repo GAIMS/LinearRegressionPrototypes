@@ -1740,7 +1740,7 @@ GameObject:
   - component: {fileID: 5373695813097911355}
   - component: {fileID: 5373695813097911354}
   - component: {fileID: 5373695813097911353}
-  - component: {fileID: 9011569406187687495}
+  - component: {fileID: 1563955278618327963}
   m_Layer: 0
   m_Name: '[Racer] Chao'
   m_TagString: Untagged
@@ -1808,6 +1808,10 @@ MonoBehaviour:
   Speed: 1
   Stamina: 1
   Recharge: 1
+  Fly: 1
+  Swim: 1
+  Climb: 1
+  Laziness: 1
 --- !u!114 &5373695813097911354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,6 +1824,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9349909c39f0f7545b3048a8f6262856, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  surfaceMask:
+    serializedVersion: 2
+    m_Bits: 64
+  waterMask:
+    serializedVersion: 2
+    m_Bits: 16
+  grounded: 0
+  prevGrounded: 0
+  inWater: 0
+  detectWall: 0
   canAct: 1
   stamina: 10
   recharging: 0
@@ -1838,19 +1852,18 @@ MonoBehaviour:
   skin: {fileID: 8846060770465787449}
   animator: {fileID: 3460964921574209666}
   motionLayer: 0
---- !u!136 &9011569406187687495
-CapsuleCollider:
+--- !u!65 &1563955278618327963
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5373695813097911352}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 10b0046649dba1c4ba58591852755878, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 0.5
-  m_Direction: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1 &5560143691194160314
 GameObject:

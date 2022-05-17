@@ -18,13 +18,17 @@ public class RacerStats : MonoBehaviour {
 	[Range(0.1f, 1f)]
 	public float Recharge = 1f;
 	
-//	public float Fly = 1f;
+	[Range(0.1f, 1f)]
+	public float Fly = 1f;
 	
-//	public float Swim = 1f;
+	[Range(0.1f, 1f)]
+	public float Swim = 1f;
 	
-//	public float Climb = 1f;
+	[Range(0.1f, 1f)]
+	public float Climb = 1f;
 	
-//	public float Laziness = 1f;	
+	[Range(0.1f, 1f)]
+	public float Laziness = 1f;	
 	
 	private void Start() {
 		if (this.RandomizeOnStart) {
@@ -33,10 +37,17 @@ public class RacerStats : MonoBehaviour {
 	}
 	
 	public void RandomizeStats() {
-		this.Acceleration = UnityEngine.Random.Range(0.1f, 1f);
-		this.Speed = UnityEngine.Random.Range(0.1f, 1f);
-		this.Stamina = UnityEngine.Random.Range(0.1f, 1f);
-		this.Recharge = UnityEngine.Random.Range(0.1f, 1f);
+		float min = GameManager.Instance.minStat;
+		float max = GameManager.Instance.maxStat;
+		
+		this.Acceleration = UnityEngine.Random.Range(min, max);
+		this.Speed = UnityEngine.Random.Range(min, max);
+		this.Stamina = UnityEngine.Random.Range(min, max);
+		this.Recharge = UnityEngine.Random.Range(min, max);
+		this.Fly = UnityEngine.Random.Range(min, max);
+		this.Swim = UnityEngine.Random.Range(min, max);
+		this.Climb = UnityEngine.Random.Range(min, max);
+		this.Laziness = UnityEngine.Random.Range(min, max);
 	}
 	
 }

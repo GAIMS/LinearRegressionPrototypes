@@ -24,6 +24,8 @@ public class RacerSkin : MonoBehaviour {
 	private void Update() {
 		this.HandleRotation();
 		
+		this.animator.SetBool("Fly", !this.core.physics.Grounded && !this.core.physics.DetectWall);
+		this.animator.SetBool("Climb", this.core.physics.DetectWall);
 		this.animator.SetFloat("Horizontal Velocity", this.core.physics.GetHorizontalVelocity());
 	}
 	
