@@ -10,18 +10,16 @@ public class BotController : MonoBehaviour
     [SerializeField] private float runSpeed;
     [Range(.25f,1)]
     [SerializeField] private float climbSpeed;
-    [Range(.25f,1)]
+    [Range(.5f,1)]
     [SerializeField] private float flySpeed;
     [Range(.25f,1)]
     [SerializeField] private float swimSpeed;
-    [Range(.25f,1)]
+    [Range(.75f,1)]
     [SerializeField] private float stamina;
 
     [SerializeField] float speedMultiplier = 10;
 
     [SerializeField] private LayerMask groundMask;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask waterLayer;
     [SerializeField] private Transform groundPos;
     [SerializeField] private float radius;
     
@@ -36,9 +34,9 @@ public class BotController : MonoBehaviour
     {
         runSpeed = Random.Range(.25f, 1f);
         climbSpeed = Random.Range(.25f, 1f);
-        flySpeed = Random.Range(.25f, 1f);
+        flySpeed = Random.Range(.5f, 1f);
         swimSpeed = Random.Range(.25f, 1f);
-        stamina = Random.Range(.25f, 1f);
+        stamina = Random.Range(.75f, 1f);
 
         rb = GetComponent<Rigidbody2D>();
     }
