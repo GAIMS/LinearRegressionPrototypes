@@ -41,37 +41,30 @@ public class BotController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    
-    void FixedUpdate()
+    private void Update()
     {
         RaycastHit2D hit = Physics2D.CircleCast(groundPos.position, radius,Vector2.zero ,0f,groundMask);
 
-        //Debug.Log((bool)Physics2D.CircleCast(groundPos.position, radius, Vector2.zero, 0, groundMask));
-        if(Physics2D.CircleCast(groundPos.position, radius, Vector2.zero, 0, groundMask))
+        if(Physics2D.CircleCast(groundPos.position, radius, Vector2.down, 0, groundMask))
         {
             isflying = false;
 
-            if (hit.collider.gameObject.layer == 6)
+            switch (hit.collider.gameObject.layer)
             {
-                isGrounded = true;
+                case 3:
+                    isClimbing = true;
+                    isGrounded = false;
+                    break;
+                case 4:
+                    isSwimming = true;
+                    isGrounded = false;
+                    break;
+                case 6 when hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3 
+                                                               && hit.collider.gameObject.layer == 6:
+                    isGrounded = true;
+                    break;
             }
-            
-            if (hit.collider.gameObject.layer == 3)
-            {
-                isClimbing = true;
-                isGrounded = false;
-            }
-            // else if(hit.collider.gameObject.layer != 3)
-            // {
-            //     isClimbing = false;
-            // }
-            
-            if (hit.collider.gameObject.layer == 4)
-            {
-                isSwimming = true;
-                isGrounded = false;
-            }
-            
+
             if(hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3)
             {
                 isSwimming = false;
@@ -85,6 +78,11 @@ public class BotController : MonoBehaviour
             isSwimming = false;
             isflying = true;
         }
+    }
+
+    void FixedUpdate()
+    {
+        //Debug.Log((bool)Physics2D.CircleCast(groundPos.position, radius, Vector2.zero, 0, groundMask));
 
         if (isGrounded)
         {
