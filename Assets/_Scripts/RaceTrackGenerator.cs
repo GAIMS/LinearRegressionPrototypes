@@ -19,11 +19,16 @@ public class RaceTrackGenerator : MonoBehaviour
     [Range(.25f,1)]
     [SerializeField] private float swimWeight;
 
+    private KillBox killbox;
+    private GameManager gm;
+    
     private RaceChunk lastChunk;
     private RaceChunk finishChunk;
     private bool firstChunk = true;
     void Awake()
     {
+        killbox = FindObjectOfType<KillBox>();
+        gm = FindObjectOfType<GameManager>();
         for (int i = 0; i < raceSegments; i++)
         {
             GenerateTrack();
@@ -38,7 +43,7 @@ public class RaceTrackGenerator : MonoBehaviour
     
     void Update()
     {
-        if (finishChunk.finishedRacers == 3)
+        if (finishChunk.finishedRacers + killbox.dead == 3)
         {
             Restart();
         }
@@ -108,7 +113,10 @@ public class RaceTrackGenerator : MonoBehaviour
 
     public void Restart()
     {
+        gm.UpdateLists(raceSegments);
+        
         firstChunk = true;
+        killbox.dead = 0;
         RaceChunk[] oldChunks = FindObjectsOfType<RaceChunk>();
         foreach (var chunk in oldChunks)
         {

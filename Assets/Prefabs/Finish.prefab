@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3630940602709857871}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 12.1937, z: 0}
-  m_LocalScale: {x: 1, y: 25.387297, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 51.6, z: 1}
   m_Children:
   - {fileID: 3630940603395084616}
   m_Father: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
   chunkType: 4
   lftPoint: {fileID: 3630940603395084616}
   rtPoint: {fileID: 0}
+  finishedRacers: 0
 --- !u!1 &3630940603395084617
 GameObject:
   m_ObjectHideFlags: 0

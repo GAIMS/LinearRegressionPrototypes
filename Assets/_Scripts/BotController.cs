@@ -7,15 +7,15 @@ using Random = UnityEngine.Random;
 public class BotController : MonoBehaviour
 {
     [Range(.25f,1)]
-    [SerializeField] private float runSpeed;
+    [SerializeField] public float runSpeed;
     [Range(.25f,1)]
-    [SerializeField] private float climbSpeed;
+    [SerializeField] public float climbSpeed;
     [Range(.5f,1)]
-    [SerializeField] private float flySpeed;
+    [SerializeField] public float flySpeed;
     [Range(.25f,1)]
-    [SerializeField] private float swimSpeed;
+    [SerializeField] public float swimSpeed;
     [Range(.75f,1)]
-    [SerializeField] private float stamina;
+    [SerializeField] public float stamina;
 
     [SerializeField] float speedMultiplier = 10;
 
@@ -43,35 +43,32 @@ public class BotController : MonoBehaviour
 
     private void Update()
     {
-        RaycastHit2D hit = Physics2D.CircleCast(groundPos.position, radius,Vector2.zero ,0f,groundMask);
-
-        if(Physics2D.CircleCast(groundPos.position, radius, Vector2.down, 0, groundMask))
+        RaycastHit2D[] hit = Physics2D.CircleCastAll(groundPos.position, radius,Vector2.zero ,0f,groundMask);
+        isSwimming = false;
+        isClimbing = false;
+        if(hit.Length > 0)
         {
+            for (int i = 0; i < hit.Length; i++)
+            {
+                switch (hit[i].collider.gameObject.layer)
+                {
+                    case 3:
+                        isClimbing = true;
+                        isGrounded = false;
+                        break;
+                    case 4:
+                        isSwimming = true;
+                        isGrounded = false;
+                        break;
+                    case 6 when hit[i].collider.gameObject.layer != 4 && hit[i].collider.gameObject.layer != 3 
+                                                                   && hit[i].collider.gameObject.layer == 6:
+                        isGrounded = true;
+                        //isSwimming = false;
+                        //isClimbing = false;
+                        break;
+                }
+            }
             isflying = false;
-
-            switch (hit.collider.gameObject.layer)
-            {
-                case 3:
-                    isClimbing = true;
-                    isGrounded = false;
-                    break;
-                case 4:
-                    isSwimming = true;
-                    isGrounded = false;
-                    break;
-                case 6 when hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3 
-                                                               && hit.collider.gameObject.layer == 6:
-                    isGrounded = true;
-                    isSwimming = false;
-                    isClimbing = false;
-                    break;
-            }
-
-            if(hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3)
-            {
-                //isSwimming = false;
-                //isClimbing = false;
-            }
         }
         else
         {
@@ -80,6 +77,8 @@ public class BotController : MonoBehaviour
             isSwimming = false;
             isflying = true;
         }
+
+        //isClimbing = Physics2D.Raycast(transform.position, Vector2.right, radius,3);
     }
 
     void FixedUpdate()
