@@ -409,7 +409,7 @@ GameObject:
   - component: {fileID: 1022754379}
   m_Layer: 7
   m_Name: Bot (1)
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 1089275290}
   m_Layer: 7
   m_Name: Bot
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -768,7 +768,7 @@ GameObject:
   - component: {fileID: 1687248106}
   m_Layer: 7
   m_Name: Bot (2)
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -967,11 +967,12 @@ MonoBehaviour:
   - {fileID: 7203412056847000957, guid: d4efab89f114e48469ccf13969eae22f, type: 3}
   - {fileID: 467471265607531740, guid: 5d7af483bb7ea44889a032c2160c750b, type: 3}
   - {fileID: 2681635878131166071, guid: 9a24d7592a86d4bae827d7ba02044010, type: 3}
+  finish: {fileID: 3630940602709857871, guid: ff4e7933da739454db8e9b4a6da7560e, type: 3}
   raceSegments: 15
   runWeight: 1
   climbWeight: 1
   flyWeight: 1
-  swimWeight: 0.95
+  swimWeight: 0.925
 --- !u!1001 &467471265312740368
 PrefabInstance:
   m_ObjectHideFlags: 0

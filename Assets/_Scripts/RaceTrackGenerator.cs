@@ -6,6 +6,8 @@ public class RaceTrackGenerator : MonoBehaviour
 {
     public GameObject[] raceChunks;
 
+    [SerializeField] private GameObject finish;
+    
     [SerializeField] private int raceSegments;
     
     [Range(.25f,1)]
@@ -18,6 +20,7 @@ public class RaceTrackGenerator : MonoBehaviour
     [SerializeField] private float swimWeight;
 
     private RaceChunk lastChunk;
+    private RaceChunk finishChunk;
     private bool firstChunk = true;
     void Awake()
     {
@@ -25,13 +28,20 @@ public class RaceTrackGenerator : MonoBehaviour
         {
             GenerateTrack();
             firstChunk = false;
+            if (i == raceSegments - 1)
+            {
+                PlaceFinish();
+            }
         }
     }
 
     
     void Update()
     {
-        
+        if (finishChunk.finishedRacers == 3)
+        {
+            Restart();
+        }
     }
 
     public void GenerateTrack()
@@ -87,5 +97,38 @@ public class RaceTrackGenerator : MonoBehaviour
             newChunk.transform.position -= newChunk.GetComponent<RaceChunk>().lftPoint.localPosition;
         }
         lastChunk = newChunk.GetComponent<RaceChunk>();
+    }
+
+    public void PlaceFinish()
+    {
+        GameObject newChunk = Instantiate(finish, lastChunk.rtPoint.position,Quaternion.identity,transform);
+        newChunk.transform.position -= newChunk.GetComponent<RaceChunk>().lftPoint.localPosition;
+        finishChunk = newChunk.GetComponent<RaceChunk>();
+    }
+
+    public void Restart()
+    {
+        firstChunk = true;
+        RaceChunk[] oldChunks = FindObjectsOfType<RaceChunk>();
+        foreach (var chunk in oldChunks)
+        {
+            Destroy(chunk.gameObject);
+        }
+        for (int i = 0; i < raceSegments; i++)
+        {
+            GenerateTrack();
+            firstChunk = false;
+            if (i == raceSegments - 1)
+            {
+                PlaceFinish();
+            }
+        }
+
+        BotController[] bots = FindObjectsOfType<BotController>();
+        foreach (var bot in bots)
+        {
+            bot.transform.position = Vector3.zero;
+            bot.GetComponent<Rigidbody2D>().simulated = true;
+        }
     }
 }

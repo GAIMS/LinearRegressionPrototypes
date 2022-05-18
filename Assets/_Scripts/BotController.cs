@@ -62,13 +62,15 @@ public class BotController : MonoBehaviour
                 case 6 when hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3 
                                                                && hit.collider.gameObject.layer == 6:
                     isGrounded = true;
+                    isSwimming = false;
+                    isClimbing = false;
                     break;
             }
 
             if(hit.collider.gameObject.layer != 4 && hit.collider.gameObject.layer != 3)
             {
-                isSwimming = false;
-                isClimbing = false;
+                //isSwimming = false;
+                //isClimbing = false;
             }
         }
         else
