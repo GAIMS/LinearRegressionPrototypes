@@ -58,6 +58,13 @@
      <Compile Include="Assets\_Scripts\KillBox.cs" />
      <Compile Include="Assets\_Scripts\RaceChunk.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
+     <Compile Include="Assets\_Scripts\_GridScripts\PlayerController.cs" />
+     <Compile Include="Assets\_Scripts\HexGridGame.cs" />
+     <Compile Include="Assets\_Scripts\HexGridManager.cs" />
+     <Compile Include="Assets\_Scripts\PerlinNoiseGeneration.cs" />
+     <Compile Include="Assets\_Scripts\_GridScripts\LineObject.cs" />
+     <Compile Include="Assets\_Scripts\_GridScripts\PointObject.cs" />
+     <Compile Include="Assets\_Scripts\_GridScripts\GraphObject.cs" />
  <Reference Include="UnityEngine">
  <HintPath>/Applications/Unity/Hub/Editor/2020.3.34f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -619,17 +626,11 @@
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Unity.2D.PixelPerfect">
- <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
- </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VisualStudio.Editor">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.2D.PixelPerfect.Editor">
- <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -658,8 +659,14 @@
  <Reference Include="com.unity.cinemachine.editor">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.2D.PixelPerfect">
+ <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.2D.PixelPerfect.dll</HintPath>
+ </Reference>
  <Reference Include="Cinemachine">
  <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.2D.PixelPerfect.Editor">
+ <HintPath>/Users/walterkeiler/Documents/GitHub/LinearRegressionPrototypes/LinearRegressionPrototypes/Library/ScriptAssemblies/Unity.2D.PixelPerfect.Editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

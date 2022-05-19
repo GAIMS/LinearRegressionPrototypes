@@ -4,12 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum DataType
+{
+    Run,
+    Fly,
+    Swim,
+    Climb,
+    Position
+}
 public class GameManager : MonoBehaviour
 {
     public List<Race> races;
     public List<Agent> agents;
     private int raceNum = 0;
-    public BotController winner;
+    public DataType firstDataPoint, secondDataPoint;
+    [SerializeField] private GraphObject graph;
+    [SerializeField] private HexGridManager hexGrid;
 
     private void Update()
     {
@@ -35,9 +45,59 @@ public class GameManager : MonoBehaviour
             temp.flySpeed = obj.flySpeed;
             temp.swimSpeed = obj.swimSpeed;
             temp.raceNumber = raceNum;
-            if (winner == obj) temp.wins = true;
+            temp.placement = obj.placement;
+            temp.color = obj.GetComponent<SpriteRenderer>().color;
+
             agents.Add(temp);
         }
+    }
+
+    public void UpdateGraph()
+    {
+        graph.ClearPoints();
+        foreach (var agent in agents)
+        {
+            Vector2 pos = Vector2.zero;
+            switch (firstDataPoint)
+            {
+                case DataType.Run:
+                    pos.x = agent.runSpeed;
+                    break;
+                case DataType.Climb:
+                    pos.x = agent.climbSpeed;
+                    break;
+                case DataType.Swim:
+                    pos.x = agent.swimSpeed;
+                    break;
+                case DataType.Fly:
+                    pos.x = agent.flySpeed;
+                    break;
+                case DataType.Position:
+                    pos.x = agent.placement;
+                    break;
+            }
+            switch (secondDataPoint)
+            {
+                case DataType.Run:
+                    pos.y = agent.runSpeed;
+                    break;
+                case DataType.Climb:
+                    pos.y = agent.climbSpeed;
+                    break;
+                case DataType.Swim:
+                    pos.y = agent.swimSpeed;
+                    break;
+                case DataType.Fly:
+                    pos.y = agent.flySpeed;
+                    break;
+                case DataType.Position:
+                    pos.y = agent.placement;
+                    break;
+            }
+            graph.AddPoint(pos,agent.color);
+        }
+
+        hexGrid.UpdateHexes();
     }
 }
 
@@ -89,6 +149,7 @@ public class Agent
     public float climbSpeed;
     public float flySpeed;
     public float swimSpeed;
-    public bool wins;
+    public int placement;
     public int raceNumber;
+    public Color color;
 }

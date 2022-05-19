@@ -20,8 +20,7 @@ public class RaceChunk : MonoBehaviour
 
     public int finishedRacers = 0;
     private GameManager gm;
-
-    private bool win = false;
+    
     private void Start()
     {
         gm = FindObjectOfType<GameManager>();
@@ -32,11 +31,7 @@ public class RaceChunk : MonoBehaviour
         if (chunkType == ChunkType.Finish && col.CompareTag("Bot"))
         {
             col.attachedRigidbody.simulated = false;
-            if (!win)
-            {
-                gm.winner = col.GetComponent<BotController>();
-                win = true;
-            }
+            col.GetComponent<BotController>().placement = finishedRacers + 1;
             finishedRacers++;
         }
     }

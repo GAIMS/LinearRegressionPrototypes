@@ -10,6 +10,7 @@ public class KillBox : MonoBehaviour
     {
         if (col.CompareTag("Bot"))
         {
+            col.GetComponent<BotController>().placement = 10;
             dead++;
         }
     }

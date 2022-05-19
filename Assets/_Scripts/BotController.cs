@@ -27,6 +27,8 @@ public class BotController : MonoBehaviour
     [SerializeField] private bool isClimbing = false;
     [SerializeField] private bool isflying = false;
     [SerializeField] private bool isSwimming = false;
+
+    public int placement;
     
     private Rigidbody2D rb;
     
