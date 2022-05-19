@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 1022754380}
   - component: {fileID: 1022754379}
   m_Layer: 7
-  m_Name: Bot (1)
+  m_Name: Bot-Green
   m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 1089275291}
   - component: {fileID: 1089275290}
   m_Layer: 7
-  m_Name: Bot
+  m_Name: Bot-Red
   m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -813,7 +813,7 @@ GameObject:
   - component: {fileID: 1687248107}
   - component: {fileID: 1687248106}
   m_Layer: 7
-  m_Name: Bot (2)
+  m_Name: Bot-Blue
   m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1018,7 +1018,7 @@ MonoBehaviour:
   runWeight: 1
   climbWeight: 1
   flyWeight: 1
-  swimWeight: 0.925
+  swimWeight: 0.95
 --- !u!1 &1948760005
 GameObject:
   m_ObjectHideFlags: 0
