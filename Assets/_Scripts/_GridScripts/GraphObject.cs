@@ -226,6 +226,9 @@ public class GraphObject : MonoBehaviour
             Line.UpdatePosition();
         } else if (rectIntersects.Count == 1) {
             Debug.LogError("Only 1 screen intersection, this shouldn't be possible.");
+            for (int i = 0; i < intersects.Count; i++) {
+                Debug.Log(i + ": " + intersects[i]);
+            }
         } else if (rectIntersects.Count > 2) {
             Debug.LogError("More than 2 screen intersections, this shouldn't be possible.");
         } else {
