@@ -21,6 +21,8 @@ public class HexGridManager : MonoBehaviour
     public Hex[,] hexes;
     public Hex lowestHex;
 
+    private HexGridGame hexGame;
+    
     private Vector3[] cubeDirectionVectors = new Vector3[]
     {
         new Vector3(1, 0, -1),
@@ -35,6 +37,7 @@ public class HexGridManager : MonoBehaviour
     {
         hexes = new Hex[gridWidth, gridHeight];
         graphObject = FindObjectOfType<GraphObject>();
+        hexGame = GetComponent<HexGridGame>();
         CreateHexGrid(hexSize);
         UpdateHexes();
     }
@@ -111,6 +114,7 @@ public class HexGridManager : MonoBehaviour
     
     public void UpdateHexes()
     {
+        hexGame.firstPick = true;
         lowestHex = hexes[0, 0];
         for (int x = 0; x < hexes.GetLength(0); x++)
         {
@@ -177,6 +181,21 @@ public class HexGridManager : MonoBehaviour
 
         hex.lowestNeighbors = lowest;
         return lowest;
+    }
+
+    public void UnHideHexes()
+    {
+        foreach (var hex in hexes)
+        {
+            hex.hexObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+    }
+    public void HideHexes()
+    {
+        foreach (var hex in hexes)
+        {
+            hex.hexObject.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
     public class Hex

@@ -16,7 +16,7 @@ public class HexGridGame : MonoBehaviour
 
     private HexGridManager.Hex pickedHex;
     private bool turn = false;
-    private bool firstPick = true;
+    public bool firstPick = true;
     private int score;
 
     public HexGridManager.Hex[,] hexes;
