@@ -115,7 +115,15 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	private void Start() {
-		this.stamina = this.GetMaxStamina();
+		this.canAct = false;
+		this.StartCoroutine(this.StartDelay(1f));
+	}
+	
+	private IEnumerator StartDelay(float delay) {
+		this.core.Rank.gameObject.SetActive(false);
+		yield return new WaitForSeconds(delay);
+		this.canAct = true;
+		this.core.Rank.gameObject.SetActive(true);
 	}
 	
 	private void Update() {
@@ -124,19 +132,7 @@ public class RacerPhysics : MonoBehaviour {
 	
 	private void HandleStamina() {
 		if (this.canAct) {
-			if (!this.recharging) {
-				if (this.stamina > 0f) {
-					this.stamina -= Time.deltaTime;
-				} else if (this.stamina <= 0f) {
-					this.stamina = 0f;
-					this.recharging = true;
-				}
-			} else {
-				this.stamina = Mathf.Clamp(this.stamina + (this.GetRecharge() * Time.deltaTime), 0f, this.GetMaxStamina());
-				if (this.stamina >= this.GetMaxStamina()) {
-					this.recharging = false;
-				}
-			}
+		//	this.stamina = Mathf.Clamp(this.stamina - Time.deltaTime, 0f, this.GetMaxStamina());
 		}
 	}				
 	
@@ -150,15 +146,16 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	private void HandleGround() {
-		if (!this.grounded || this.inWater || this.detectWall) {
+		if (!this.grounded || this.detectWall || this.inWater) {
 			return;
 		}
 		
-		Debug.Log("Doing Ground");
+	//	Debug.Log("Doing Ground");
+	
 		Vector3 velocity = this.rigidbody.velocity;
 		Vector3 normalized = Math3d.ProjectVectorOnPlane(this.groundNormal, velocity).normalized;
 		
-		if (this.recharging || !this.canAct) {
+		if (!this.canAct) {
 			if (velocity.magnitude > 0f) {
 				velocity = Vector3.Lerp(velocity, Vector3.zero, BASE_DECELERATION * Time.fixedDeltaTime);
 			} else {
@@ -173,7 +170,7 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	private void HandleGroundDetection() {
-		if ((this.grounded || Vector3.Dot(this.rigidbody.velocity, this.gravity) <= 0f) && this.GroundCast(out this.hitInfo)) {
+		if (((this.grounded || Vector3.Dot(this.rigidbody.velocity, this.gravity) <= 0f) && this.GroundCast(out this.hitInfo)) && !this.inWater) {
 			if (!this.grounded) {
 				this.rigidbody.velocity = Math3d.ProjectVectorOnPlane(this.groundNormal, this.rigidbody.velocity);
 			} else {
@@ -198,7 +195,7 @@ public class RacerPhysics : MonoBehaviour {
 			return;
 		}
 		
-		Debug.Log("Doing Air");
+	//	Debug.Log("Doing Air");
 		
 		Vector3 velocity = this.rigidbody.velocity;
 		Vector3 hori = velocity;
@@ -214,11 +211,12 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	private void HandleWater() {
-		if (this.grounded || this.detectWall || !this.inWater) {
+		if (this.detectWall || !this.inWater) {
 			return;
 		}
 		
-		Debug.Log("Doing Water");
+	//	Debug.Log("Doing Water");
+	
 		Vector3 velocity = this.rigidbody.velocity;
 		velocity += this.transform.right * (this.GetAcceleration() * Time.fixedDeltaTime);
 		velocity.y = 0f;
@@ -232,7 +230,8 @@ public class RacerPhysics : MonoBehaviour {
 			return;
 		}		
 		
-		Debug.Log("Doing Wall");
+	//	Debug.Log("Doing Wall");
+	
 		Vector3 velocity = Vector3.zero;
 		velocity = Vector3.up * this.GetClimbSpeed();
 		this.rigidbody.velocity = velocity;
@@ -258,7 +257,7 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	public float GetTopSpeed() {
-		return BASE_SPEED * this.core.stats.Speed;
+		return BASE_SPEED * this.core.stats.Speed * ((this.HasStamina()) ? 1f : 0.5f);
 	}
 	
 	public float GetAcceleration() {
@@ -274,15 +273,15 @@ public class RacerPhysics : MonoBehaviour {
 	}
 	
 	public float GetFlySpeed() {
-		return BASE_SPEED * 1.5f * this.core.stats.Fly;
+		return BASE_SPEED * 1.5f * this.core.stats.Fly * ((this.HasStamina()) ? 1f : 0.5f);
 	}
 	
 	public float GetSwimSpeed() {
-		return BASE_SPEED * 0.75f * this.core.stats.Swim;
+		return BASE_SPEED * 0.75f * this.core.stats.Swim * ((this.HasStamina()) ? 1f : 0.5f);
 	}
 	
 	public float GetClimbSpeed() {
-		return BASE_SPEED * 0.5f * this.core.stats.Climb;
+		return BASE_SPEED * 0.5f * this.core.stats.Climb * ((this.HasStamina()) ? 1f : 0.5f);
 	}
 	
 	public bool GroundCast(out RaycastHit hit) {
@@ -315,5 +314,9 @@ public class RacerPhysics : MonoBehaviour {
 			this.inWater = false;
 			this.rigidbody.velocity = Vector3.zero;
 		}
+	}
+	
+	public bool HasStamina() {
+		return this.stamina > 0f;
 	}
 }

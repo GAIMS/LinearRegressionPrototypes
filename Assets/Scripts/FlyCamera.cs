@@ -2,15 +2,57 @@ using UnityEngine;
 using System.Collections;
  
 public class FlyCamera : MonoBehaviour {
+	
+	private static FlyCamera _Instance;
+	public static FlyCamera Instance {
+		get {
+			if (_Instance == null) {
+				_Instance = FindObjectOfType<FlyCamera>();
+			}
+			return _Instance;
+		}
+	}
+	
+	public Transform racerToFollow;
+	
+	private int racer = 0;
+	
+	private void Update() {
+		if (this.racerToFollow == null) {
+			return;
+		}
+		this.transform.position = this.racerToFollow.position + new Vector3(0f, 9.5f, -35f);
+		
+		
+		if (Input.GetKeyDown(KeyCode.UpArrow)) {
+			this.racer++;
+			if (this.racer >= GameManager.Instance.racers.Count) {
+				this.racer = 0;
+			}
+			this.racerToFollow = GameManager.Instance.racers[this.racer].transform;
+		}
+		
+		if (Input.GetKeyDown(KeyCode.DownArrow)) {
+			this.racer--;
+			if (this.racer < 0) {
+				this.racer = GameManager.Instance.racers.Count - 1;
+			}
+			this.racerToFollow = GameManager.Instance.racers[this.racer].transform;
+		}
+	} 
  
-    /*
+	public void SetRacer(int index) {
+		this.racer = index;
+	}
+ 
+	/*
     Writen by Windexglow 11-13-10.  Use it, edit it, steal it I don't care.  
     Converted to C# 27-02-13 - no credit wanted.
     Simple flycam I made, since I couldn't find any others made public.  
     Made simple to use (drag and drop, done) for regular keyboard layout  
     wasd : basic movement
     shift : Makes camera accelerate
-    space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
+    space : Moves camera on X and Z axis only.  So camera doesn't gain any height
      
      
     float mainSpeed = 15.0f; //regular speed
@@ -20,15 +62,13 @@ public class FlyCamera : MonoBehaviour {
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun= 1.0f;
 	
+	private Vector3 initialPos;
+	
 	void Start() {
+		this.initialPos = this.transform.position;
 	}
      
     void Update () {
-        lastMouse = Input.mousePosition - lastMouse ;
-        lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
-        lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y, 0);
-        transform.eulerAngles = lastMouse;
-        lastMouse =  Input.mousePosition;
         //Mouse  camera angle done.  
        
         //Keyboard commands
@@ -75,4 +115,9 @@ public class FlyCamera : MonoBehaviour {
         }
         return p_Velocity;
     }
+	
+	public void ResetPosition() {
+		this.transform.position = this.initialPos;
+	}
+	*/
 }

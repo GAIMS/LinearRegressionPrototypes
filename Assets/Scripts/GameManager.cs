@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,10 +16,12 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 	
-	[Range(0.1f, 1f)]
+	 public List<Race> races;
+	
+	[Range(0.1f, 3f)]
 	public float minStat = 0.1f;
 	
-	[Range(0.1f, 1f)]
+	[Range(0.1f, 3f)]
 	public float maxStat = 1f;
 	
 	[Range(2, 12)]
@@ -30,6 +33,12 @@ public class GameManager : MonoBehaviour {
 	public List<GameObject> racers;
 	
 	public Sprite[] ranks;
+	
+	public GameObject[] courses = new GameObject[5];
+	
+	public RenderTexture[] renderTextures;
+	
+	public string[] names;
 	
 	private void Start() {
 		this.GenerateRacers();
@@ -51,14 +60,15 @@ public class GameManager : MonoBehaviour {
 			GameObject racer = Instantiate(this.racerPrefab, position, Quaternion.identity);
 			position.z -= 1f;
 			this.racers.Add(racer);
-		}
-	}
-	
-	private void Update() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			this.GenerateRacers();
+			RacerCore core = racer.GetComponent<RacerCore>();
+			core.SetCameraRenderTexture(11 - i);
 		}
 		
+		int rand = UnityEngine.Random.Range(0, this.racers.Count);
+		FlyCamera.Instance.racerToFollow = this.racers[rand].transform;
+	}
+	
+	private void Update() {		
 		this.TrackPositions();
 	}
 	
@@ -71,4 +81,57 @@ public class GameManager : MonoBehaviour {
 			core.SetRank(11 - i);
 		}
 	}
+	
+	public void RestartRace() {
+		this.GenerateRacers();
+	}
+	
+	public void SwitchCourse(int index) {
+		for (int i = 0; i < this.courses.Length; i++) {
+			bool flag = i == index;
+			this.courses[i].SetActive(flag);
+		}
+		this.RestartRace();
+	}
+}
+
+[Serializable]
+public class Race
+{
+    public float runPercent;
+    public float flyPercent;
+    public float swimPercent;
+    public float climbPercent;
+
+    public void RaceUpdate(float segments, RaceChunk[] chunks)
+    {
+        List<RaceChunk> runChunks = new List<RaceChunk>();
+        List<RaceChunk> flyChunks = new List<RaceChunk>();
+        List<RaceChunk> swimChunks = new List<RaceChunk>();
+        List<RaceChunk> climbChunks = new List<RaceChunk>();
+
+        foreach (var chunk in chunks)
+        {
+            switch (chunk.GetComponent<RaceChunk>().chunkType)
+            {
+                case ChunkType.Climb:
+                    climbChunks.Add(chunk);
+                    break;
+                case ChunkType.Ground:
+                    runChunks.Add(chunk);
+                    break;
+                case ChunkType.Fly:
+                    flyChunks.Add(chunk);
+                    break;
+                case ChunkType.Swim:
+                    swimChunks.Add(chunk);
+                    break;
+            }
+        }
+        
+        runPercent = (runChunks.Count / segments) * 100;
+        flyPercent = (flyChunks.Count / segments) * 100;
+        swimPercent = (swimChunks.Count / segments) * 100;
+        climbPercent = (climbChunks.Count / segments) * 100;
+    }
 }

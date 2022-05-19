@@ -6,28 +6,20 @@ public class RacerStats : MonoBehaviour {
 	
 	public bool RandomizeOnStart = true;
 	
-	[Range(0.1f, 1f)]
 	public float Acceleration = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Speed = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Stamina = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Recharge = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Fly = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Swim = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Climb = 1f;
 	
-	[Range(0.1f, 1f)]
 	public float Laziness = 1f;	
 	
 	private void Start() {
