@@ -129,7 +129,7 @@ public class HexGridManager : MonoBehaviour
 
                 
                 graphObject.RedrawLine(hexes[x, y].lineOfBestFit);
-                hexes[x, y].hexValue = graphObject.CalculateTotalLoss() * hexValueMultiplier;
+                hexes[x, y].hexValue = graphObject.CalculateTotalLoss();
                 if (hexes[x, y].hexValue < lowestHex.hexValue)
                 {
                     lowestHex = hexes[x, y];
@@ -143,7 +143,7 @@ public class HexGridManager : MonoBehaviour
 
     void SetText(Hex hex)
     {
-        hex.hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hex.hexValue)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
+        hex.hexObject.GetComponentInChildren<Text>().text = Mathf.Floor(Mathf.Abs(hex.hexValue  * hexValueMultiplier)).ToString(); //((int) (hexes[x,y].hexValue * 10)).ToString();
         hex.hexObject.GetComponent<SpriteRenderer>().color = Color.red * Mathf.Abs(hex.hexValue * hexColorMultiplier);
 
         Vector3 randPos = LowestNeighbor(hex).hexObject.transform.position;

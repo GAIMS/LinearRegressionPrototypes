@@ -7,17 +7,19 @@ public class RaceTrackGenerator : MonoBehaviour
     public GameObject[] raceChunks;
 
     [SerializeField] private GameObject finish;
+    [SerializeField] private GameObject racerPrefab;
+    [SerializeField] private CameraController camController;
     
     [SerializeField] private int raceSegments;
     
     [Range(.25f,1)]
-    [SerializeField] private float runWeight;
+    [SerializeField] public float runWeight;
     [Range(.25f,1)]
-    [SerializeField] private float climbWeight;
+    [SerializeField] public float climbWeight;
     [Range(.25f,1)]
-    [SerializeField] private float flyWeight;
+    [SerializeField] public float flyWeight;
     [Range(.25f,1)]
-    [SerializeField] private float swimWeight;
+    [SerializeField] public float swimWeight;
 
     private KillBox killbox;
     private GameManager gm;
@@ -25,10 +27,18 @@ public class RaceTrackGenerator : MonoBehaviour
     private RaceChunk lastChunk;
     private RaceChunk finishChunk;
     private bool firstChunk = true;
+
+    public int racers;
     void Awake()
     {
         killbox = FindObjectOfType<KillBox>();
         gm = FindObjectOfType<GameManager>();
+        for (int i = 0; i < racers; i++)
+        {
+            GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
+            newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+        }
+        
         for (int i = 0; i < raceSegments; i++)
         {
             GenerateTrack();
@@ -43,7 +53,7 @@ public class RaceTrackGenerator : MonoBehaviour
     
     void Update()
     {
-        if (finishChunk.finishedRacers + killbox.dead == 3)
+        if (finishChunk.finishedRacers + killbox.dead == racers)
         {
             Restart();
         }
@@ -117,6 +127,7 @@ public class RaceTrackGenerator : MonoBehaviour
         
         firstChunk = true;
         killbox.dead = 0;
+
         RaceChunk[] oldChunks = FindObjectsOfType<RaceChunk>();
         foreach (var chunk in oldChunks)
         {
@@ -135,8 +146,31 @@ public class RaceTrackGenerator : MonoBehaviour
         BotController[] bots = FindObjectsOfType<BotController>();
         foreach (var bot in bots)
         {
-            bot.transform.position = Vector3.zero;
-            bot.GetComponent<Rigidbody2D>().simulated = true;
+            Destroy(bot.gameObject);
         }
+        
+        for (int i = 0; i < racers; i++)
+        {
+            GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
+            newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+        }
+        camController.FindBots();
+    }
+
+    public void RunWeight(float weight)
+    {
+        runWeight = weight;
+    }
+    public void FlyWeight(float weight)
+    {
+        flyWeight = weight;
+    }
+    public void SwimWeight(float weight)
+    {
+        swimWeight = weight;
+    }
+    public void ClimbWeight(float weight)
+    {
+        climbWeight = weight;
     }
 }

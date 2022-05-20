@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,15 @@ public class CameraController : MonoBehaviour
     private BotController[] bots;
     void Start()
     {
-        bots = FindObjectsOfType<BotController>();
+        //bots = FindObjectsOfType<BotController>();
+        FindBots();
     }
 
+    public void FindBots()
+    {
+        bots = Array.Empty<BotController>();
+        bots = FindObjectsOfType<BotController>();
+    }
     
     void Update()
     {
@@ -17,8 +24,11 @@ public class CameraController : MonoBehaviour
         var totalY = 0f;
         foreach(var bot in bots)
         {
-            totalX += bot.transform.position.x;
-            totalY += bot.transform.position.y;
+            if(bot != null)
+            {
+                totalX += bot.transform.position.x;
+                totalY += bot.transform.position.y;
+            }
         }
         var centerX = totalX / bots.Length;
         var centerY = totalY / bots.Length;
