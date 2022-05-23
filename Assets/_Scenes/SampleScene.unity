@@ -606,6 +606,7 @@ MonoBehaviour:
   agents: []
   firstDataPoint: 0
   secondDataPoint: 1
+  DataPoint: 000000000500000001000000020000000700000003000000
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
 --- !u!4 &294876407
@@ -6646,6 +6647,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 294876406}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: UpdateGraph
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

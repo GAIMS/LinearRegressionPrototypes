@@ -5,17 +5,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private BotController[] bots;
+    private List<BotController> bots;
+    private RaceTrackGenerator rtg;
     void Start()
     {
+        rtg = FindObjectOfType<RaceTrackGenerator>();
         //bots = FindObjectsOfType<BotController>();
         FindBots();
     }
 
     public void FindBots()
     {
-        bots = Array.Empty<BotController>();
-        bots = FindObjectsOfType<BotController>();
+        bots = new List<BotController>();
+        for (int i = 0; i < rtg.racers; i++)
+        {
+            bots.Add(FindObjectsOfType<BotController>()[i]);
+        }
     }
     
     void Update()
@@ -30,8 +35,8 @@ public class CameraController : MonoBehaviour
                 totalY += bot.transform.position.y;
             }
         }
-        var centerX = totalX / bots.Length;
-        var centerY = totalY / bots.Length;
+        var centerX = totalX / bots.Count;
+        var centerY = totalY / bots.Count;
         transform.position = new Vector3(centerX, centerY, transform.position.z);
     }
 }

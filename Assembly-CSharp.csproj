@@ -59,6 +59,7 @@
      <Compile Include="Assets\_Scripts\RaceTrackGenerator.cs" />
      <Compile Include="Assets\_Scripts\_GridScripts\PlayerController.cs" />
      <Compile Include="Assets\_Scripts\KillBox.cs" />
+     <Compile Include="Assets\_Scripts\BotNumController.cs" />
      <Compile Include="Assets\_Scripts\TimeScaler.cs" />
      <Compile Include="Assets\_Scripts\PerlinNoiseGeneration.cs" />
      <Compile Include="Assets\_Scripts\HexGridGame.cs" />
@@ -66,7 +67,6 @@
      <Compile Include="Assets\_Scripts\_GridScripts\LineObject.cs" />
      <Compile Include="Assets\_Scripts\_GridScripts\GraphObject.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
-     <Compile Include="Assets\_Scripts\BotNumController.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
