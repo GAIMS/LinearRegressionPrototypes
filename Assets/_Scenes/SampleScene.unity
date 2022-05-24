@@ -456,7 +456,7 @@ MonoBehaviour:
   agents: []
   firstDataPoint: 0
   secondDataPoint: 1
-  DataPoint: 0000000007000000010000000500000004000000
+  DataPoint: 000000000500000004000000
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
 --- !u!4 &294876407
@@ -5648,6 +5648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cf59e996831b7a4c84e913b6cb3ae68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Debug: 0
   Camera: {fileID: 963194227}
   Rect:
     serializedVersion: 2

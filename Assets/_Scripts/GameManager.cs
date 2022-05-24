@@ -64,38 +64,50 @@ public class GameManager : MonoBehaviour
         foreach (var agent in agents)
         {
             Vector2 pos = Vector2.zero;
+            bool yAxis = false;
             for (int i = 0; i < DataPoint.Length; i++)
             {
                 switch (DataPoint[i])
                     {
                         case DataType.Run:
-                            pos.x = agent.runSpeed;
+                            if(!yAxis)
+                                pos.x = agent.runSpeed;
                             break;
                         case DataType.Climb:
-                            pos.x = agent.climbSpeed;
+                            if(!yAxis)
+                                pos.x = agent.climbSpeed;
                             break;
                         case DataType.Swim:
-                            pos.x = agent.swimSpeed;
+                            if(!yAxis)
+                                pos.x = agent.swimSpeed;
                             break;
                         case DataType.Fly:
-                            pos.x = agent.flySpeed;
+                            if(!yAxis)
+                                pos.x = agent.flySpeed;
                             break;
                         case DataType.Position:
-                            pos.x = agent.placement;
+                            if(!yAxis)
+                                pos.x = agent.placement;
                             break;
                         case DataType.Plus:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Plus, pos.x);
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Plus, pos.x);
                             break;
                         case DataType.Minus:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Minus, pos.x);
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Minus, pos.x);
                             break;
                         case DataType.Multiply:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Multiply, pos.x);
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Multiply, pos.x);
                             break;
                         case DataType.Divide:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Divide, pos.x);
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Divide, pos.x);
                             break;
+                        
                         case DataType.__________:
+                            yAxis = true;
                             switch (DataPoint[i + 1])
                             {
                                 case DataType.Run:
@@ -112,7 +124,7 @@ public class GameManager : MonoBehaviour
                                     break;
                                 case DataType.Position:
                                     pos.y = agent.placement;
-                                    Debug.Log(pos);
+                                    //Debug.Log(pos);
                                     break;
                                 case DataType.Plus:
                                     pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Plus, pos.y);
@@ -132,45 +144,7 @@ public class GameManager : MonoBehaviour
                             break;
                     }
             }
-
-            // Vector2 pos = Vector2.zero;
-            // switch (firstDataPoint)
-            // {
-            //     case DataType.Run:
-            //         pos.x = agent.runSpeed;
-            //         break;
-            //     case DataType.Climb:
-            //         pos.x = agent.climbSpeed;
-            //         break;
-            //     case DataType.Swim:
-            //         pos.x = agent.swimSpeed;
-            //         break;
-            //     case DataType.Fly:
-            //         pos.x = agent.flySpeed;
-            //         break;
-            //     case DataType.Position:
-            //         pos.x = agent.placement;
-            //         break;
-            // }
-            // switch (secondDataPoint)
-            // {
-            //     case DataType.Run:
-            //         pos.y = agent.runSpeed;
-            //         break;
-            //     case DataType.Climb:
-            //         pos.y = agent.climbSpeed;
-            //         break;
-            //     case DataType.Swim:
-            //         pos.y = agent.swimSpeed;
-            //         break;
-            //     case DataType.Fly:
-            //         pos.y = agent.flySpeed;
-            //         break;
-            //     case DataType.Position:
-            //         pos.y = agent.placement;
-            //         break;
-            // }
-            //graph._Debug = true;
+            Debug.Log(pos);
             graph.AddPoint(pos,agent.color);
         }
 
