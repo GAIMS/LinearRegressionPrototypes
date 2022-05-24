@@ -321,7 +321,7 @@ public class GraphObject : MonoBehaviour
         for (int i = 0; i < Points.Count; i++) {
             totalLoss += CalculateLoss(Points[i].Point, Line.Line, mode);
         }
-        Debug.Log("Total Loss: " + totalLoss);
+        //Debug.Log("Total Loss: " + totalLoss);
         return totalLoss;
     }
 
