@@ -12,10 +12,10 @@ public enum DataType
     Climb,
     Position,
     __________,
-    _Plus,
-    _Minus,
-    _Multiply,
-    _Divide
+    Plus,
+    Minus,
+    Multiply,
+    Divide
 }
 public class GameManager : MonoBehaviour
 {
@@ -83,17 +83,17 @@ public class GameManager : MonoBehaviour
                         case DataType.Position:
                             pos.x = agent.placement;
                             break;
-                        case DataType._Plus:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType._Plus, pos.x);
+                        case DataType.Plus:
+                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Plus, pos.x);
                             break;
-                        case DataType._Minus:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType._Minus, pos.x);
+                        case DataType.Minus:
+                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Minus, pos.x);
                             break;
-                        case DataType._Multiply:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType._Multiply, pos.x);
+                        case DataType.Multiply:
+                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Multiply, pos.x);
                             break;
-                        case DataType._Divide:
-                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType._Divide, pos.x);
+                        case DataType.Divide:
+                            pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Divide, pos.x);
                             break;
                         case DataType.__________:
                             switch (DataPoint[i + 1])
@@ -112,18 +112,19 @@ public class GameManager : MonoBehaviour
                                     break;
                                 case DataType.Position:
                                     pos.y = agent.placement;
+                                    Debug.Log(pos);
                                     break;
-                                case DataType._Plus:
-                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType._Plus, pos.y);
+                                case DataType.Plus:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Plus, pos.y);
                                     break;
-                                case DataType._Minus:
-                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType._Minus, pos.y);
+                                case DataType.Minus:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Minus, pos.y);
                                     break;
-                                case DataType._Multiply:
-                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType._Multiply, pos.y);
+                                case DataType.Multiply:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Multiply, pos.y);
                                     break;
-                                case DataType._Divide:
-                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType._Divide, pos.y);
+                                case DataType.Divide:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Divide, pos.y);
                                     break;
                                 case DataType.__________:
                                     break;
@@ -179,13 +180,13 @@ public class GameManager : MonoBehaviour
     {
         switch (operation)
         {
-            case DataType._Plus:
+            case DataType.Plus:
                 return value += GetAgentDataValue(agent, dataType);
-            case DataType._Minus:
+            case DataType.Minus:
                 return value -= GetAgentDataValue(agent, dataType);
-            case DataType._Multiply:
+            case DataType.Multiply:
                 return value *= GetAgentDataValue(agent, dataType);
-            case DataType._Divide:
+            case DataType.Divide:
                 return value /= GetAgentDataValue(agent, dataType);
         }
 
