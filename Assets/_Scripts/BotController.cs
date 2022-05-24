@@ -89,19 +89,23 @@ public class BotController : MonoBehaviour
 
         if (isGrounded)
         {
-            rb.velocity = new Vector2( runSpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            //rb.velocity = new Vector2( runSpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            rb.AddForce(new Vector2( runSpeed * speedMultiplier * Time.deltaTime, 0));
         }
         if (isSwimming)
         {
-            rb.velocity = new Vector2( swimSpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            //rb.velocity = new Vector2( swimSpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            rb.AddForce(new Vector2( swimSpeed * speedMultiplier * Time.deltaTime, 0));
         }
         if (isflying)
         {
-            rb.velocity = new Vector2( flySpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            //rb.velocity = new Vector2( flySpeed * speedMultiplier * Time.deltaTime, rb.velocity.y);
+            rb.AddForce(new Vector2( flySpeed * speedMultiplier * Time.deltaTime, 0));
         }
         if (isClimbing)
         {
-            rb.velocity = new Vector2( rb.velocity.x, climbSpeed * speedMultiplier * Time.deltaTime);
+            //rb.velocity = new Vector2( rb.velocity.x, climbSpeed * speedMultiplier * Time.deltaTime);
+            rb.AddForce(new Vector2( 0, climbSpeed * speedMultiplier * Time.deltaTime) - Physics2D.gravity);
         }
     }
 

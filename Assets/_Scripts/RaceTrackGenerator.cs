@@ -156,6 +156,40 @@ public class RaceTrackGenerator : MonoBehaviour
         }
         camController.FindBots();
     }
+    
+    public void RestartButton()
+    {
+        firstChunk = true;
+        killbox.dead = 0;
+
+        RaceChunk[] oldChunks = FindObjectsOfType<RaceChunk>();
+        foreach (var chunk in oldChunks)
+        {
+            Destroy(chunk.gameObject);
+        }
+        for (int i = 0; i < raceSegments; i++)
+        {
+            GenerateTrack();
+            firstChunk = false;
+            if (i == raceSegments - 1)
+            {
+                PlaceFinish();
+            }
+        }
+
+        BotController[] bots = FindObjectsOfType<BotController>();
+        foreach (var bot in bots)
+        {
+            Destroy(bot.gameObject);
+        }
+        
+        for (int i = 0; i < racers; i++)
+        {
+            GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
+            newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+        }
+        camController.FindBots();
+    }
 
     public void RunWeight(float weight)
     {
