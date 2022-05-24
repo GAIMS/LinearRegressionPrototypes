@@ -138,7 +138,9 @@ public class HexGridManager : MonoBehaviour
             }
         }
         lowestHex.hexObject.GetComponent<SpriteRenderer>().color = Color.green;
-        graphObject.RedrawLine(graphObject.Points);
+        if (graphObject.Points.Count > 1) {
+            graphObject.RedrawLine(graphObject.Points);
+        }
     }
 
     void SetText(Hex hex)

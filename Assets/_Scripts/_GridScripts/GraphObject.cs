@@ -8,6 +8,7 @@ using UnityEngine;
 public class GraphObject : MonoBehaviour
 {
     [Header("General")]
+    public bool _Debug = false;
     public Camera Camera;
     public Rect Rect;
     public LineObject Line;
@@ -33,6 +34,7 @@ public class GraphObject : MonoBehaviour
     }
 
     public void RedrawGraph(bool redrawPoints, bool redrawLine) {
+        if (_Debug) Debug.Log("RedrawGraph");
         //Rect.x = this.transform.position.x;
         //Rect.y = this.transform.position.y;
         RedrawRect();
@@ -52,6 +54,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Redraw Rect")]
     public void RedrawRect() {
+        if (_Debug) Debug.Log("RedrawRect");
         RedrawCorners();
         RedrawSides();
         // redraw grid lines?
@@ -59,11 +62,12 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Redraw Grid")]
     public void RedrawGrid() {
-
+        if (_Debug) Debug.Log("RedrawGrid");
     }
 
     [ContextMenu("Redraw Points")]
     public void RedrawPoints() {
+        if (_Debug) Debug.Log("Redraw Points");
         ClearPoints();
         GameObject empty = new GameObject();
         empty.transform.SetParent(PointContainer.transform);
@@ -79,6 +83,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Clear Points")]
     public void ClearPoints() {
+        if (_Debug) Debug.Log("Clear Points");
         if (PointContainer.transform.childCount > 0) {
             for (int i = PointContainer.transform.childCount - 1; i >= 0; i--) {
                 if (Application.isEditor)
@@ -94,6 +99,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Redraw Corners")]
     public void RedrawCorners() {
+        if (_Debug) Debug.Log("Redraw Corners");
         for (int i = 0; i < 4; i++) {
             if (Corners.Count <= i || Corners[i] == null) {
                 Corners.Add(Instantiate(PointPrefab));
@@ -124,6 +130,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Redraw Sides")]
     public void RedrawSides() {
+        if (_Debug) Debug.Log("RedrawSides");
         if (Corners.Count == 4) {
             for (int i = 0; i < 4; i++) {
                 if (Sides.Count <= i || Sides[i] == null) {
@@ -163,6 +170,7 @@ public class GraphObject : MonoBehaviour
 
     public void RedrawLine(List<PointObject> _points) {
         // get our line of best fit
+        if (_Debug) Debug.Log("Redraw Line from points");
         List<Point> points = new List<Point>();
         foreach (PointObject _p in _points) {
             points.Add(_p.Point);
@@ -172,6 +180,7 @@ public class GraphObject : MonoBehaviour
     }
 
     public void RedrawLine(Line line) {
+        if (_Debug) Debug.Log("RedrawLineTrue");
         Line.Line = line;
         // find our points of intersection
         List<Point> intersects = new List<Point>();
@@ -227,7 +236,7 @@ public class GraphObject : MonoBehaviour
         } else if (rectIntersects.Count == 1) {
             Debug.LogError("Only 1 screen intersection, this shouldn't be possible.");
             for (int i = 0; i < intersects.Count; i++) {
-                Debug.Log(i + ": " + intersects[i]);
+                if (_Debug) Debug.Log(i + ": " + intersects[i]);
             }
         } else if (rectIntersects.Count > 2) {
             Debug.LogError("More than 2 screen intersections, this shouldn't be possible.");
@@ -237,7 +246,12 @@ public class GraphObject : MonoBehaviour
     }
 
     public Line LineOfBestFit(List<Point> points) {
+        if (_Debug) Debug.Log("LineOfBestFit");
         //average our points
+        if (points.Count <= 1) {
+            Debug.LogError("Not enough points to draw line");
+            return new Line(Corners[0].Point, Corners[3].Point);
+        }
         float meanX = points.Average(point => point.X);
         float meanY = points.Average(point => point.Y);
 
@@ -247,16 +261,22 @@ public class GraphObject : MonoBehaviour
         float slope = sumXY/sumXX;
         float yIntercept = meanY - (slope * meanX);
         float xIntercept = (0 - yIntercept) / slope;
-
-        return new Line(new Point(0,yIntercept), new Point(xIntercept, 0));
+        Point a = new Point(xIntercept, 0);
+        Point b = new Point(0, yIntercept);
+        if (a.X == b.X && a.Y == b.Y) {
+            b = new Point(1, slope * 1 + yIntercept);
+        }
+        return new Line(a,b);
     }
 
     public void AddPoint(Vector3 position, Color pointColor, bool screenSpace = false, bool redrawLine = true) {
+        if (_Debug) Debug.Log("AddPoint");
         Vector3 _position = position;
         if (screenSpace) {
             _position = Camera.ScreenToWorldPoint(position);
         }
         Point p = new Point(_position);
+        if (_Debug) Debug.Log(p);
         if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width/2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
             PointObject point = Instantiate(PointPrefab, PointContainer.transform);
             point.Point = p;
@@ -280,6 +300,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Draw Loss Lines")]
     public void RedrawLossLines() {
+        if (_Debug) Debug.Log("RedrawLossLines");
         ClearLossLines();
         for (int i = 0; i < Points.Count; i++) {
             LineObject line = Instantiate(LinePrefab, LineContainer.transform);
@@ -291,6 +312,7 @@ public class GraphObject : MonoBehaviour
 
     [ContextMenu("Clear Loss Lines")]
     public void ClearLossLines() {
+        if (_Debug) Debug.Log("ClearLossLines");
         for (int i = LineContainer.transform.childCount - 1; i >= 0; i--)
         {
             if (Application.isEditor)
@@ -301,6 +323,7 @@ public class GraphObject : MonoBehaviour
     }
 
     public float CalculateLoss(Point point, Line line, LossMode mode = LossMode.Default) {
+        if (_Debug) Debug.Log("CalculateLoss");
         Line lossLine = CalculateLossLine(point, line);
         float loss = lossLine.A.Y - lossLine.B.Y;
         loss *= loss;
@@ -321,11 +344,11 @@ public class GraphObject : MonoBehaviour
         for (int i = 0; i < Points.Count; i++) {
             totalLoss += CalculateLoss(Points[i].Point, Line.Line, mode);
         }
-        //Debug.Log("Total Loss: " + totalLoss);
         return totalLoss;
     }
 
     public Line CalculateLossLine(Point point, Line lineA) {
+        if (_Debug) Debug.Log("CalculateLossLine");
         Point xIntercept = new Point(point.X, 0);
         Line lineB = new Line(point, xIntercept);
         Point intersect = LineIntersection.FindIntersection(lineA, lineB);

@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
             //         pos.y = agent.placement;
             //         break;
             // }
+            //graph._Debug = true;
             graph.AddPoint(pos,agent.color);
         }
 
