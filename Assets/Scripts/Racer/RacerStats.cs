@@ -23,9 +23,6 @@ public class RacerStats : MonoBehaviour {
 	public float Laziness = 1f;	
 	
 	private void Start() {
-		if (this.RandomizeOnStart) {
-			this.RandomizeStats();
-		}
 	}
 	
 	public void RandomizeStats() {

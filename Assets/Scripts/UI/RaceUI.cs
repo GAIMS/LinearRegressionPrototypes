@@ -45,6 +45,14 @@ public class RaceUI : MonoBehaviour {
 		this.racerInfo.placement = rank;
 		GameplayUI.Instance.ReorderList();
 	}
+	
+	public void SetStats(float[] stats) {
+		this.racerInfo.speed.localScale = new Vector3(stats[0], 1f, 1f);
+		this.racerInfo.fly.localScale = new Vector3(stats[1], 1f, 1f);
+		this.racerInfo.swim.localScale = new Vector3(stats[2], 1f, 1f);
+		this.racerInfo.climb.localScale = new Vector3(stats[3], 1f, 1f);
+		this.racerInfo.acceleration.localScale = new Vector3(stats[4], 1f, 1f);
+	}
 }
 
 

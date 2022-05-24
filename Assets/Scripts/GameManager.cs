@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour {
 	[Range(2, 12)]
 	public int numberOfRacers = 2;
 	
+	private int currentRacers;
+	
 	[SerializeField]
 	public GameObject racerPrefab;
 	
@@ -61,8 +63,12 @@ public class GameManager : MonoBehaviour {
 			position.z -= 1f;
 			this.racers.Add(racer);
 			RacerCore core = racer.GetComponent<RacerCore>();
-			core.SetCameraRenderTexture(11 - i);
+			core.SetCameraRenderTexture((this.numberOfRacers - 1) - i);
+			core.stats.RandomizeStats();
+			core.SetStats((this.numberOfRacers - 1) - i);
 		}
+		
+		this.currentRacers = this.numberOfRacers;
 		
 		int rand = UnityEngine.Random.Range(0, this.racers.Count);
 		FlyCamera.Instance.racerToFollow = this.racers[rand].transform;
@@ -78,11 +84,12 @@ public class GameManager : MonoBehaviour {
 		).ToList();
 		for (int i = 0; i < this.racers.Count; i++) {
 			RacerCore core = this.racers[i].GetComponent<RacerCore>();
-			core.SetRank(11 - i);
+			core.SetRank((this.currentRacers - 1) - i);
 		}
 	}
 	
 	public void RestartRace() {
+		GameplayUI.Instance.SetUI();
 		this.GenerateRacers();
 	}
 	
@@ -92,6 +99,25 @@ public class GameManager : MonoBehaviour {
 			this.courses[i].SetActive(flag);
 		}
 		this.RestartRace();
+	}
+	
+	public void ChangePlayerCount() {
+		int num = (int)GameplayUI.Instance.playerNumSlider.value;
+		this.numberOfRacers = num;
+		GameplayUI.Instance.playerCountSlider.SetText(num.ToString());
+	}
+	
+	public void UpdateMaxStat() {
+		float num = GameplayUI.Instance.maxStatSlider.value;
+		this.maxStat = num;
+		GameplayUI.Instance.maxStat.SetText(num.ToString("F2"));
+		
+	}
+	
+	public void UpdateMinStat() {
+		float num = GameplayUI.Instance.minStatSlider.value;
+		this.minStat = num;
+		GameplayUI.Instance.minStat.SetText(num.ToString("F2"));
 	}
 }
 

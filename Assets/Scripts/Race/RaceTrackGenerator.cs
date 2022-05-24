@@ -2,13 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RaceTrackGenerator : MonoBehaviour
-{
+public class RaceTrackGenerator : MonoBehaviour {
+	
+	private static RaceTrackGenerator _Instance;
+	public static RaceTrackGenerator Instance {
+		get {
+			if (_Instance == null) {
+				_Instance = FindObjectOfType<RaceTrackGenerator>();
+			}
+			return _Instance;
+		}
+	}
+	
     public GameObject[] raceChunks;
 
     [SerializeField] private GameObject start, finish;
     
     [SerializeField] private int raceSegments;
+	
+	public int RaceSegments {
+		get {
+			return this.raceSegments;
+		}
+	}
     
     [Range(.25f,1)]
     [SerializeField] private float runWeight;
@@ -130,12 +146,24 @@ public class RaceTrackGenerator : MonoBehaviour
         }
         for (int i = 0; i < raceSegments; i++)
         {
-            GenerateTrack();
-            firstChunk = false;
-            if (i == raceSegments - 1)
-            {
-                PlaceFinish();
-            }
+			if (i == 0) {
+				PlaceStart();
+				firstChunk = false;
+			} else {
+			
+				GenerateTrack();
+				if (i == raceSegments - 1)
+				{
+					PlaceFinish();
+				}
+			}
         }
+		GameManager.Instance.RestartRace();
     }
+	
+	public void UpdateRaceSegments() {
+		int segments = (int)GameplayUI.Instance.raceSegmentSlider.value;
+		this.raceSegments = segments;
+		GameplayUI.Instance.raceCourseSegments.SetText(segments.ToString());
+	}
 }

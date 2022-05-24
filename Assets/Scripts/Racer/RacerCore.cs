@@ -65,4 +65,15 @@ public class RacerCore : MonoBehaviour {
 		Debug.Log("Setting render texture");
 		this.previewCamera.targetTexture = GameManager.Instance.renderTextures[index];
 	}
+	
+	public void SetStats(int index) {
+		float[] stats = new float[5] {
+			this.stats.Speed,
+			this.stats.Fly,
+			this.stats.Swim,
+			this.stats.Climb,
+			this.stats.Acceleration
+		};
+		GameplayUI.Instance.raceUI[index].SetStats(stats);
+	}
 }
