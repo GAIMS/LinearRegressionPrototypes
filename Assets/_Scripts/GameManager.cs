@@ -22,8 +22,10 @@ public class GameManager : MonoBehaviour
     public List<Race> races;
     public List<Agent> agents;
     private int raceNum = 0;
-    public DataType firstDataPoint, secondDataPoint;
+    
     public DataType[] DataPoint;
+    public List<SavedData> savedData;
+
     [SerializeField] private GraphObject graph;
     [SerializeField] private HexGridManager hexGrid;
 
@@ -147,7 +149,9 @@ public class GameManager : MonoBehaviour
             Debug.Log(pos);
             graph.AddPoint(pos,agent.color);
         }
-
+        SavedData data = new SavedData();
+        data.operation = DataPoint;
+        savedData.Add(data);
         hexGrid.UpdateHexes();
     }
 
@@ -239,4 +243,10 @@ public class Agent
     public int placement;
     public int raceNumber;
     public Color color;
+}
+
+[Serializable]
+public class SavedData
+{
+    public DataType[] operation;
 }

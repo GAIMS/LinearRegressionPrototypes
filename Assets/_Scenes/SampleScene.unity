@@ -454,9 +454,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   races: []
   agents: []
-  firstDataPoint: 0
-  secondDataPoint: 1
   DataPoint: 000000000500000004000000
+  savedData: []
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
 --- !u!4 &294876407
@@ -4536,9 +4535,9 @@ MonoBehaviour:
   camController: {fileID: 1568269603}
   raceSegments: 10
   runWeight: 1
-  climbWeight: 0.25
-  flyWeight: 0.25
-  swimWeight: 0.25
+  climbWeight: 1
+  flyWeight: 1
+  swimWeight: 0.95
   racers: 3
 --- !u!1 &1885023804
 GameObject:
