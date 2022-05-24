@@ -75,7 +75,8 @@ public class LineIntersection
         if (Mathf.Abs(x1 - x2) < tolerance && Mathf.Abs(x3 - x4) < tolerance)
         {   
             //return default (no intersection)
-            Debug.Log("A");
+            Debug.Log("A, no intersections");
+            Debug.Log(lineA);
             return default(Point);
         }
 
@@ -83,7 +84,8 @@ public class LineIntersection
         if (Mathf.Abs(y1 - y2) < tolerance && Mathf.Abs(y3 - y4) < tolerance)
         {
             //return default (no intersection)
-            Debug.Log("B");
+            Debug.Log("B, no intersections");
+            Debug.Log(lineA);
             return default(Point);
         }
 
