@@ -4536,9 +4536,9 @@ MonoBehaviour:
   camController: {fileID: 1568269603}
   raceSegments: 10
   runWeight: 1
-  climbWeight: 1
-  flyWeight: 1
-  swimWeight: 0.95
+  climbWeight: 0.25
+  flyWeight: 0.25
+  swimWeight: 0.25
   racers: 3
 --- !u!1 &1885023804
 GameObject:
