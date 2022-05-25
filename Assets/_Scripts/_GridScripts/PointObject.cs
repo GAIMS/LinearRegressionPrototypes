@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PointObject : MonoBehaviour
 {
+    public Point Raw;
     public Point Point;
 
     public Renderer Renderer;
@@ -11,6 +12,11 @@ public class PointObject : MonoBehaviour
     [ContextMenu("UpdatePosition")]
     public void UpdatePosition() {
         this.transform.localPosition = new Vector3(Point.X, Point.Y, 0);
+    }
+
+    public void UpdatePosition(Rect source, Rect target) {
+        Debug.Log(Point);
+        this.transform.localPosition = new Vector3((Point.X/source.width)*target.width,(Point.Y/source.height)/target.width);
     }
 }
 

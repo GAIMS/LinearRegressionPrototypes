@@ -74,16 +74,16 @@ public class LineIntersection
         float x4 = lineB.B.X, y4 = lineB.B.Y;
 
         // equations of the form x = c (two vertical lines)
-        if (Mathf.Abs(x1 - x2) < tolerance && Mathf.Abs(x3 - x4) < tolerance && Mathf.Abs(x1 - x3) < tolerance)
+        /*if (Mathf.Abs(x1 - x2) < tolerance && Mathf.Abs(x3 - x4) < tolerance && Mathf.Abs(x1 - x3) < tolerance)
         {
-            throw new System.Exception("Both lines overlap vertically, ambiguous intersection points.");
+            Debug.LogError("Both lines overlap vertically, ambiguous intersection points.");
         }
 
         //equations of the form y=c (two horizontal lines)
         if (Mathf.Abs(y1 - y2) < tolerance && Mathf.Abs(y3 - y4) < tolerance && Mathf.Abs(y1 - y3) < tolerance)
         {
-            throw new System.Exception("Both lines overlap horizontally, ambiguous intersection points.");
-        }
+            Debug.LogError("Both lines overlap horizontally, ambiguous intersection points.");
+        }*/
 
         //equations of the form x=c (two vertical parallel lines)
         if (Mathf.Abs(x1 - x2) < tolerance && Mathf.Abs(x3 - x4) < tolerance)

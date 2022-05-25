@@ -9,8 +9,10 @@ public class GraphObject : MonoBehaviour
 {
     [Header("General")]
     public bool _Debug = false;
+    public GraphMode Mode;
     public Camera Camera;
     public Rect Rect;
+    public Rect Space;
     public LineObject Line;
     public GameObject LineContainer;
     public List<PointObject> Points;
@@ -74,6 +76,7 @@ public class GraphObject : MonoBehaviour
         empty.transform.localPosition = new Vector3(0,0,0);
         for (int i = 0; i < PointCount; i++) {
             PointObject p = Instantiate(PointPrefab, empty.transform);
+            // change this to be based off the Space variable
             p.Point = new Point(Random.Range(Rect.x - (Rect.width/2), Rect.x + (Rect.width/2)), Random.Range(Rect.y - (Rect.height/2), Rect.y + (Rect.height/2)));
             p.UpdatePosition();
             Points.Add(p);
@@ -106,16 +109,32 @@ public class GraphObject : MonoBehaviour
             }
             switch (i) {
                 case 0:
-                    Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y - (Rect.height/2));
+                    if (Mode == GraphMode.PositiveY) {
+                        Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y);
+                    } else {
+                        Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y - (Rect.height/2));
+                    }
                     break;
                 case 1:
-                    Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y - (Rect.height/2));
+                    if (Mode == GraphMode.PositiveY) {
+                        Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y);
+                    } else {
+                        Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y - (Rect.height/2));
+                    }
                     break;
                 case 2:
-                    Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y + (Rect.height/2));
+                    if (Mode == GraphMode.PositiveY) {
+                        Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y + Rect.height);
+                    } else {
+                        Corners[i].Point = new Point(Rect.x - (Rect.width/2), Rect.y + (Rect.height/2));
+                    }
                     break;
                 case 3:
-                    Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y + (Rect.height/2));
+                    if (Mode == GraphMode.PositiveY) {
+                        Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y + Rect.height);
+                    } else {
+                        Corners[i].Point = new Point(Rect.x + (Rect.width/2), Rect.y + (Rect.height/2));
+                    }
                     break;
                 
             }
@@ -253,16 +272,25 @@ public class GraphObject : MonoBehaviour
             return new Line(Corners[0].Point, Corners[3].Point);
         }
         float meanX = points.Average(point => point.X);
+        Debug.Log("meanX: " + meanX);
         float meanY = points.Average(point => point.Y);
+        Debug.Log("meanY: " + meanY);
 
         //cacluate our slope
         float sumXY = points.Sum(point => point.X * point.Y);
+        Debug.Log("sumXY: " + sumXY);
         float sumXX = points.Sum(point => point.X * point.X);
+        Debug.Log("sumXX: " + sumXX);
         float slope = sumXY/sumXX;
+        Debug.Log("slope: " + slope);
         float yIntercept = meanY - (slope * meanX);
+        Debug.Log("yIntercept: " + yIntercept);
         float xIntercept = (0 - yIntercept) / slope;
+        Debug.Log("xIntercept: " + xIntercept);
         Point a = new Point(xIntercept, 0);
-        Point b = new Point(0, yIntercept);
+        Debug.Log(a);
+        Point b = new Point(yIntercept, 0);
+        Debug.Log(b);
         if (a.X == b.X && a.Y == b.Y) {
             b = new Point(1, slope * 1 + yIntercept);
         }
@@ -271,13 +299,14 @@ public class GraphObject : MonoBehaviour
 
     public void AddPoint(Vector3 position, Color pointColor, bool screenSpace = false, bool redrawLine = true) {
         if (_Debug) Debug.Log("AddPoint");
-        Vector3 _position = position;
+        if (_Debug) Debug.Log(position);
+        Vector3 _position = new Vector3((position.x/Space.width)*Rect.width/2 + Rect.x, (position.y/Space.height)*Rect.height + Rect.y, position.z);
         if (screenSpace) {
             _position = Camera.ScreenToWorldPoint(position);
         }
         Point p = new Point(_position);
         if (_Debug) Debug.Log(p);
-        if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width/2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
+        //if (p.X >= (Rect.x - (Rect.width/2)) && p.X <= (Rect.x + (Rect.width/2)) && p.Y >= (Rect.y - (Rect.height/2)) && p.Y <= (Rect.y + (Rect.height/2))) {
             PointObject point = Instantiate(PointPrefab, PointContainer.transform);
             point.Point = p;
             point.GetComponent<SpriteRenderer>().color = pointColor;
@@ -289,9 +318,9 @@ public class GraphObject : MonoBehaviour
             if (DrawLossLines) {
                 RedrawLossLines();
             }
-        } else {
-            Debug.LogError("New Point is out of bounds");
-        }
+        //} else {
+            //Debug.LogError("New Point is out of bounds");
+        //}
     }
 
     public void InBounds(Point point) {
@@ -324,6 +353,7 @@ public class GraphObject : MonoBehaviour
 
     public float CalculateLoss(Point point, Line line, LossMode mode = LossMode.Default) {
         if (_Debug) Debug.Log("CalculateLoss");
+        if (_Debug) Debug.Log(point);
         Line lossLine = CalculateLossLine(point, line);
         float loss = lossLine.A.Y - lossLine.B.Y;
         loss *= loss;
@@ -349,8 +379,10 @@ public class GraphObject : MonoBehaviour
 
     public Line CalculateLossLine(Point point, Line lineA) {
         if (_Debug) Debug.Log("CalculateLossLine");
+        if (_Debug) Debug.Log(lineA);
         Point xIntercept = new Point(point.X, 0);
         Line lineB = new Line(point, xIntercept);
+        if (_Debug) Debug.Log(lineB);
         Point intersect = LineIntersection.FindIntersection(lineA, lineB);
         // check if our intersection is out of bounds, draw screen intersection if so
         if (intersect.Y < Corners[0].Point.Y || intersect.Y > Corners[2].Point.Y) {
@@ -363,6 +395,11 @@ public class GraphObject : MonoBehaviour
         Line lossLine = new Line(point, intersect);
         return lossLine;
     }
+}
+
+public enum GraphMode {
+    Default,
+    PositiveY
 }
 
 public enum LossMode {
