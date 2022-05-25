@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button hexOn;
     [SerializeField] private Button hexOff;
 
+    private List<float> predictionOutput;
+
     private void Awake()
     {
         rtg = FindObjectOfType<RaceTrackGenerator>();
@@ -62,6 +64,120 @@ public class GameManager : MonoBehaviour
         graph.gameObject.SetActive(false);
         hexGrid.gameObject.SetActive(false);
         rtg.Restart();
+    }
+
+    public void GetPrediction()
+    {
+        BotController[] bots = FindObjectsOfType<BotController>();
+        predictionOutput = new List<float>();
+        for (int j = 0; j < bots.Length; j++)
+        {
+            Agent agent = new Agent();
+            agent.climbSpeed = bots[j].climbSpeed;
+            agent.runSpeed = bots[j].runSpeed;
+            agent.flySpeed = bots[j].flySpeed;
+            agent.swimSpeed = bots[j].swimSpeed;
+            agent.raceNumber = raceNum;
+            agent.placement = bots[j].placement;
+            agent.color = bots[j].GetComponent<SpriteRenderer>().color;
+            
+            Vector2 pos = Vector2.zero;
+            bool yAxis = false;
+            for (int i = 0; i < DataPoint.Length; i++)
+            {
+                switch (DataPoint[i])
+                    {
+                        case DataType.Run:
+                            if(!yAxis)
+                                pos.x = agent.runSpeed;
+                            break;
+                        case DataType.Climb:
+                            if(!yAxis)
+                                pos.x = agent.climbSpeed;
+                            break;
+                        case DataType.Swim:
+                            if(!yAxis)
+                                pos.x = agent.swimSpeed;
+                            break;
+                        case DataType.Fly:
+                            if(!yAxis)
+                                pos.x = agent.flySpeed;
+                            break;
+                        case DataType.Position:
+                            if(!yAxis)
+                                pos.x = agent.placement;
+                            break;
+                        case DataType.Plus:
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Plus, pos.x);
+                            break;
+                        case DataType.Minus:
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Minus, pos.x);
+                            break;
+                        case DataType.Multiply:
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Multiply, pos.x);
+                            break;
+                        case DataType.Divide:
+                            if(!yAxis)
+                                pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Divide, pos.x);
+                            break;
+                        
+                        case DataType.__________:
+                            yAxis = true;
+                            switch (DataPoint[i + 1])
+                            {
+                                case DataType.Run:
+                                    pos.y = agent.runSpeed;
+                                    break;
+                                case DataType.Climb:
+                                    pos.y = agent.climbSpeed;
+                                    break;
+                                case DataType.Swim:
+                                    pos.y = agent.swimSpeed;
+                                    break;
+                                case DataType.Fly:
+                                    pos.y = agent.flySpeed;
+                                    break;
+                                case DataType.Position:
+                                    pos.y = agent.placement;
+                                    //Debug.Log(pos);
+                                    break;
+                                case DataType.Plus:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Plus, pos.y);
+                                    break;
+                                case DataType.Minus:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Minus, pos.y);
+                                    break;
+                                case DataType.Multiply:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Multiply, pos.y);
+                                    break;
+                                case DataType.Divide:
+                                    pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Divide, pos.y);
+                                    break;
+                                case DataType.__________:
+                                    break;
+                            }
+                            break;
+                    }
+            }
+
+            float pred = graph.Line.Line.Slope * pos.x + graph.Line.Line.YIntercept;
+            predictionOutput.Add(pred);
+        }
+
+        int hightestIndex = 0;
+        float hightestVal = 0;
+        for (int i = 0; i < predictionOutput.Count; i++)
+        {
+            if (predictionOutput[i] > hightestVal)
+            {
+                hightestVal = predictionOutput[i];
+                hightestIndex = i;
+            }
+        }
+        Debug.Log(hightestIndex);
     }
     
     public void UpdateLists(int segments)

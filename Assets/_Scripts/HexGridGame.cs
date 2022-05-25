@@ -59,7 +59,7 @@ public class HexGridGame : MonoBehaviour
             }
             if(adaptiveRadius)
             {
-                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, (Mathf.CeilToInt(pickedHex.hexValue / 100))))
+                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(Mathf.Abs(hex.hexValue * hm.hexValueMultiplier / 10))))
                 {
                     hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -164,7 +164,7 @@ public class HexGridGame : MonoBehaviour
         
         if(adaptiveRadius)
         {
-            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
+            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(Mathf.Abs(pickedHex.hexValue * hm.hexValueMultiplier / 10))))
             {
                 hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }
@@ -206,7 +206,7 @@ public class HexGridGame : MonoBehaviour
         
         if(adaptiveRadius)
         {
-            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
+            foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(Mathf.Abs(pickedHex.hexValue * hm.hexValueMultiplier / 10))))
             {
                 hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }

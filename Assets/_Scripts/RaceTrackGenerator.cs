@@ -160,6 +160,7 @@ public class RaceTrackGenerator : MonoBehaviour
             newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
         }
         camController.FindBots();
+        gm.GetPrediction();
         gameOver = true;
     }
 
