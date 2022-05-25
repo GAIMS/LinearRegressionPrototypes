@@ -181,3 +181,4 @@ MonoBehaviour:
   isflying: 0
   isSwimming: 0
   placement: 0
+  usingForce: 1
