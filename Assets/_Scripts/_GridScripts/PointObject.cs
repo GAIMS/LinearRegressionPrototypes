@@ -21,7 +21,7 @@ public class PointObject : MonoBehaviour
 }
 
 [System.Serializable]
-public struct Point {
+public class Point {
     public float X;
     public float Y;
 

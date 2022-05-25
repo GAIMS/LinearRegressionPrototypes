@@ -89,18 +89,14 @@ public class LineIntersection
         if (Mathf.Abs(x1 - x2) < tolerance && Mathf.Abs(x3 - x4) < tolerance)
         {   
             //return default (no intersection)
-            Debug.Log("A, no intersections");
-            Debug.Log(lineA);
-            return default(Point);
+            return null;
         }
 
         //equations of the form y=c (two horizontal parallel lines)
         if (Mathf.Abs(y1 - y2) < tolerance && Mathf.Abs(y3 - y4) < tolerance)
         {
             //return default (no intersection)
-            Debug.Log("B, no intersections");
-            Debug.Log(lineA);
-            return default(Point);
+            return null;
         }
 
         //general equation of line is y = mx + c where m is the slope
@@ -171,8 +167,7 @@ public class LineIntersection
                 && Mathf.Abs(-m2 * x + y - c2) < tolerance))
             {
                 //return default (no intersection)
-                Debug.Log("C");
-                return default(Point);
+                return null;
             }
         }
 
@@ -185,7 +180,7 @@ public class LineIntersection
             
         }*/
 
-        return new Point { X = x, Y = y };
+        return new Point(x, y);
 
         //return default (no intersection)
         //Debug.Log("E");

@@ -231,7 +231,7 @@ public class GraphObject : MonoBehaviour
         // find the points which are within the bounds of teh screen edge
         List<Point> rectIntersects = new List<Point>();
         for (int i = 0; i < intersects.Count; i++) {
-            if (intersects[i].X >= Corners[0].Point.X && intersects[i].X <= Corners[1].Point.X) {
+            if (intersects[i] != null && intersects[i].X >= Corners[0].Point.X && intersects[i].X <= Corners[1].Point.X) {
                 if (intersects[i].Y >= Corners[0].Point.Y && intersects[i].Y <= Corners[2].Point.Y) {
                     bool duplicate = false;
                     for (int j = 0; j < rectIntersects.Count; j++) {
@@ -247,6 +247,8 @@ public class GraphObject : MonoBehaviour
                 }
             }
         }
+
+        foreach (Point p in rectIntersects) if (_Debug) Debug.Log(p);
 
         if (rectIntersects.Count == 2) {
             // build line renderer position values
@@ -272,25 +274,25 @@ public class GraphObject : MonoBehaviour
             return new Line(Corners[0].Point, Corners[3].Point);
         }
         float meanX = points.Average(point => point.X);
-        Debug.Log("meanX: " + meanX);
+        if (_Debug) Debug.Log("meanX: " + meanX);
         float meanY = points.Average(point => point.Y);
-        Debug.Log("meanY: " + meanY);
+        if (_Debug) Debug.Log("meanY: " + meanY);
 
         //cacluate our slope
         float sumXY = points.Sum(point => point.X * point.Y);
-        Debug.Log("sumXY: " + sumXY);
+        if (_Debug) Debug.Log("sumXY: " + sumXY);
         float sumXX = points.Sum(point => point.X * point.X);
-        Debug.Log("sumXX: " + sumXX);
+        if (_Debug) Debug.Log("sumXX: " + sumXX);
         float slope = sumXY/sumXX;
-        Debug.Log("slope: " + slope);
+        if (_Debug) Debug.Log("slope: " + slope);
         float yIntercept = meanY - (slope * meanX);
-        Debug.Log("yIntercept: " + yIntercept);
+        if (_Debug) Debug.Log("yIntercept: " + yIntercept);
         float xIntercept = (0 - yIntercept) / slope;
-        Debug.Log("xIntercept: " + xIntercept);
+        if (_Debug) Debug.Log("xIntercept: " + xIntercept);
         Point a = new Point(xIntercept, 0);
-        Debug.Log(a);
+        if (_Debug) Debug.Log(a);
         Point b = new Point(yIntercept, 0);
-        Debug.Log(b);
+        if (_Debug) Debug.Log(b);
         if (a.X == b.X && a.Y == b.Y) {
             b = new Point(1, slope * 1 + yIntercept);
         }
