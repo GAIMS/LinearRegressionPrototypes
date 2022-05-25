@@ -29,6 +29,8 @@ public class RaceTrackGenerator : MonoBehaviour
     private bool firstChunk = true;
 
     public int racers;
+    [HideInInspector]
+    public bool gameOver = true;
     void Awake()
     {
         killbox = FindObjectOfType<KillBox>();
@@ -53,9 +55,12 @@ public class RaceTrackGenerator : MonoBehaviour
     
     void Update()
     {
-        if (finishChunk.finishedRacers + killbox.dead == racers)
+        if (finishChunk.finishedRacers + killbox.dead == racers && gameOver)
         {
-            Restart();
+            gm.UpdateLists(raceSegments);
+            gm.EndRace();
+            gameOver = false;
+            //Restart();
         }
     }
 
@@ -155,8 +160,9 @@ public class RaceTrackGenerator : MonoBehaviour
             newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
         }
         camController.FindBots();
+        gameOver = true;
     }
-    
+
     public void RestartButton()
     {
         firstChunk = true;
