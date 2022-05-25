@@ -28,6 +28,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GraphObject graph;
     [SerializeField] private HexGridManager hexGrid;
+    private RaceTrackGenerator rtg;
+
+    private void Awake()
+    {
+        rtg = FindObjectOfType<RaceTrackGenerator>();
+    }
 
     private void Update()
     {
@@ -37,6 +43,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EndRace()
+    {
+        graph.gameObject.SetActive(true);
+        hexGrid.gameObject.SetActive(true);
+        UpdateGraph();
+        hexGrid.UpdateHexes();
+    }
+
+    public void NextRace()
+    {
+        graph.gameObject.SetActive(false);
+        hexGrid.gameObject.SetActive(false);
+        rtg.Restart();
+    }
+    
     public void UpdateLists(int segments)
     {
         raceNum++;
@@ -190,6 +211,7 @@ public class GameManager : MonoBehaviour
 
         return 0f;
     }
+    
 }
 
 [Serializable]

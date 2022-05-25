@@ -7,7 +7,7 @@ public class HexGridGame : MonoBehaviour
 {
     [SerializeField] private LayerMask hexLayer;
     [SerializeField] private Text lossText;
-    [SerializeField] private Text gameOverText;
+    [SerializeField] private GameObject restartRaceButton;
     [SerializeField] private int hexRadius;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private bool randomFirstPick;
@@ -22,11 +22,13 @@ public class HexGridGame : MonoBehaviour
     public HexGridManager.Hex[,] hexes;
 
     private HexGridManager hm;
+    private GameManager gm;
     
 
     void Start()
     {
         hm = GetComponent<HexGridManager>();
+        gm = FindObjectOfType<GameManager>();
         hexes = hm.hexes;
         lossText.text = "Total Loss: " + graphObject.CalculateTotalLoss();
     }
@@ -139,7 +141,7 @@ public class HexGridGame : MonoBehaviour
             firstPick = true;
             turn = false;
 
-            gameOverText.enabled = false;
+            restartRaceButton.SetActive(false);
             
             if (cumulativeScore && pickedHex != null)
             {
@@ -219,7 +221,8 @@ public class HexGridGame : MonoBehaviour
 
         if (pickedHex == hm.lowestHex)
         {
-            gameOverText.enabled = true;
+            restartRaceButton.SetActive(true);
+            //gm.RestartRace();
         }
     }
 }
