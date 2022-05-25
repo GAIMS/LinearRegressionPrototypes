@@ -28,6 +28,12 @@ public struct Line {
         }
     }
 
+    public float YIntercept {
+        get {
+            return A.Y - (Slope*A.X);
+        }
+    }
+
     public Line(Point a, Point b) {
         A = a;
         B = b;
@@ -42,6 +48,14 @@ public struct Line {
     public override string ToString()
     {
         return A.ToString() + "----->" + B.ToString();
+    }
+
+    public float GetX(float y) {
+        return (y - YIntercept) / Slope;
+    }
+
+    public float GetY(float x) {
+        return Slope*x + YIntercept;
     }
 }
 
