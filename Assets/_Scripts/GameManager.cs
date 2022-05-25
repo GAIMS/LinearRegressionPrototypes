@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum DataType
 {
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GraphObject graph;
     [SerializeField] private HexGridManager hexGrid;
     private RaceTrackGenerator rtg;
+    [SerializeField] private Button hexOn;
+    [SerializeField] private Button hexOff;
 
     private void Awake()
     {
@@ -45,14 +48,17 @@ public class GameManager : MonoBehaviour
 
     public void EndRace()
     {
-        graph.gameObject.SetActive(true);
-        hexGrid.gameObject.SetActive(true);
-        UpdateGraph();
-        hexGrid.UpdateHexes();
+        hexOn.onClick.Invoke();
+        Time.timeScale = 1;
+        //graph.gameObject.SetActive(true);
+        //hexGrid.gameObject.SetActive(true);
+        //UpdateGraph();
+        //hexGrid.UpdateHexes();
     }
 
     public void NextRace()
     {
+        hexOff.onClick.Invoke();
         graph.gameObject.SetActive(false);
         hexGrid.gameObject.SetActive(false);
         rtg.Restart();

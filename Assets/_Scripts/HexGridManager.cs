@@ -14,7 +14,7 @@ public class HexGridManager : MonoBehaviour
     [SerializeField] private float offset = .05f;
     [SerializeField] private GraphObject graphObject;
     [SerializeField] private float slopeMax = 2;
-    [SerializeField] private float hexValueMultiplier = .1f;
+    public float hexValueMultiplier = .1f;
     [SerializeField] private float hexColorMultiplier = .025f;
 
     

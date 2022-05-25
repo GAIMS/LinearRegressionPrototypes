@@ -59,7 +59,7 @@ public class HexGridGame : MonoBehaviour
             }
             if(adaptiveRadius)
             {
-                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, Mathf.CeilToInt(pickedHex.hexValue / 10)))
+                foreach (var hexCol in hm.GetExtendedNeighbors(pickedHex, (Mathf.CeilToInt(pickedHex.hexValue / 100))))
                 {
                     hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
                 }

@@ -545,6 +545,8 @@ MonoBehaviour:
   savedData: []
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
+  hexOn: {fileID: 2110371360}
+  hexOff: {fileID: 523197942}
 --- !u!4 &294876407
 Transform:
   m_ObjectHideFlags: 0
@@ -2279,6 +2281,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804044107}
   m_CullTransparentMesh: 1
+--- !u!1 &881795705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881795706}
+  m_Layer: 0
+  m_Name: New Game Object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &881795706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881795705}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_Children: []
+  m_Father: {fileID: 1491110645007475432}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &949191701
 GameObject:
   m_ObjectHideFlags: 0
@@ -4207,7 +4239,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568269602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 59.5, y: 1, z: -35590}
+  m_LocalPosition: {x: 59.5, y: 1, z: -41990}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
@@ -6350,7 +6382,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 881795706}
   m_Father: {fileID: 1491110645950001479}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6378,7 +6411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491110645950001529}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.07, y: 1, z: 0}
+  m_LocalPosition: {x: 5.07, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2543617688037585891}
@@ -6410,6 +6443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Debug: 0
+  Mode: 1
   Camera: {fileID: 963194227}
   Rect:
     serializedVersion: 2
@@ -6417,6 +6451,12 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 10
+  Space:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 4
   Line: {fileID: 9199007554462496550}
   LineContainer: {fileID: 397267019751394810}
   Points: []
@@ -7242,7 +7282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2921566001913224963}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 0.02, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -7375,7 +7415,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2921566002593119695}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 10, y: 0.02, z: 1}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -7496,7 +7536,7 @@ MonoBehaviour:
   restartRaceButton: {fileID: 326497660}
   hexRadius: 2
   graphObject: {fileID: 1491110645950001528}
-  randomFirstPick: 0
+  randomFirstPick: 1
   cumulativeScore: 1
   adaptiveRadius: 1
   firstPick: 1
@@ -7518,9 +7558,9 @@ MonoBehaviour:
   hexPrefab: {fileID: 7273884098483859450, guid: f1337e056b7544e2fa472ab5e6b28049, type: 3}
   offset: 0.05
   graphObject: {fileID: 1491110645950001528}
-  slopeMax: 2
-  hexValueMultiplier: 1
-  hexColorMultiplier: 0.025
+  slopeMax: 3
+  hexValueMultiplier: 0.25
+  hexColorMultiplier: 0.015
 --- !u!1 &2921566003081065995
 GameObject:
   m_ObjectHideFlags: 0
@@ -7595,8 +7635,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -5, y: -5, z: 0}
-  - {x: 5, y: -5, z: 0}
+  - {x: -5, y: 0, z: 0}
+  - {x: 5, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 3
@@ -7693,8 +7733,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -5, y: 5, z: 0}
-  - {x: 5, y: 5, z: 0}
+  - {x: -5, y: 10, z: 0}
+  - {x: 5, y: 10, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 3
@@ -7791,8 +7831,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: -5, y: -5, z: 0}
-  - {x: -5, y: 5, z: 0}
+  - {x: -5, y: 0, z: 0}
+  - {x: -5, y: 10, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 3
@@ -7889,8 +7929,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 5, y: -5, z: 0}
-  - {x: 5, y: 5, z: 0}
+  - {x: 5, y: 0, z: 0}
+  - {x: 5, y: 10, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 3
@@ -8093,7 +8133,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602446815183850708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: -5, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -8107,7 +8147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602446815145437680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: -5, z: 0}
+  m_LocalPosition: {x: 5, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -8121,7 +8161,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602446815580967050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 5, z: 0}
+  m_LocalPosition: {x: -5, y: 10, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -8135,7 +8175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602446814904842560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 5, z: 0}
+  m_LocalPosition: {x: 5, y: 10, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 1491110645950001479}
@@ -8198,8 +8238,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: -5, y: 0, z: 0}
+  - {x: 5, y: 10, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 2
@@ -8369,9 +8409,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b5e5257f9833e48a99ed90d595fd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Raw:
+    X: 0
+    Y: 0
   Point:
     X: -5
-    Y: 5
+    Y: 10
   Renderer: {fileID: 4835707264715859983}
 --- !u!114 &4645874007785512515
 MonoBehaviour:
@@ -8385,9 +8428,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b5e5257f9833e48a99ed90d595fd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Raw:
+    X: 0
+    Y: 0
   Point:
     X: -5
-    Y: -5
+    Y: 0
   Renderer: {fileID: 4835707264587248721}
 --- !u!114 &4645874007815027559
 MonoBehaviour:
@@ -8401,9 +8447,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b5e5257f9833e48a99ed90d595fd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Raw:
+    X: 0
+    Y: 0
   Point:
     X: 5
-    Y: -5
+    Y: 0
   Renderer: {fileID: 4835707264548589941}
 --- !u!114 &4645874008080788439
 MonoBehaviour:
@@ -8417,9 +8466,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b5e5257f9833e48a99ed90d595fd80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Raw:
+    X: 0
+    Y: 0
   Point:
     X: 5
-    Y: 5
+    Y: 10
   Renderer: {fileID: 4835707264274334149}
 --- !u!23 &4835707264274334149
 MeshRenderer:
@@ -9058,10 +9110,10 @@ MonoBehaviour:
   Line:
     A:
       X: -5
-      Y: 5
+      Y: 10
     B:
       X: 5
-      Y: 5
+      Y: 10
   LineRenderer: {fileID: 3168383612392069586}
 --- !u!114 &7621322846432663850
 MonoBehaviour:
@@ -9078,10 +9130,10 @@ MonoBehaviour:
   Line:
     A:
       X: -5
-      Y: -5
+      Y: 0
     B:
       X: 5
-      Y: -5
+      Y: 0
   LineRenderer: {fileID: 3168383612148138416}
 --- !u!114 &7621322846637381247
 MonoBehaviour:
@@ -9098,10 +9150,10 @@ MonoBehaviour:
   Line:
     A:
       X: 5
-      Y: -5
+      Y: 0
     B:
       X: 5
-      Y: 5
+      Y: 10
   LineRenderer: {fileID: 3168383613017362149}
 --- !u!114 &7621322846691059544
 MonoBehaviour:
@@ -9118,10 +9170,10 @@ MonoBehaviour:
   Line:
     A:
       X: -5
-      Y: -5
+      Y: 0
     B:
       X: -5
-      Y: 5
+      Y: 10
   LineRenderer: {fileID: 3168383613014425538}
 --- !u!222 &7638699946624342946
 CanvasRenderer:
@@ -9265,9 +9317,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Line:
     A:
-      X: 0
+      X: -5
       Y: 0
     B:
-      X: 0
-      Y: 0
+      X: 5
+      Y: 10
   LineRenderer: {fileID: 4437536596357377980}
