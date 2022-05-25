@@ -36,6 +36,17 @@ public class BotController : MonoBehaviour
     
     void Start()
     {
+        /*runSpeed = Random.Range(.5f, 1f);
+        climbSpeed = Random.Range(.5f, 1f);
+        flySpeed = Random.Range(.5f, 1f);
+        swimSpeed = Random.Range(.5f, 1f);
+        stamina = Random.Range(.75f, 1f);
+
+        rb = GetComponent<Rigidbody2D>();*/
+    }
+
+    public void Init()
+    {
         runSpeed = Random.Range(.5f, 1f);
         climbSpeed = Random.Range(.5f, 1f);
         flySpeed = Random.Range(.5f, 1f);
