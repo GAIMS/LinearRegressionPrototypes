@@ -68,18 +68,18 @@ public class GameManager : MonoBehaviour
 
     public void GetPrediction()
     {
-        BotController[] bots = FindObjectsOfType<BotController>();
         predictionOutput = new List<float>();
-        for (int j = 0; j < bots.Length; j++)
+        for (int j = 0; j < rtg.racerObjects.Count; j++)
         {
             Agent agent = new Agent();
-            agent.climbSpeed = bots[j].climbSpeed;
-            agent.runSpeed = bots[j].runSpeed;
-            agent.flySpeed = bots[j].flySpeed;
-            agent.swimSpeed = bots[j].swimSpeed;
+            BotController bot = rtg.racerObjects[j].GetComponent<BotController>();
+            agent.climbSpeed = bot.climbSpeed;
+            agent.runSpeed = bot.runSpeed;
+            agent.flySpeed = bot.flySpeed;
+            agent.swimSpeed = bot.swimSpeed;
             agent.raceNumber = raceNum;
-            agent.placement = bots[j].placement;
-            agent.color = bots[j].GetComponent<SpriteRenderer>().color;
+            agent.placement = bot.placement;
+            agent.color = bot.GetComponent<SpriteRenderer>().color;
             
             Vector2 pos = Vector2.zero;
             bool yAxis = false;
@@ -171,13 +171,14 @@ public class GameManager : MonoBehaviour
         float hightestVal = 0;
         for (int i = 0; i < predictionOutput.Count; i++)
         {
+            Debug.Log("i: " + predictionOutput[i]);
             if (predictionOutput[i] > hightestVal)
             {
                 hightestVal = predictionOutput[i];
                 hightestIndex = i;
             }
         }
-        Debug.Log(hightestIndex);
+        rtg.racerObjects[hightestIndex].transform.GetChild(2).gameObject.SetActive(true);
     }
     
     public void UpdateLists(int segments)

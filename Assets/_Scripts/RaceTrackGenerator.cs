@@ -8,6 +8,7 @@ public class RaceTrackGenerator : MonoBehaviour
 
     [SerializeField] private GameObject finish;
     [SerializeField] private GameObject racerPrefab;
+    [SerializeField] public List<GameObject> racerObjects;
     [SerializeField] private CameraController camController;
     
     [SerializeField] private int raceSegments;
@@ -39,6 +40,8 @@ public class RaceTrackGenerator : MonoBehaviour
         {
             GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
             newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+            newRacer.GetComponent<BotController>().Init();
+            racerObjects.Add(newRacer);
         }
         
         for (int i = 0; i < raceSegments; i++)
@@ -153,11 +156,14 @@ public class RaceTrackGenerator : MonoBehaviour
         {
             Destroy(bot.gameObject);
         }
+        racerObjects.Clear();
         
         for (int i = 0; i < racers; i++)
         {
             GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
             newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+            newRacer.GetComponent<BotController>().Init();
+            racerObjects.Add(newRacer);
         }
         camController.FindBots();
         gm.GetPrediction();
@@ -189,11 +195,14 @@ public class RaceTrackGenerator : MonoBehaviour
         {
             Destroy(bot.gameObject);
         }
+        racerObjects.Clear();
         
         for (int i = 0; i < racers; i++)
         {
             GameObject newRacer = Instantiate(racerPrefab, Vector3.up, Quaternion.identity, null);
             newRacer.GetComponent<SpriteRenderer>().color = Random.ColorHSV();
+            newRacer.GetComponent<BotController>().Init();
+            racerObjects.Add(newRacer);
         }
         camController.FindBots();
     }

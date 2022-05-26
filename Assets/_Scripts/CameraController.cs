@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float radius = 25f;
     void Start()
     {
+        GetComponent<CinemachineVirtualCamera>().enabled = true;
         rtg = FindObjectOfType<RaceTrackGenerator>();
         //bots = FindObjectsOfType<BotController>();
         targetGroup = GetComponentInChildren<CinemachineTargetGroup>();
