@@ -531,7 +531,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 10
+  m_CameraDistance: 69.01
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -775,7 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   races: []
   agents: []
-  DataPoint: 000000000600000005000000
+  DataPoint: 010000000600000005000000
   savedData: []
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
@@ -4473,7 +4473,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568269602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 59.5, y: 1, z: -20}
+  m_LocalPosition: {x: 59.5, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
@@ -5603,6 +5603,9 @@ MonoBehaviour:
   - {fileID: 7203412056847000957, guid: d4efab89f114e48469ccf13969eae22f, type: 3}
   - {fileID: 467471265607531740, guid: 5d7af483bb7ea44889a032c2160c750b, type: 3}
   - {fileID: 2681635878131166071, guid: 9a24d7592a86d4bae827d7ba02044010, type: 3}
+  - {fileID: 7135988662157294752, guid: 5791a2d20f6864fc493542cdf55bf413, type: 3}
+  - {fileID: 7203412056847000957, guid: b559ed93f2f25409d86784285e6c4a23, type: 3}
+  - {fileID: 2681635878131166071, guid: 617ece7cd67e443e7b7e2d9e2fa6ed60, type: 3}
   finish: {fileID: 3630940602709857871, guid: ff4e7933da739454db8e9b4a6da7560e, type: 3}
   racerPrefab: {fileID: 1244064043429347481, guid: 5e31b107c76624c429c6a7f1e0d8aed4, type: 3}
   racerObjects: []
@@ -7857,6 +7860,7 @@ MonoBehaviour:
   randomFirstPick: 1
   cumulativeScore: 1
   adaptiveRadius: 1
+  rememberHexes: 0
   firstPick: 1
 --- !u!114 &2921566003081065993
 MonoBehaviour:
@@ -7876,7 +7880,7 @@ MonoBehaviour:
   hexPrefab: {fileID: 7273884098483859450, guid: f1337e056b7544e2fa472ab5e6b28049, type: 3}
   offset: 0.05
   graphObject: {fileID: 1491110645950001528}
-  slopeMax: 3
+  slopeMax: 5
   hexValueMultiplier: 0.0015
   hexColorMultiplier: 0.00015
 --- !u!1 &2921566003081065995

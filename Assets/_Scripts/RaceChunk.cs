@@ -20,6 +20,8 @@ public class RaceChunk : MonoBehaviour
 
     public int finishedRacers = 0;
     private GameManager gm;
+
+    public bool zeroGravity = false;
     
     private void Start()
     {
@@ -34,6 +36,19 @@ public class RaceChunk : MonoBehaviour
             col.GetComponent<BotController>().placement = finishedRacers + 1;
             col.GetComponent<BotController>().raceTime = FindObjectOfType<RaceTrackGenerator>().raceTimer;
             finishedRacers++;
+        }
+
+        if (col.CompareTag("Bot"))
+        {
+            col.attachedRigidbody.gravityScale = -0.25f;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Bot"))
+        {
+            other.attachedRigidbody.gravityScale = 0.5f;
         }
     }
 }

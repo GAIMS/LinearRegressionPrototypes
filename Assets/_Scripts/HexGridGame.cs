@@ -13,6 +13,7 @@ public class HexGridGame : MonoBehaviour
     [SerializeField] private bool randomFirstPick;
     [SerializeField] private bool cumulativeScore;
     [SerializeField] private bool adaptiveRadius;
+    [SerializeField] private bool rememberHexes;
 
     private HexGridManager.Hex pickedHex;
     private bool turn = false;
@@ -160,6 +161,8 @@ public class HexGridGame : MonoBehaviour
         foreach (var hexCol in hexes)
         {
             hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.black;
+            if(!rememberHexes)
+                hexCol.hexObject.transform.GetChild(0).GetComponent<SpriteRenderer>().enabled = true;
         }
         
         if(adaptiveRadius)

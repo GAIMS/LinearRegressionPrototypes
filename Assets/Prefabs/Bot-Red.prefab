@@ -183,6 +183,7 @@ MonoBehaviour:
   isflying: 0
   isSwimming: 0
   placement: 0
+  raceTime: 0
   usingForce: 0
 --- !u!1 &2459691325258706356
 GameObject:
