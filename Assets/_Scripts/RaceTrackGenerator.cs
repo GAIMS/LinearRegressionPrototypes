@@ -30,6 +30,8 @@ public class RaceTrackGenerator : MonoBehaviour
     private bool firstChunk = true;
 
     public int racers;
+    public float raceTimer;
+    
     [HideInInspector]
     public bool gameOver = true;
     void Awake()
@@ -58,6 +60,9 @@ public class RaceTrackGenerator : MonoBehaviour
     
     void Update()
     {
+        if(gameOver)
+            raceTimer += Time.deltaTime;
+        
         if (finishChunk.finishedRacers + killbox.dead == racers && gameOver)
         {
             gm.UpdateLists(raceSegments);

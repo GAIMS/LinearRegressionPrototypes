@@ -775,7 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   races: []
   agents: []
-  DataPoint: 000000000500000004000000
+  DataPoint: 000000000600000005000000
   savedData: []
   graph: {fileID: 1491110645950001528}
   hexGrid: {fileID: 2921566003081065993}
@@ -5613,6 +5613,7 @@ MonoBehaviour:
   flyWeight: 1
   swimWeight: 0.95
   racers: 3
+  raceTimer: 0
   gameOver: 1
 --- !u!1 &1885023804
 GameObject:
@@ -7876,8 +7877,8 @@ MonoBehaviour:
   offset: 0.05
   graphObject: {fileID: 1491110645950001528}
   slopeMax: 3
-  hexValueMultiplier: 0.25
-  hexColorMultiplier: 0.015
+  hexValueMultiplier: 0.0015
+  hexColorMultiplier: 0.00015
 --- !u!1 &2921566003081065995
 GameObject:
   m_ObjectHideFlags: 0

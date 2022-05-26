@@ -12,6 +12,7 @@ public enum DataType
     Swim,
     Climb,
     Position,
+    FinishTime,
     __________,
     Plus,
     Minus,
@@ -79,6 +80,7 @@ public class GameManager : MonoBehaviour
             agent.swimSpeed = bot.swimSpeed;
             agent.raceNumber = raceNum;
             agent.placement = bot.placement;
+            agent.finishTime = bot.raceTime;
             agent.color = bot.GetComponent<SpriteRenderer>().color;
             
             Vector2 pos = Vector2.zero;
@@ -106,6 +108,10 @@ public class GameManager : MonoBehaviour
                         case DataType.Position:
                             if(!yAxis)
                                 pos.x = agent.placement;
+                            break;
+                        case DataType.FinishTime:
+                            if(!yAxis)
+                                pos.x = agent.finishTime;
                             break;
                         case DataType.Plus:
                             if(!yAxis)
@@ -143,6 +149,9 @@ public class GameManager : MonoBehaviour
                                 case DataType.Position:
                                     pos.y = agent.placement;
                                     //Debug.Log(pos);
+                                    break;
+                                case DataType.FinishTime:
+                                    pos.y = agent.finishTime;
                                     break;
                                 case DataType.Plus:
                                     pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Plus, pos.y);
@@ -198,6 +207,7 @@ public class GameManager : MonoBehaviour
             temp.swimSpeed = obj.swimSpeed;
             temp.raceNumber = raceNum;
             temp.placement = obj.placement;
+            temp.finishTime = obj.raceTime;
             temp.color = obj.GetComponent<SpriteRenderer>().color;
 
             agents.Add(temp);
@@ -235,6 +245,10 @@ public class GameManager : MonoBehaviour
                             if(!yAxis)
                                 pos.x = agent.placement;
                             break;
+                        case DataType.FinishTime:
+                            if(!yAxis)
+                                pos.x = agent.finishTime;
+                            break;
                         case DataType.Plus:
                             if(!yAxis)
                                 pos.x = DataPointOperation(agent, DataPoint[i + 1], DataType.Plus, pos.x);
@@ -271,6 +285,9 @@ public class GameManager : MonoBehaviour
                                 case DataType.Position:
                                     pos.y = agent.placement;
                                     //Debug.Log(pos);
+                                    break;
+                                case DataType.FinishTime:
+                                    pos.y = agent.finishTime;
                                     break;
                                 case DataType.Plus:
                                     pos.y = DataPointOperation(agent, DataPoint[i + 2], DataType.Plus, pos.y);
@@ -330,6 +347,8 @@ public class GameManager : MonoBehaviour
                 return agent.flySpeed;
             case DataType.Position:
                 return agent.placement;
+            case DataType.FinishTime:
+                return agent.finishTime;
         }
 
         return 0f;
@@ -386,6 +405,7 @@ public class Agent
     public float flySpeed;
     public float swimSpeed;
     public int placement;
+    public float finishTime;
     public int raceNumber;
     public Color color;
 }

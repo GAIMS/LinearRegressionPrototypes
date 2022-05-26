@@ -32,6 +32,7 @@ public class RaceChunk : MonoBehaviour
         {
             col.attachedRigidbody.simulated = false;
             col.GetComponent<BotController>().placement = finishedRacers + 1;
+            col.GetComponent<BotController>().raceTime = FindObjectOfType<RaceTrackGenerator>().raceTimer;
             finishedRacers++;
         }
     }

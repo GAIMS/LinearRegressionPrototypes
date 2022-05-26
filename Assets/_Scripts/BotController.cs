@@ -29,6 +29,7 @@ public class BotController : MonoBehaviour
     [SerializeField] private bool isSwimming = false;
 
     public int placement;
+    public float raceTime;
 
     [SerializeField] private bool usingForce;
     
