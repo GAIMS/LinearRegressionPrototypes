@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using TMPro;
 
 public class GameplayUI : MonoBehaviour {
@@ -36,6 +35,24 @@ public class GameplayUI : MonoBehaviour {
 	
 	public TextMeshProUGUI minStat;
 	
+	public Slider runSlider;
+	
+	public TextMeshProUGUI run;
+	
+	public Slider flySlider;
+	
+	public TextMeshProUGUI fly;
+	
+	public Slider climbSlider;
+	
+	public TextMeshProUGUI climb;
+	
+	public Slider swimSlider;
+	
+	public TextMeshProUGUI swim;
+	
+	public Image selectedRacerTracker;
+	
 	private void Awake() {
 	}	
 	
@@ -53,6 +70,18 @@ public class GameplayUI : MonoBehaviour {
 		
 		this.minStatSlider.value = GameManager.Instance.minStat;
 		this.minStat.SetText(this.minStatSlider.value.ToString());
+		
+		this.runSlider.value = RaceTrackGenerator.Instance.RunWeight;
+		this.run.SetText(this.runSlider.value.ToString());
+		
+		this.flySlider.value = RaceTrackGenerator.Instance.FlyWeight;
+		this.fly.SetText(this.flySlider.value.ToString());
+		
+		this.climbSlider.value = RaceTrackGenerator.Instance.ClimbWeight;
+		this.climb.SetText(this.climbSlider.value.ToString());
+		
+		this.swimSlider.value = RaceTrackGenerator.Instance.SwimWeight;
+		this.swim.SetText(this.swimSlider.value.ToString());
 	}
 	
 	public void SetUI() {
@@ -81,11 +110,27 @@ public class GameplayUI : MonoBehaviour {
 			raceUI.Add(this.raceUI[i]);
 		}
 		
-		raceUI = raceUI.OrderBy(
-			x => x.racerInfo.placement
-		).ToList();
+		raceUI.Sort((a, b) => a.racerInfo.placement.CompareTo(b.racerInfo.placement));
+		
 		for (int i = 0; i < raceUI.Count; i++) {
 			raceUI[i].transform.SetAsLastSibling();
 		}
+	}
+
+	private void LateUpdate() {
+		this.SelectedRacerTracker();
+	}
+
+	public void SelectedRacerTracker() {
+		Transform racer = null;
+		for (int i = 0; i < GameManager.Instance.CurrentRacers; i++) {
+			if (GameManager.Instance.racers[i].gameObject.transform == FlyCamera.Instance.racerToFollow) {
+				racer = GameManager.Instance.racers[i].transform;
+			}
+		}
+		Transform goalPos = RaceTrackGenerator.Instance.LastChunk.lftPoint;
+		float distance = racer.transform.position.x / goalPos.position.x;
+		
+		this.selectedRacerTracker.fillAmount = distance;
 	}
 }

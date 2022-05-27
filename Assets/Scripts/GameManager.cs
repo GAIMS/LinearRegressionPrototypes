@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class GameManager : MonoBehaviour {
 	
@@ -29,6 +28,12 @@ public class GameManager : MonoBehaviour {
 	
 	private int currentRacers;
 	
+	public int CurrentRacers {
+		get {
+			return this.currentRacers;
+		}
+	}
+	
 	[SerializeField]
 	public GameObject racerPrefab;
 	
@@ -41,6 +46,8 @@ public class GameManager : MonoBehaviour {
 	public RenderTexture[] renderTextures;
 	
 	public string[] names;
+	
+	public float time = 0f;
 	
 	private void Start() {
 		this.GenerateRacers();
@@ -79,9 +86,9 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	private void TrackPositions() {
-		this.racers = this.racers.OrderBy(
-			x => Vector2.Distance(this.transform.position, new Vector2(x.transform.position.x, 0f))
-		).ToList();
+		
+		this.racers.Sort((a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
+		
 		for (int i = 0; i < this.racers.Count; i++) {
 			RacerCore core = this.racers[i].GetComponent<RacerCore>();
 			core.SetRank((this.currentRacers - 1) - i);

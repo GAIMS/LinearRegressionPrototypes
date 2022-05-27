@@ -31,6 +31,14 @@ public class RacerCore : MonoBehaviour {
 	
 	public Camera previewCamera;
 	
+	public float minutes = 0f;
+	
+	public float seconds = 0f;
+	
+	public float milliseconds = 0f;
+	
+	public bool timerEnabled = false;
+	
 	private void Awake() {
 		this.physics = this.GetComponent<RacerPhysics>();
 		this.skin = this.GetComponent<RacerSkin>();
@@ -39,6 +47,28 @@ public class RacerCore : MonoBehaviour {
 	
 	private void Update() {
 		this.HandleStaminaBar();
+		this.HandleTime();
+	}
+	
+	private void HandleTime() {
+		if (!this.timerEnabled) {
+			return;
+		}
+		this.milliseconds += Mathf.Round(Time.deltaTime * 1000f);
+		if (this.milliseconds >= 1000f) {
+			if (this.seconds >= 59f && this.minutes < 99f) {
+				this.minutes++;
+				this.seconds = 0f;
+			} else if (this.seconds < 59f) {
+				this.seconds++;
+			}
+			this.milliseconds = 0f;
+		} else if (this.minutes == 99 && this.seconds == 59 && this.milliseconds >= 990f) {
+			this.minutes = 99f;
+			this.seconds = 59f;
+			this.milliseconds = 999f;
+			this.timerEnabled = false;
+		}
 	}
 	
 	public void SetRank(int rank) {
@@ -50,6 +80,9 @@ public class RacerCore : MonoBehaviour {
 			
 			for (int i = 0; i < GameplayUI.Instance.raceUI.Length; i++) {
 				if (GameplayUI.Instance.raceUI[i].racerInfo.image.texture == this.previewCamera.targetTexture) {
+					if (FlyCamera.Instance.racerToFollow == this.gameObject.transform) {
+						FlyCamera.Instance.SetRacer(rank);
+					}
 					GameplayUI.Instance.raceUI[i].SetRank(rank);
 				}
 			}			

@@ -34,11 +34,50 @@ public class RaceTrackGenerator : MonoBehaviour {
     [SerializeField] private float flyWeight;
     [Range(.25f,1)]
     [SerializeField] private float swimWeight;
+	
+	public float RunWeight {
+		get {
+			return this.runWeight;
+		} set {
+			this.runWeight = value;
+		}
+	}
+	
+	public float FlyWeight {
+		get {
+			return this.flyWeight;
+		} set {
+			this.flyWeight = value;
+		}
+	}
+	
+	public float ClimbWeight {
+		get {
+			return this.climbWeight;
+		} set {
+			this.climbWeight = value;
+		}
+	}
+	
+	public float SwimWeight {
+		get {
+			return this.swimWeight;
+		} set {
+			this.swimWeight = value;
+		}
+	}
 
 //    private KillBox killbox;
     private GameManager gm;
     
     private RaceChunk lastChunk;
+	
+	public RaceChunk LastChunk {
+		get {
+			return this.lastChunk;
+		}
+	}
+	
     private RaceChunk finishChunk;
     private bool firstChunk = true;
     void Awake()
@@ -165,5 +204,29 @@ public class RaceTrackGenerator : MonoBehaviour {
 		int segments = (int)GameplayUI.Instance.raceSegmentSlider.value;
 		this.raceSegments = segments;
 		GameplayUI.Instance.raceCourseSegments.SetText(segments.ToString());
+	}
+	
+	public void UpdateRun() {
+		float num = GameplayUI.Instance.runSlider.value;
+		this.runWeight = num;
+		GameplayUI.Instance.run.SetText(num.ToString("F2"));
+	}
+	
+	public void UpdateFly() {
+		float num = GameplayUI.Instance.flySlider.value;
+		this.flyWeight = num;
+		GameplayUI.Instance.fly.SetText(num.ToString("F2"));		
+	}
+	
+	public void UpdateClimb() {
+		float num = GameplayUI.Instance.climbSlider.value;
+		this.climbWeight = num;
+		GameplayUI.Instance.climb.SetText(num.ToString("F2"));		
+	}
+	
+	public void UpdateSwim() {
+		float num = GameplayUI.Instance.swimSlider.value;
+		this.swimWeight = num;
+		GameplayUI.Instance.swim.SetText(num.ToString("F2"));
 	}
 }

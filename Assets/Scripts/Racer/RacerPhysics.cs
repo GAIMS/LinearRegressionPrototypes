@@ -124,6 +124,7 @@ public class RacerPhysics : MonoBehaviour {
 		yield return new WaitForSeconds(delay);
 		this.canAct = true;
 		this.core.Rank.gameObject.SetActive(true);
+		this.core.timerEnabled = true;
 	}
 	
 	private void Update() {
@@ -300,6 +301,7 @@ public class RacerPhysics : MonoBehaviour {
 		ObjGoal goal = collider.GetComponent<ObjGoal>();
 		if (goal != null) {
 			this.canAct = false;
+			this.core.timerEnabled = false;
 		}
 		
 		bool water = collider.gameObject.layer == 4;
