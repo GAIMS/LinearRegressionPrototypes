@@ -1,0 +1,21 @@
+1. Rewrite Hex Manager and game to allow for scaling and better control
+
+2. Make the camera zoom in and out smoother
+
+3. Create better physics for agents
+
+4. Create weighting system for attributes so they are more balanced
+
+5. Simplfy the hex manager system so it turns on and off better
+
+6. Change Bot controller to use more robust system for switching movement types
+
+7. Place kill box in a better place
+
+8. Write bot for hex grid
+
+9. Make more segments
+
+10. Make race segments fit together better
+
+11. Update Game manager opperations to be easier to do
