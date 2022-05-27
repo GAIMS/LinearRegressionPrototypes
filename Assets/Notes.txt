@@ -1,0 +1,21 @@
+- Ideally the racers should rely on a state system for each of their states (ground movement, flying, climbing, swimming, etc.). This would help greatly when it comes to updating their animations & also help ensure that they're doing the correct thing. Having a state machine will also make it much easier to keep track of what the character is currently doing, and also make it easier to customize the values for each individual action they can do.
+
+- I'd like to include a trigger/collision detection system I use in other projects that would allow us to be able to add things like unique mechanics, objects they can interact with, etc. Essentially we'd be able to add an infinite amount of things that the racers can interact with without ever having to modify their code.
+
+- Physics may need to be updated if we plan on allowing for insanely high stats.
+
+- UI will need to be reworked. Considering scrapping the player camera preview. Also would like to update the bar along the bottom to display each racer's position in the course. Currently it only shows the one you are currently watching.
+
+- We should create preset courses that the player can choose from.
+
+- A level creator of some sort would be really neat to have. Allow them to use premade pieces that they can put together to further experiment with the AI.
+
+- The way level generation is handled is exactly how I'd approach it. I believe we should continue using the system that Walter developed going forward.
+
+- In the next version, we should include toggles in the UI to show and hide certain menu's for customization. The current UI in my version of the project feels incredibly cluttered.
+
+- I think it would be neat if we gave the racers the ability to jump if they detect a gap. This way we can have a gap obstacle. If they fail the jump, then they'll fall into a pit and stray off of the main path for a short bit. 
+
+- Would like to reorganize the game manager and UI scripts. Likely will rewrite them completely when we begin the next version of the project.
+
+- Should use a different Unity version. 2020 is known for having issues with importing assets and Unity taking a while constantly 'refreshing' when running the game. Everytime I start play mode in my project, Unity takes roughly 10-20 seconds to reload the entire application before playing the game.
