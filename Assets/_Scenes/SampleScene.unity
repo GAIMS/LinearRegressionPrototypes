@@ -5000,7 +5000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1760463601
 Transform:
   m_ObjectHideFlags: 0
@@ -5610,7 +5610,7 @@ MonoBehaviour:
   racerPrefab: {fileID: 1244064043429347481, guid: 5e31b107c76624c429c6a7f1e0d8aed4, type: 3}
   racerObjects: []
   camController: {fileID: 1568269603}
-  raceSegments: 10
+  raceSegments: 20
   runWeight: 1
   climbWeight: 1
   flyWeight: 1
